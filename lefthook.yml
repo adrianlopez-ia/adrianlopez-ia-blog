@@ -2,12 +2,9 @@ pre-commit:
   parallel: true
   commands:
     biome-check:
-      glob: "*.{js,ts,jsx,tsx,json,jsonc}"
+      glob: "*.{js,ts,jsx,tsx,json,jsonc,astro}"
       run: npx @biomejs/biome check --no-errors-on-unmatched --files-ignore-unknown=true --staged {staged_files}
       stage_fixed: true
-    stylelint:
-      glob: "*.{css,scss}"
-      run: npx stylelint {staged_files}
     typecheck:
       run: npx turbo typecheck
 

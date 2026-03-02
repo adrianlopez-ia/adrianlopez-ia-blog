@@ -1,9 +1,9 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
 
   --color-brand-50: #f0f0ff;
   --color-brand-100: #e0e0ff;

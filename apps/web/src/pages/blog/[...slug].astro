@@ -1,7 +1,6 @@
 ---
-import BlogLayout from '@layouts/BlogLayout.astro';
-import { getPublishedPosts } from '@lib/content';
 import { render } from 'astro:content';
+import { getPublishedPosts } from '@lib/content';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();

@@ -17,9 +17,7 @@ export async function getPublishedPosts() {
 
 export async function getPostsByTag(tag: string) {
   const posts = await getPublishedPosts();
-  return posts.filter((post) =>
-    post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase()),
-  );
+  return posts.filter((post) => post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase()));
 }
 
 export function getAllTags(posts: Awaited<ReturnType<typeof getPublishedPosts>>) {

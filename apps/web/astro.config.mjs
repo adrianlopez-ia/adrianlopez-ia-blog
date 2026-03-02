@@ -6,11 +6,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://adrianlopez.dev',
-  integrations: [
-    mdx(),
-    react(),
-    sitemap(),
-  ],
+  integrations: [mdx(), react(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },

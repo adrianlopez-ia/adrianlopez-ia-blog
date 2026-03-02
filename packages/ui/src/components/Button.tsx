@@ -18,7 +18,13 @@ const sizeStyles = {
   lg: 'px-6 py-3 text-base',
 };
 
-export function Button({ variant = 'primary', size = 'md', children, className = '', ...props }: ButtonProps) {
+export function Button({
+  variant = 'primary',
+  size = 'md',
+  children,
+  className = '',
+  ...props
+}: ButtonProps) {
   return (
     <button
       className={`inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-200 disabled:opacity-50 ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}

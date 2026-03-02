@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Message {
   id: string;
@@ -43,17 +43,17 @@ export default function ChatWidget() {
 
   return (
     <div className="flex h-[500px] flex-col rounded-2xl border border-white/10 bg-white/[0.02]">
-      <div className="border-b border-white/5 px-4 py-3">
-        <h3 className="text-sm font-semibold">React AI Chatbot</h3>
-        <p className="text-xs text-gray-400">Powered by Vercel AI SDK + OpenAI</p>
+      <div className="border-white/5 border-b px-4 py-3">
+        <h3 className="font-semibold text-sm">React AI Chatbot</h3>
+        <p className="text-gray-400 text-xs">Powered by Vercel AI SDK + OpenAI</p>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.length === 0 && (
           <div className="flex h-full items-center justify-center text-center">
             <div>
               <p className="text-2xl">💬</p>
-              <p className="mt-2 text-sm text-gray-400">Send a message to start chatting</p>
+              <p className="mt-2 text-gray-400 text-sm">Send a message to start chatting</p>
             </div>
           </div>
         )}
@@ -65,9 +65,7 @@ export default function ChatWidget() {
           >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
-                msg.role === 'user'
-                  ? 'bg-indigo-500 text-white'
-                  : 'bg-white/5 text-gray-200'
+                msg.role === 'user' ? 'bg-indigo-500 text-white' : 'bg-white/5 text-gray-200'
               }`}
             >
               {msg.content}
@@ -79,9 +77,18 @@ export default function ChatWidget() {
           <div className="flex justify-start">
             <div className="rounded-2xl bg-white/5 px-4 py-2">
               <div className="flex gap-1">
-                <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: '0ms' }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: '150ms' }} />
-                <span className="h-2 w-2 animate-bounce rounded-full bg-gray-400" style={{ animationDelay: '300ms' }} />
+                <span
+                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                  style={{ animationDelay: '0ms' }}
+                />
+                <span
+                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                  style={{ animationDelay: '150ms' }}
+                />
+                <span
+                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
+                  style={{ animationDelay: '300ms' }}
+                />
               </div>
             </div>
           </div>
@@ -90,7 +97,7 @@ export default function ChatWidget() {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="border-t border-white/5 p-4">
+      <form onSubmit={handleSubmit} className="border-white/5 border-t p-4">
         <div className="flex gap-2">
           <input
             type="text"
@@ -102,7 +109,7 @@ export default function ChatWidget() {
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="rounded-xl bg-indigo-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-600 disabled:opacity-50"
+            className="rounded-xl bg-indigo-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-indigo-600 disabled:opacity-50"
           >
             Send
           </button>

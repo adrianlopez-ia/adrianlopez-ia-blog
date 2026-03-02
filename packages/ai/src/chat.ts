@@ -1,7 +1,7 @@
-import { streamText } from 'ai';
 import type { AiProvider, ChatMessage } from '@blog/types';
-import { getModel } from './providers';
+import { streamText } from 'ai';
 import type { AgentConfig } from './agents';
+import { getModel } from './providers';
 
 export interface ChatStreamOptions {
   messages: ChatMessage[];

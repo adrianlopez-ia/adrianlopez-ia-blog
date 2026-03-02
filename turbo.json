@@ -1,7 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["**/.env.*local", ".env"],
-  "globalPassThroughEnv": ["TURSO_DATABASE_URL", "TURSO_AUTH_TOKEN", "OPENAI_API_KEY", "ANTHROPIC_API_KEY", "NODE_ENV"],
+  "globalPassThroughEnv": [
+    "TURSO_DATABASE_URL",
+    "TURSO_AUTH_TOKEN",
+    "OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY",
+    "NODE_ENV"
+  ],
   "ui": "tui",
   "tasks": {
     "dev": {

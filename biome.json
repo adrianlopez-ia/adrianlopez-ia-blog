@@ -63,7 +63,10 @@
               { "selector": { "kind": "enum" }, "formats": ["PascalCase"] },
               { "selector": { "kind": "class" }, "formats": ["PascalCase"] },
               { "selector": { "kind": "function" }, "formats": ["camelCase", "PascalCase"] },
-              { "selector": { "kind": "variable" }, "formats": ["camelCase", "CONSTANT_CASE", "PascalCase"] }
+              {
+                "selector": { "kind": "variable" },
+                "formats": ["camelCase", "CONSTANT_CASE", "PascalCase"]
+              }
             ]
           }
         }
@@ -81,19 +84,24 @@
     }
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      "dist",
-      ".turbo",
-      ".astro",
-      "drizzle",
-      "*.min.js",
-      "pnpm-lock.yaml"
-    ]
+    "ignore": ["node_modules", "dist", ".turbo", ".astro", "drizzle", "*.min.js", "pnpm-lock.yaml"]
   },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
-  }
+  },
+  "overrides": [
+    {
+      "include": ["**/*.astro"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }

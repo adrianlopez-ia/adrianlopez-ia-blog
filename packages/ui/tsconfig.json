@@ -1,8 +1,22 @@
 {
-  "extends": "@blog/config/typescript/react",
   "compilerOptions": {
+    "target": "ES2024",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noEmit": true,
     "rootDir": "./src",
     "outDir": "./dist"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["node_modules", "dist", ".turbo"]
 }
