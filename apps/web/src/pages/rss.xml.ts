@@ -3,7 +3,6 @@ import rss from '@astrojs/rss';
 import { getPublishedPosts } from '@lib/content';
 import type { APIContext } from 'astro';
 
-// biome-ignore lint/style/useNamingConvention: Astro requires uppercase GET for API routes
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts();
 

@@ -12,6 +12,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "noUncheckedIndexedAccess": true
-  },
-  "include": ["src", ".astro", ".astro/types.d.ts"]
+  }
 }

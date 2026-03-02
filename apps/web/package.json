@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "typecheck": "tsc --noEmit",
+    "typecheck:astro": "astro check",
     "lint": "biome check src/",
     "lint:fix": "biome check --write src/"
   },

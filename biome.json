@@ -36,8 +36,8 @@
         "useExhaustiveDependencies": "warn"
       },
       "performance": {
-        "noBarrelFile": "off",
-        "noReExportAll": "off"
+        "noBarrelFile": "warn",
+        "noReExportAll": "warn"
       },
       "style": {
         "noNonNullAssertion": "warn",
@@ -62,7 +62,10 @@
               { "selector": { "kind": "interface" }, "formats": ["PascalCase"] },
               { "selector": { "kind": "enum" }, "formats": ["PascalCase"] },
               { "selector": { "kind": "class" }, "formats": ["PascalCase"] },
-              { "selector": { "kind": "function" }, "formats": ["camelCase", "PascalCase"] },
+              {
+                "selector": { "kind": "function" },
+                "formats": ["camelCase", "PascalCase", "CONSTANT_CASE"]
+              },
               {
                 "selector": { "kind": "variable" },
                 "formats": ["camelCase", "CONSTANT_CASE", "PascalCase"]
@@ -99,6 +102,26 @@
           "correctness": {
             "noUnusedVariables": "off",
             "noUnusedImports": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": ["**/pages/**/*.ts", "**/pages/**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "include": ["**/*.tsx", "**/*.jsx"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useExhaustiveDependencies": "off"
           }
         }
       }
