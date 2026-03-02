@@ -1,23 +1,29 @@
+import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import { estimateReadingTime, stripHtml } from '@blog/utils';
 
 export async function getPublishedPosts() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => !data.draft);
 
   return posts
-    .map((post) => ({
+    .map((post: CollectionEntry<'blog'>) => ({
       ...post,
       data: {
         ...post.data,
         readingTime: post.data.readingTime ?? estimateReadingTime(stripHtml(post.body ?? '')),
       },
     }))
-    .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+    .sort(
+      (a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
+        b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+    );
 }
 
 export async function getPostsByTag(tag: string) {
   const posts = await getPublishedPosts();
-  return posts.filter((post) => post.data.tags.some((t) => t.toLowerCase() === tag.toLowerCase()));
+  return posts.filter((post: CollectionEntry<'blog'>) =>
+    post.data.tags.some((t: string) => t.toLowerCase() === tag.toLowerCase()),
+  );
 }
 
 export function getAllTags(posts: Awaited<ReturnType<typeof getPublishedPosts>>) {

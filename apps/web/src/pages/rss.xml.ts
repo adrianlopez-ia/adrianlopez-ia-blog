@@ -1,7 +1,9 @@
+import type { CollectionEntry } from 'astro:content';
 import rss from '@astrojs/rss';
 import { getPublishedPosts } from '@lib/content';
 import type { APIContext } from 'astro';
 
+// biome-ignore lint/style/useNamingConvention: Astro requires uppercase GET for API routes
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts();
 
@@ -9,7 +11,7 @@ export async function GET(context: APIContext) {
     title: 'Adrian Lopez Blog',
     description: 'Modern web development, AI, and cutting-edge technologies.',
     site: context.site?.toString() ?? 'https://adrianlopez.dev',
-    items: posts.map((post) => ({
+    items: posts.map((post: CollectionEntry<'blog'>) => ({
       title: post.data.title,
       pubDate: post.data.publishedAt,
       description: post.data.description,
