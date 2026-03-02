@@ -1,4 +1,6 @@
 ---
+import PostList from '@components/blog/PostList.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
 import { getAllTags, getPublishedPosts } from '@lib/content';
 
 const posts = await getPublishedPosts();
