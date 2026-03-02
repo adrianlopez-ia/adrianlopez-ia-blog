@@ -14,7 +14,7 @@ interface Props {
 const { title, slug, excerpt, publishedAt, readingTime, tags = [], coverImage } = Astro.props;
 ---
 
-<article class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 hover:border-brand-500/30 hover:bg-white/[0.04]">
+<article class="group relative overflow-hidden rounded-2xl transition-all duration-300 themed-card">
   {coverImage && (
     <div class="aspect-video overflow-hidden">
       <img
@@ -44,14 +44,14 @@ const { title, slug, excerpt, publishedAt, readingTime, tags = [], coverImage } 
     </h2>
 
     {excerpt && (
-      <p class="mt-2 line-clamp-2 text-sm text-surface-200">{excerpt}</p>
+      <p class="mt-2 line-clamp-2 text-sm" style="color: var(--color-text-secondary);">{excerpt}</p>
     )}
 
-    <div class="mt-4 flex items-center gap-3 text-xs text-surface-200">
+    <div class="mt-4 flex items-center gap-3 text-xs" style="color: var(--color-text-muted);">
       {publishedAt && <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>}
       {readingTime && (
         <>
-          <span class="h-1 w-1 rounded-full bg-surface-200" />
+          <span class="h-1 w-1 rounded-full" style="background-color: var(--color-text-muted);" />
           <span>{readingTime} min read</span>
         </>
       )}

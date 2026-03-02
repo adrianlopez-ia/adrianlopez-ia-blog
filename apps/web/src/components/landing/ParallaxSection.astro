@@ -21,7 +21,7 @@ const { id, title, subtitle, reverse = false } = Astro.props;
       <h2 class="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
         <Fragment set:html={title} />
       </h2>
-      {subtitle && <p class="mt-6 text-lg text-surface-200">{subtitle}</p>}
+      {subtitle && <p class="mt-6 text-lg" style="color: var(--color-text-secondary);">{subtitle}</p>}
       <div class="mt-8">
         <slot name="content" />
       </div>

@@ -45,7 +45,7 @@ const features = [
       <h2 class="feature-title font-display text-4xl font-bold tracking-tight opacity-0 sm:text-5xl">
         Built with the <span class="gradient-text">Latest Tech</span>
       </h2>
-      <p class="feature-subtitle mx-auto mt-4 max-w-2xl text-lg text-surface-200 opacity-0">
+      <p class="feature-subtitle mx-auto mt-4 max-w-2xl text-lg opacity-0" style="color: var(--color-text-secondary);"
         Every piece of this blog is crafted with 2026's most cutting-edge tools and patterns.
       </p>
     </div>
@@ -53,12 +53,12 @@ const features = [
     <div class="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {features.map((feature, i) => (
         <div
-          class="feature-card group rounded-2xl border border-white/5 bg-white/[0.02] p-8 opacity-0 transition-all duration-300 hover:border-brand-500/30 hover:bg-white/[0.04]"
+          class="feature-card group rounded-2xl p-8 opacity-0 transition-all duration-300 themed-card"
           data-delay={i * 0.1}
         >
           <span class="text-4xl">{feature.icon}</span>
           <h3 class="mt-4 font-display text-xl font-semibold">{feature.title}</h3>
-          <p class="mt-2 text-sm text-surface-200">{feature.description}</p>
+          <p class="mt-2 text-sm" style="color: var(--color-text-secondary);">{feature.description}</p>
         </div>
       ))}
     </div>

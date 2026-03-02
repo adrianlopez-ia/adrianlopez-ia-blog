@@ -23,7 +23,7 @@ const postData = posts.map((post) => ({
       <h1 class="font-display text-5xl font-bold tracking-tight sm:text-6xl">
         The <span class="gradient-text">Blog</span>
       </h1>
-      <p class="mt-4 text-lg text-surface-200">
+      <p class="mt-4 text-lg" style="color: var(--color-text-secondary);">
         Thoughts on modern web development, AI, and the technologies shaping our future.
       </p>
     </header>
@@ -39,7 +39,8 @@ const postData = posts.map((post) => ({
         {tags.map(({ name, count }) => (
           <a
             href={`/blog/tag/${name.toLowerCase()}`}
-            class="rounded-full border border-white/5 px-4 py-1.5 text-sm font-medium text-surface-200 transition-colors hover:border-brand-500/30 hover:text-brand-400"
+            class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors hover:text-brand-500 dark:hover:text-brand-400"
+            style="border: 1px solid var(--color-border); color: var(--color-text-secondary);"
           >
             {name} ({count})
           </a>

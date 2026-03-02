@@ -9,7 +9,7 @@ const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 {filteredHeadings.length > 0 && (
   <nav class="text-sm" aria-label="Table of contents">
-    <h2 class="mb-4 font-display text-xs font-semibold uppercase tracking-wide text-surface-200">
+    <h2 class="mb-4 font-display text-xs font-semibold uppercase tracking-wide" style="color: var(--color-text-muted);">
       On this page
     </h2>
     <ul class="space-y-2">
@@ -17,7 +17,8 @@ const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         <li class:list={[heading.depth === 3 && 'ml-4']}>
           <a
             href={`#${heading.slug}`}
-            class="block text-surface-200 transition-colors hover:text-brand-400"
+            class="block transition-colors hover:text-brand-500 dark:hover:text-brand-400"
+            style="color: var(--color-text-secondary);"
           >
             {heading.text}
           </a>

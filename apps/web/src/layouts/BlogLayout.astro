@@ -45,10 +45,10 @@ const {
       </h1>
 
       {description && (
-        <p class="mt-4 text-lg text-surface-200 dark:text-surface-200">{description}</p>
+        <p class="mt-4 text-lg" style="color: var(--color-text-secondary);">{description}</p>
       )}
 
-      <div class="mt-6 flex items-center justify-center gap-4 text-sm text-surface-200">
+      <div class="mt-6 flex items-center justify-center gap-4 text-sm" style="color: var(--color-text-muted);">
         {publishedAt && <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>}
         {readingTime && <span>{readingTime} min read</span>}
       </div>
