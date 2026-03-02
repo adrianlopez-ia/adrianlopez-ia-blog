@@ -1,0 +1,74 @@
+---
+title: "AI Chatbots with Vercel AI SDK and LangChain"
+description: "A deep dive into building AI-powered chatbots using the Vercel AI SDK, LangChain.js, and multiple AI providers."
+publishedAt: 2026-03-02
+tags: ["AI", "LangChain", "TypeScript", "React"]
+coverImage: "/images/ai-chatbot-cover.png"
+---
+
+# AI Chatbots with Vercel AI SDK and LangChain
+
+Building intelligent chatbots has never been easier. In this post, we explore how to integrate AI chat capabilities into a modern web application.
+
+## Architecture
+
+Our AI setup uses a shared package (`@blog/ai`) that provides:
+
+- **Provider abstraction** -- Switch between OpenAI and Anthropic seamlessly
+- **Streaming responses** -- Real-time token streaming for instant feedback
+- **LangChain agents** -- Complex multi-step reasoning with tool use
+
+## Setting Up the Provider
+
+```typescript
+import { createOpenAI } from '@ai-sdk/openai';
+import { createAnthropic } from '@ai-sdk/anthropic';
+
+const providers = {
+  openai: createOpenAI({ apiKey: process.env.OPENAI_API_KEY }),
+  anthropic: createAnthropic({ apiKey: process.env.ANTHROPIC_API_KEY }),
+};
+```
+
+## Streaming Chat
+
+The Vercel AI SDK makes streaming responses trivial:
+
+```typescript
+import { streamText } from 'ai';
+
+const result = streamText({
+  model: providers.openai('gpt-4o'),
+  messages,
+  temperature: 0.7,
+});
+
+return result.toTextStreamResponse();
+```
+
+## React Chat Component
+
+The frontend chat component uses React islands in Astro:
+
+```tsx
+function ChatWidget() {
+  const { messages, input, handleSubmit, handleInputChange } = useChat({
+    api: '/api/ai/chat',
+  });
+
+  return (
+    <div className="flex flex-col gap-4">
+      {messages.map((m) => (
+        <div key={m.id}>{m.content}</div>
+      ))}
+      <form onSubmit={handleSubmit}>
+        <input value={input} onChange={handleInputChange} />
+      </form>
+    </div>
+  );
+}
+```
+
+## Live Examples
+
+Check out the [Examples page](/examples) for live, interactive demos of AI chatbots built with different frameworks!

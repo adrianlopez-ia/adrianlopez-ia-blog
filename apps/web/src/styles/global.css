@@ -1,0 +1,95 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+  --color-brand-50: #f0f0ff;
+  --color-brand-100: #e0e0ff;
+  --color-brand-200: #c7c7ff;
+  --color-brand-300: #a3a3ff;
+  --color-brand-400: #7c7cff;
+  --color-brand-500: #5b5bf7;
+  --color-brand-600: #4747e5;
+  --color-brand-700: #3838c9;
+  --color-brand-800: #2e2ea3;
+  --color-brand-900: #282881;
+
+  --color-surface-50: #fafafa;
+  --color-surface-100: #f5f5f5;
+  --color-surface-200: #e5e5e5;
+  --color-surface-800: #1a1a2e;
+  --color-surface-900: #111122;
+  --color-surface-950: #0a0a1a;
+}
+
+@layer base {
+  :root {
+    --color-bg: var(--color-surface-50);
+    --color-text: var(--color-surface-900);
+    --color-text-muted: var(--color-surface-200);
+    --color-accent: var(--color-brand-500);
+    color-scheme: light;
+  }
+
+  :root.dark {
+    --color-bg: var(--color-surface-950);
+    --color-text: var(--color-surface-50);
+    --color-text-muted: var(--color-surface-200);
+    --color-accent: var(--color-brand-400);
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-500);
+    color: white;
+  }
+}
+
+@layer components {
+  .prose {
+    max-width: 72ch;
+    line-height: 1.8;
+  }
+
+  .prose :where(h1, h2, h3, h4) {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .prose :where(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  }
+
+  .prose :where(pre) {
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    overflow-x: auto;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-brand-400), var(--color-brand-600));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}

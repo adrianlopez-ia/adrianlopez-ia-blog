@@ -1,0 +1,116 @@
+---
+description: Astro 5 patterns for web app (Content Collections, View Transitions, client directives)
+globs: ['apps/web/**/*.astro', 'apps/web/**/*.tsx', 'apps/web/**/*.ts']
+alwaysApply: false
+---
+
+# Astro 5 Patterns
+
+## Content Collections
+
+- Use Content Collections with Zod schemas for all content (blog, etc.).
+- Define schemas in `content.config.ts` with `defineCollection` and `z.object()`.
+
+```typescript
+// content.config.ts
+import { defineCollection, z } from 'astro:content';
+
+const blog = defineCollection({
+  loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    publishedAt: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+```
+
+## Component Choice
+
+- **Prefer Astro components** for static content (layouts, blog cards, landing sections).
+- Use React/Vue/Svelte only when interactivity is needed (chat widgets, forms, client-side state).
+
+```astro
+---
+// ✅ Good - Astro for static content
+---
+
+<article class="post-card">
+  <h2>{post.title}</h2>
+  <p>{post.excerpt}</p>
+</article>
+```
+
+## Client Directives
+
+- `client:load` only when needed immediately (e.g. chat widget).
+- Prefer `client:visible` for below-the-fold content (lazy hydration).
+- Use `client:idle` for non-critical interactivity.
+
+```astro
+<!-- ✅ Good - Visible when in viewport -->
+<ChatWidget client:visible />
+
+<!-- ❌ Avoid - Loads immediately -->
+<ChatWidget client:load />
+
+<!-- ✅ Good - When above fold and critical -->
+<Header client:load />
+```
+
+## View Transitions
+
+- Enable View Transitions for page navigation where appropriate.
+- Use `<ViewTransitions />` in layout or `<Transition />` for partial updates.
+
+```astro
+---
+import { ViewTransitions } from 'astro:transitions';
+---
+
+<head>
+  <ViewTransitions />
+</head>
+```
+
+## Path Aliases
+
+Use project aliases for imports:
+
+| Alias | Path |
+|-------|------|
+| `@components/` | `./src/components/*` |
+| `@layouts/` | `./src/layouts/*` |
+| `@lib/` | `./src/lib/*` |
+| `@/` | `./src/*` |
+
+```astro
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import PostCard from '@components/blog/PostCard.astro';
+import { getPostBySlug } from '@lib/content';
+---
+```
+
+## Image Optimization
+
+- Use `astro:assets` for optimized images.
+- Prefer `<Image>` component for responsive images.
+
+```astro
+---
+import { Image } from 'astro:assets';
+---
+
+<Image src={post.coverImage} alt={post.title} width={800} />
+```
+
+## Class Binding
+
+- Use `class:list` for conditional classes in Astro.
+
+```astro
+<article class:list={['post-card', { 'post-card--featured': post.featured }]}>
+```

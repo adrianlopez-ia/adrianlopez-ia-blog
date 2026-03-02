@@ -1,0 +1,63 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TableOfContents from '@components/blog/TableOfContents.astro';
+import { formatDate } from '@blog/utils';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  publishedAt?: Date;
+  readingTime?: number;
+  tags?: string[];
+  headings?: Array<{ depth: number; slug: string; text: string }>;
+}
+
+const { title, description, image, publishedAt, readingTime, tags = [], headings = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} image={image} type="article">
+  <article class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+    <header class="mb-12 text-center">
+      {tags.length > 0 && (
+        <div class="mb-4 flex flex-wrap justify-center gap-2">
+          {tags.map((tag) => (
+            <a
+              href={`/blog/tag/${tag.toLowerCase()}`}
+              class="rounded-full bg-brand-500/10 px-3 py-1 text-sm font-medium text-brand-500 transition-colors hover:bg-brand-500/20"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <h1 class="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        {title}
+      </h1>
+
+      {description && (
+        <p class="mt-4 text-lg text-surface-200 dark:text-surface-200">{description}</p>
+      )}
+
+      <div class="mt-6 flex items-center justify-center gap-4 text-sm text-surface-200">
+        {publishedAt && <time datetime={publishedAt.toISOString()}>{formatDate(publishedAt)}</time>}
+        {readingTime && <span>{readingTime} min read</span>}
+      </div>
+    </header>
+
+    <div class="relative lg:grid lg:grid-cols-[1fr_200px] lg:gap-12">
+      <div class="prose mx-auto">
+        <slot />
+      </div>
+
+      {headings.length > 0 && (
+        <aside class="hidden lg:block">
+          <div class="sticky top-24">
+            <TableOfContents headings={headings} />
+          </div>
+        </aside>
+      )}
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,54 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="SolidJS Dashboard" description="Real-time metrics dashboard built with SolidJS signals.">
+  <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
+    <header class="mb-8">
+      <a href="/examples" class="text-sm text-brand-400 hover:underline">&larr; Back to Examples</a>
+      <h1 class="mt-4 font-display text-4xl font-bold tracking-tight">
+        SolidJS <span class="gradient-text">Dashboard</span>
+      </h1>
+      <p class="mt-2 text-surface-200">
+        A real-time metrics dashboard with SolidJS signals and fine-grained reactivity.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">SolidJS</span>
+        <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">Signals</span>
+        <span class="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-400">Charts</span>
+      </div>
+    </header>
+
+    <div id="solid-dashboard-app" class="rounded-2xl border border-white/10 bg-white/[0.02] p-8">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+          <p class="text-xs text-gray-400">Requests/sec</p>
+          <p class="mt-1 text-2xl font-bold text-blue-400">12,847</p>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+          <p class="text-xs text-gray-400">Avg Latency</p>
+          <p class="mt-1 text-2xl font-bold text-green-400">24ms</p>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+          <p class="text-xs text-gray-400">Error Rate</p>
+          <p class="mt-1 text-2xl font-bold text-yellow-400">0.02%</p>
+        </div>
+        <div class="rounded-xl border border-white/5 bg-white/[0.02] p-4">
+          <p class="text-xs text-gray-400">Uptime</p>
+          <p class="mt-1 text-2xl font-bold text-emerald-400">99.99%</p>
+        </div>
+      </div>
+      <p class="mt-4 text-center text-xs text-gray-500">Add SolidJS integration for live reactive updates</p>
+    </div>
+
+    <div class="mt-8 rounded-xl border border-white/5 bg-white/[0.02] p-6">
+      <h2 class="font-display text-lg font-semibold">How it works</h2>
+      <ul class="mt-3 space-y-2 text-sm text-surface-200">
+        <li>- SolidJS signals for fine-grained reactivity without virtual DOM</li>
+        <li>- <code class="text-blue-400">createSignal()</code> and <code class="text-blue-400">createEffect()</code></li>
+        <li>- Real-time WebSocket data streaming</li>
+        <li>- Lightweight chart rendering with Canvas API</li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

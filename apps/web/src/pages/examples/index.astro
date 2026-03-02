@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+
+const examples = [
+  {
+    title: 'React AI Chatbot',
+    description: 'Interactive chatbot built with React 19 and Vercel AI SDK with streaming responses.',
+    href: '/examples/react-chatbot',
+    tech: ['React', 'Vercel AI SDK', 'OpenAI'],
+    color: 'brand-400',
+  },
+  {
+    title: 'Vue Conversational Agent',
+    description: 'Conversational AI agent with Vue 3 Composition API and LangChain tools.',
+    href: '/examples/vue-agent',
+    tech: ['Vue 3', 'LangChain', 'Anthropic'],
+    color: 'green-400',
+  },
+  {
+    title: 'Svelte Interactive Widget',
+    description: 'Lightweight interactive widget showcasing Svelte 5 runes and reactivity.',
+    href: '/examples/svelte-widget',
+    tech: ['Svelte 5', 'Runes', 'Web APIs'],
+    color: 'orange-400',
+  },
+  {
+    title: 'SolidJS Dashboard',
+    description: 'Real-time metrics dashboard with SolidJS signals and fine-grained reactivity.',
+    href: '/examples/solid-dashboard',
+    tech: ['SolidJS', 'Signals', 'Charts'],
+    color: 'blue-400',
+  },
+  {
+    title: 'Vanilla Web Components Bot',
+    description: 'AI bot built with native Web Components and zero dependencies.',
+    href: '/examples/vanilla-bot',
+    tech: ['Web Components', 'Fetch API', 'Shadow DOM'],
+    color: 'yellow-400',
+  },
+];
+---
+
+<BaseLayout title="Examples" description="Interactive examples and demos with different web frameworks and AI technologies.">
+  <div class="mx-auto max-w-7xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
+    <header class="mb-12 text-center">
+      <h1 class="font-display text-5xl font-bold tracking-tight sm:text-6xl">
+        Interactive <span class="gradient-text">Examples</span>
+      </h1>
+      <p class="mt-4 text-lg text-surface-200">
+        Live demos built with different frameworks and AI technologies.
+      </p>
+    </header>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {examples.map((example) => (
+        <a
+          href={example.href}
+          class="group relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] p-8 transition-all duration-300 hover:border-brand-500/30 hover:bg-white/[0.04]"
+        >
+          <h2 class="font-display text-xl font-bold transition-colors group-hover:text-brand-400">
+            {example.title}
+          </h2>
+          <p class="mt-2 text-sm text-surface-200">{example.description}</p>
+          <div class="mt-4 flex flex-wrap gap-2">
+            {example.tech.map((t) => (
+              <span class="rounded-full bg-white/5 px-2 py-0.5 text-xs text-surface-200">
+                {t}
+              </span>
+            ))}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

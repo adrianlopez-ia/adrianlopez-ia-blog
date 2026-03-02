@@ -1,0 +1,13 @@
+{
+  "name": "@blog/config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./typescript/base": "./typescript/base.json",
+    "./typescript/astro": "./typescript/astro.json",
+    "./typescript/node": "./typescript/node.json",
+    "./typescript/react": "./typescript/react.json",
+    "./biome": "./biome/base.json",
+    "./stylelint": "./stylelint/base.json"
+  }
+}

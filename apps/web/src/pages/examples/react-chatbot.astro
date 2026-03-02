@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ChatWidget from '@components/ai/ChatWidget';
+---
+
+<BaseLayout title="React AI Chatbot" description="Interactive chatbot built with React 19 and Vercel AI SDK.">
+  <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
+    <header class="mb-8">
+      <a href="/examples" class="text-sm text-brand-400 hover:underline">&larr; Back to Examples</a>
+      <h1 class="mt-4 font-display text-4xl font-bold tracking-tight">
+        React AI <span class="gradient-text">Chatbot</span>
+      </h1>
+      <p class="mt-2 text-surface-200">
+        An interactive chatbot built with React 19 and the Vercel AI SDK with streaming responses from OpenAI.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-400">React 19</span>
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-400">Vercel AI SDK</span>
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-400">OpenAI</span>
+      </div>
+    </header>
+
+    <ChatWidget client:load />
+
+    <div class="mt-8 rounded-xl border border-white/5 bg-white/[0.02] p-6">
+      <h2 class="font-display text-lg font-semibold">How it works</h2>
+      <ul class="mt-3 space-y-2 text-sm text-surface-200">
+        <li>- React island hydrated with <code class="text-brand-400">client:load</code> in Astro</li>
+        <li>- Uses the Vercel AI SDK <code class="text-brand-400">useChat</code> hook for streaming</li>
+        <li>- Connects to the Hono API at <code class="text-brand-400">/api/ai/chat</code></li>
+        <li>- Supports multiple AI providers (OpenAI, Anthropic)</li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

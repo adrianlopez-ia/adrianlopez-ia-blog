@@ -1,0 +1,79 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  subtitle?: string;
+  reverse?: boolean;
+}
+
+const { id, title, subtitle, reverse = false } = Astro.props;
+---
+
+<section class="relative min-h-screen py-32" id={id}>
+  <div
+    class:list={[
+      'mx-auto max-w-7xl px-4 sm:px-6 lg:px-8',
+      'lg:grid lg:grid-cols-2 lg:items-center lg:gap-16',
+      reverse && 'direction-rtl',
+    ]}
+  >
+    <div class:list={['parallax-content opacity-0', reverse && 'lg:order-2']}>
+      <h2 class="font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        <Fragment set:html={title} />
+      </h2>
+      {subtitle && <p class="mt-6 text-lg text-surface-200">{subtitle}</p>}
+      <div class="mt-8">
+        <slot name="content" />
+      </div>
+    </div>
+
+    <div class:list={['parallax-visual mt-12 opacity-0 lg:mt-0', reverse && 'lg:order-1']}>
+      <slot name="visual" />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll<HTMLElement>('section[id]').forEach((section) => {
+    const content = section.querySelector('.parallax-content');
+    const visual = section.querySelector('.parallax-visual');
+    if (!content && !visual) return;
+
+    if (content) {
+      gsap.set(content, { x: -50 });
+      gsap.to(content, {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 70%',
+          end: 'top 30%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    }
+
+    if (visual) {
+      gsap.set(visual, { x: 50 });
+      gsap.to(visual, {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 60%',
+          end: 'top 20%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    }
+  });
+</script>

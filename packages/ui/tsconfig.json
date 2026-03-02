@@ -1,0 +1,8 @@
+{
+  "extends": "@blog/config/typescript/react",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src"]
+}

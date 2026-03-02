@@ -1,0 +1,61 @@
+---
+title: "Monorepo Architecture with Turborepo and pnpm"
+description: "How to structure a fullstack monorepo with Turborepo, pnpm workspaces, and shared packages for maximum code reuse."
+publishedAt: 2026-02-28
+tags: ["DevOps", "TypeScript", "Architecture"]
+coverImage: "/images/monorepo-cover.png"
+---
+
+# Monorepo Architecture with Turborepo and pnpm
+
+A monorepo is the best way to manage a fullstack project in 2026. Here's how this blog's monorepo is structured.
+
+## Why Monorepo?
+
+- **Shared types** -- One source of truth for TypeScript types
+- **Shared utilities** -- Common functions used everywhere
+- **Atomic changes** -- Frontend and backend changes in one commit
+- **Unified CI/CD** -- One pipeline to rule them all
+
+## Project Structure
+
+```
+apps/
+  web/          → Astro 5 blog + landing
+  api/          → Hono REST API
+packages/
+  ui/           → Shared React components
+  database/     → Drizzle ORM schemas
+  ai/           → AI/Agent logic
+  config/       → Shared configs
+  types/        → Shared TypeScript types
+  utils/        → Shared utilities
+```
+
+## Turborepo Pipeline
+
+The `turbo.json` configuration defines task dependencies:
+
+```json
+{
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".astro/**"]
+    },
+    "dev": {
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
+```
+
+## Code Quality
+
+We use **Biome** for linting and formatting (15-100x faster than ESLint + Prettier) with **Lefthook** for git hooks that run checks on every commit.
+
+## Key Takeaway
+
+The monorepo approach lets us share everything -- types, utilities, database schemas -- across the frontend and backend, eliminating duplication and keeping the codebase consistent.

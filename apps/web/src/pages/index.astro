@@ -1,0 +1,36 @@
+---
+import LandingLayout from '@layouts/LandingLayout.astro';
+import Hero from '@components/landing/Hero.astro';
+import Features from '@components/landing/Features.astro';
+import TextReveal from '@components/landing/TextReveal.astro';
+import CallToAction from '@components/landing/CallToAction.astro';
+---
+
+<LandingLayout
+  title="Home"
+  description="Adrian Lopez - Full-stack developer & AI enthusiast. Exploring modern web development, AI agents, and cutting-edge technologies."
+>
+  <Hero />
+
+  <section class="relative py-32">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <TextReveal
+        text="I build modern web experiences at the intersection of design and artificial intelligence. This blog is a playground for the latest technologies, frameworks, and AI-powered tools that are shaping the future of the web."
+        class="font-display text-3xl font-bold leading-relaxed tracking-tight sm:text-4xl lg:text-5xl"
+      />
+    </div>
+  </section>
+
+  <Features />
+
+  <section class="relative py-32">
+    <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <TextReveal
+        text="From React chatbots to Svelte widgets, Vue agents to SolidJS dashboards -- every example is a live, interactive demonstration you can explore and learn from."
+        class="font-display text-2xl font-bold leading-relaxed tracking-tight sm:text-3xl lg:text-4xl"
+      />
+    </div>
+  </section>
+
+  <CallToAction />
+</LandingLayout>

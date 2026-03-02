@@ -1,0 +1,79 @@
+---
+description: Git workflow with conventional commits and branch naming
+alwaysApply: true
+---
+
+# Git Workflow
+
+## Conventional Commits
+
+Use conventional commit format: `type(scope): description`
+
+**Types**: `feat` | `fix` | `docs` | `style` | `refactor` | `perf` | `test` | `build` | `ci` | `chore`
+
+```bash
+# ✅ GOOD
+feat(ai): add streaming support for chat endpoint
+fix(api): handle missing API key gracefully
+docs(readme): add setup instructions for AI package
+refactor(ui): extract ChatWidget into reusable component
+chore(deps): bump @biomejs/biome to 1.9.0
+
+# ❌ BAD
+Added streaming
+fixed bug
+WIP
+```
+
+## Branch Naming
+
+```
+feature/*  - New features (feature/ai-streaming, feature/chat-widget)
+fix/*      - Bug fixes (fix/rate-limit-429, fix/api-key-validation)
+chore/*    - Maintenance (chore/update-deps, chore/biome-config)
+```
+
+## PR Template
+
+PRs should include:
+
+1. **Description** — What changed and why
+2. **Test plan** — How to verify (manual steps, tests run)
+
+```markdown
+## Description
+Adds streaming support to the chat API using Vercel AI SDK streamText().
+
+## Test Plan
+- [ ] Run `pnpm test` — all pass
+- [ ] Start dev server, call POST /api/ai/chat with valid messages
+- [ ] Verify SSE stream returns chunks
+```
+
+## Merge Strategy
+
+- **Squash merge** to `main` — keep history clean
+- **Rebase** before merge when requested
+- **No WIP commits** to main — all commits should be complete
+
+## Atomic Commits
+
+Each commit should be a single logical change.
+
+```bash
+# ✅ GOOD - Separate commits
+feat(ai): add createChatStream
+fix(ai): handle missing provider in getModel
+docs(ai): add README with usage
+
+# ❌ BAD - Mixed concerns
+feat: add ai stuff and fix docs
+```
+
+## Checklist
+
+- [ ] Branch name follows convention
+- [ ] Commit messages use conventional format
+- [ ] PR has description and test plan
+- [ ] No WIP or broken commits
+- [ ] Squash merge to main

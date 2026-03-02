@@ -1,0 +1,40 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+const words = text.split(' ');
+---
+
+<div class:list={['text-reveal-container', className]} data-text-reveal>
+  {words.map((word, i) => (
+    <span class="reveal-word inline-block opacity-10" data-index={i}>
+      {word}&nbsp;
+    </span>
+  ))}
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll('[data-text-reveal]').forEach((container) => {
+    const words = container.querySelectorAll('.reveal-word');
+
+    gsap.to(words, {
+      opacity: 1,
+      stagger: 0.05,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 80%',
+        end: 'bottom 40%',
+        scrub: 1,
+      },
+    });
+  });
+</script>

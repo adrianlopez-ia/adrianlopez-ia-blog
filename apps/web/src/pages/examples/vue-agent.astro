@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Vue Conversational Agent" description="AI agent built with Vue 3 Composition API and LangChain.">
+  <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
+    <header class="mb-8">
+      <a href="/examples" class="text-sm text-brand-400 hover:underline">&larr; Back to Examples</a>
+      <h1 class="mt-4 font-display text-4xl font-bold tracking-tight">
+        Vue Conversational <span class="gradient-text">Agent</span>
+      </h1>
+      <p class="mt-2 text-surface-200">
+        A conversational AI agent using Vue 3 Composition API, LangChain tools, and Anthropic Claude.
+      </p>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">Vue 3</span>
+        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">LangChain</span>
+        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-400">Anthropic</span>
+      </div>
+    </header>
+
+    <div id="vue-agent-app" class="flex h-[500px] flex-col rounded-2xl border border-white/10 bg-white/[0.02]">
+      <div class="border-b border-white/5 px-4 py-3">
+        <h3 class="text-sm font-semibold">Vue AI Agent</h3>
+        <p class="text-xs text-gray-400">Powered by LangChain + Anthropic Claude</p>
+      </div>
+      <div class="flex flex-1 items-center justify-center p-4">
+        <div class="text-center">
+          <p class="text-4xl">🤖</p>
+          <p class="mt-2 text-sm text-gray-400">Vue 3 agent loading...</p>
+          <p class="mt-1 text-xs text-gray-500">Add Vue integration to activate this example</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 rounded-xl border border-white/5 bg-white/[0.02] p-6">
+      <h2 class="font-display text-lg font-semibold">How it works</h2>
+      <ul class="mt-3 space-y-2 text-sm text-surface-200">
+        <li>- Vue 3 Composition API with <code class="text-green-400">ref()</code> and <code class="text-green-400">computed()</code></li>
+        <li>- LangChain agent with tool-calling capabilities</li>
+        <li>- Anthropic Claude as the AI provider</li>
+        <li>- Reactive state management with Vue reactivity system</li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

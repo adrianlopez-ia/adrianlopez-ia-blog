@@ -1,0 +1,35 @@
+{
+  "name": "adrianlopez-ia-blog",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Adrian Lopez IA Blog - Modern fullstack monorepo with Astro, Hono, and AI agents",
+  "author": "Adrian Lopez",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.4",
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "format": "biome format --write .",
+    "check": "biome check --write .",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "clean": "turbo clean && rm -rf node_modules",
+    "db:generate": "turbo db:generate",
+    "db:migrate": "turbo db:migrate",
+    "db:studio": "turbo db:studio",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "lefthook": "^1.9.0",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  }
+}

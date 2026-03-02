@@ -1,0 +1,98 @@
+---
+description: Drizzle ORM patterns (schemas, relations, migrations)
+globs: ['packages/database/**/*.ts']
+alwaysApply: false
+---
+
+# Drizzle ORM Patterns
+
+## Schema Organization
+
+- Define schema in separate files per table: `posts.ts`, `users.ts`, `comments.ts`, `tags.ts`.
+- Export schema and relations from each file.
+- Re-export from `schema/index.ts`.
+
+```typescript
+// schema/posts.ts
+import { relations } from 'drizzle-orm';
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+
+export const posts = sqliteTable('posts', {
+  id: text('id').primaryKey(),
+  title: text('title').notNull(),
+  slug: text('slug').notNull().unique(),
+  publishedAt: integer('published_at', { mode: 'timestamp' }),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
+
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  author: one(users, { fields: [posts.authorId], references: [users.id] }),
+  comments: many(comments),
+}));
+```
+
+## Timestamps
+
+- Use `integer('column', { mode: 'timestamp' })` for date columns.
+- Use `$defaultFn(() => new Date())` for auto-generated values.
+
+```typescript
+createdAt: integer('created_at', { mode: 'timestamp' })
+  .notNull()
+  .$defaultFn(() => new Date()),
+```
+
+## Mutations
+
+- Always use `.returning()` on insert, update, and delete for typed results.
+
+```typescript
+// ✅ Good
+const [created] = await db.insert(posts).values(data).returning();
+const [updated] = await db.update(posts).set(updates).where(eq(posts.id, id)).returning();
+const [deleted] = await db.delete(posts).where(eq(posts.id, id)).returning();
+
+// ❌ Bad - No returning
+await db.insert(posts).values(data);
+```
+
+## Prepared Statements
+
+- Use `.prepare()` for frequent queries (e.g. by slug, by id) to avoid re-parsing.
+
+```typescript
+import { eq, sql } from 'drizzle-orm';
+
+const getPostBySlug = db
+  .select()
+  .from(posts)
+  .where(eq(posts.slug, sql.placeholder('slug')))
+  .prepare();
+```
+
+## Relations
+
+- Define `relations()` for each table with foreign keys.
+- Use `one()` for single relation, `many()` for collections.
+
+```typescript
+export const postsRelations = relations(posts, ({ one, many }) => ({
+  author: one(users, { fields: [posts.authorId], references: [users.id] }),
+  comments: many(comments),
+}));
+```
+
+## Migrations
+
+- Use `drizzle-kit generate` for schema changes.
+- Run migrations with `drizzle-kit migrate` or `drizzle-kit push`.
+
+```bash
+pnpm drizzle-kit generate
+pnpm drizzle-kit migrate
+```

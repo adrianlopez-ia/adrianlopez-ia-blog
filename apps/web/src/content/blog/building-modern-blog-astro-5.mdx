@@ -1,0 +1,65 @@
+---
+title: "Building a Modern Blog with Astro 5 and GSAP"
+description: "Learn how to create a stunning blog with parallax effects using Astro 5, GSAP ScrollTrigger, and Tailwind CSS v4."
+publishedAt: 2026-03-01
+tags: ["Astro", "GSAP", "Frontend", "TypeScript"]
+coverImage: "/images/astro-blog-cover.png"
+---
+
+# Building a Modern Blog with Astro 5 and GSAP
+
+Welcome to the first post of this blog! In this article, we'll explore how this very site was built using the most cutting-edge web technologies of 2026.
+
+## The Stack
+
+This blog is built as a **monorepo** using:
+
+- **Astro 5** for the frontend with zero-JS-by-default philosophy
+- **Hono** for the backend API running at 70k requests/second
+- **GSAP ScrollTrigger** for immersive parallax animations
+- **Tailwind CSS v4** with CSS-first configuration
+- **Drizzle ORM + Turso** for edge-distributed SQLite
+
+## Why Astro 5?
+
+Astro's island architecture is perfect for content-heavy sites. Pages ship with **0KB of JavaScript** by default, and interactive components are hydrated only when needed.
+
+```typescript
+// Content Collections with type-safe schemas
+const blog = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    publishedAt: z.coerce.date(),
+    tags: z.array(z.string()),
+  }),
+});
+```
+
+## Parallax with GSAP
+
+The landing page uses **GSAP ScrollTrigger** for multi-layer parallax effects and **Lenis** for buttery-smooth scrolling. Each background layer moves at a different speed, creating depth.
+
+```javascript
+gsap.to('[data-speed]', {
+  yPercent: (i, el) => -30 * parseFloat(el.dataset.speed),
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#hero',
+    start: 'top top',
+    end: 'bottom top',
+    scrub: 1,
+  },
+});
+```
+
+## What's Next
+
+In upcoming posts, we'll dive into:
+
+- Setting up AI chatbots with the Vercel AI SDK
+- Multi-framework examples (React, Vue, Svelte, SolidJS)
+- Database patterns with Drizzle ORM
+- CI/CD with GitHub Actions and Turborepo
+
+Stay tuned!
