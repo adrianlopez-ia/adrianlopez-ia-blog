@@ -25,7 +25,7 @@ const { posts, title } = Astro.props;
   )}
 
   {posts.length === 0 ? (
-    <p class="text-center text-surface-200">No posts found.</p>
+    <p class="text-center" style="color: var(--color-text-muted);">No posts found.</p>
   ) : (
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (

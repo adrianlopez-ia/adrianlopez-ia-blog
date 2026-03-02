@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#5b5bf7" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#5b5bf7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <circle cx="150" cy="300" r="200" fill="#5b5bf7" opacity="0.03"/>
+  <circle cx="1050" cy="300" r="200" fill="#7c7cff" opacity="0.03"/>
+  <g transform="translate(600,200)">
+    <rect x="-40" y="-40" width="80" height="50" rx="10" fill="white" opacity="0.06" stroke="#5b5bf7" stroke-opacity="0.4" stroke-width="1.5"/>
+    <text x="0" y="-10" font-family="monospace" font-size="11" fill="#a3a3ff" text-anchor="middle">root</text>
+    <line x1="0" y1="10" x2="-200" y2="60" stroke="#5b5bf7" stroke-opacity="0.3" stroke-width="1"/>
+    <line x1="0" y1="10" x2="-70" y2="60" stroke="#5b5bf7" stroke-opacity="0.3" stroke-width="1"/>
+    <line x1="0" y1="10" x2="70" y2="60" stroke="#5b5bf7" stroke-opacity="0.3" stroke-width="1"/>
+    <line x1="0" y1="10" x2="200" y2="60" stroke="#5b5bf7" stroke-opacity="0.3" stroke-width="1"/>
+    <rect x="-240" y="55" width="80" height="40" rx="8" fill="white" opacity="0.04" stroke="#7c7cff" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="-200" y="80" font-family="monospace" font-size="10" fill="#7c7cff" text-anchor="middle">apps/web</text>
+    <rect x="-110" y="55" width="80" height="40" rx="8" fill="white" opacity="0.04" stroke="#7c7cff" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="-70" y="80" font-family="monospace" font-size="10" fill="#7c7cff" text-anchor="middle">apps/api</text>
+    <rect x="30" y="55" width="80" height="40" rx="8" fill="white" opacity="0.04" stroke="#a3a3ff" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="70" y="80" font-family="monospace" font-size="10" fill="#a3a3ff" text-anchor="middle">pkgs/ui</text>
+    <rect x="160" y="55" width="80" height="40" rx="8" fill="white" opacity="0.04" stroke="#a3a3ff" stroke-opacity="0.3" stroke-width="1"/>
+    <text x="200" y="80" font-family="monospace" font-size="10" fill="#a3a3ff" text-anchor="middle">pkgs/db</text>
+    <line x1="-200" y1="95" x2="-70" y2="120" stroke="#5b5bf7" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="-200" y1="95" x2="70" y2="120" stroke="#5b5bf7" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="4,4"/>
+    <line x1="-70" y1="95" x2="200" y2="120" stroke="#5b5bf7" stroke-opacity="0.15" stroke-width="1" stroke-dasharray="4,4"/>
+  </g>
+  <text x="600" y="400" font-family="system-ui, sans-serif" font-size="42" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">Monorepo Architecture</text>
+  <text x="600" y="440" font-family="system-ui, sans-serif" font-size="20" fill="#a3a3ff" text-anchor="middle">Turborepo + pnpm Workspaces</text>
+  <g transform="translate(380,480)">
+    <rect width="100" height="24" rx="12" fill="#5b5bf7" opacity="0.15"/>
+    <text x="50" y="16" font-family="system-ui" font-size="11" fill="#a3a3ff" text-anchor="middle">Turborepo</text>
+  </g>
+  <g transform="translate(510,480)">
+    <rect width="70" height="24" rx="12" fill="#7c7cff" opacity="0.15"/>
+    <text x="35" y="16" font-family="system-ui" font-size="11" fill="#a3a3ff" text-anchor="middle">pnpm</text>
+  </g>
+  <g transform="translate(610,480)">
+    <rect width="100" height="24" rx="12" fill="#5b5bf7" opacity="0.15"/>
+    <text x="50" y="16" font-family="system-ui" font-size="11" fill="#a3a3ff" text-anchor="middle">TypeScript</text>
+  </g>
+  <g transform="translate(740,480)">
+    <rect width="80" height="24" rx="12" fill="#7c7cff" opacity="0.15"/>
+    <text x="40" y="16" font-family="system-ui" font-size="11" fill="#a3a3ff" text-anchor="middle">Drizzle</text>
+  </g>
+</svg>

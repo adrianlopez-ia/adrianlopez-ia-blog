@@ -12,8 +12,8 @@ interface Props {
 
 const {
   title,
-  description = 'Adrian Lopez - Full-stack developer & AI enthusiast. Blog about modern web development, AI agents, and cutting-edge technologies.',
-  image = '/images/og-default.png',
+  description = 'Adrián López Ibáñez - Full-stack developer & AI enthusiast. Blog about modern web development, AI agents, and cutting-edge technologies.',
+  image = '/images/og-default.svg',
   type = 'website',
 } = Astro.props;
 
@@ -27,7 +27,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{title} | Adrian Lopez</title>
+    <title>{title} | Adrián López Ibáñez</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
 
@@ -53,7 +53,7 @@ const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
       url: canonicalUrl.href,
       author: {
         '@type': 'Person',
-        name: 'Adrian Lopez',
+        name: 'Adrián López Ibáñez',
       },
     })} />
 

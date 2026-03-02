@@ -10,7 +10,7 @@ async function seed() {
     .values({
       id: crypto.randomUUID(),
       email: 'adrian@adrianlopez.dev',
-      name: 'Adrian Lopez',
+      name: 'Adrián López Ibáñez',
       role: 'admin',
       bio: 'Full-stack developer & AI enthusiast',
     })

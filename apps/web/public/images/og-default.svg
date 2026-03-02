@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c7cff"/>
+      <stop offset="100%" stop-color="#4747e5"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5b5bf7" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#5b5bf7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <text x="600" y="280" font-family="system-ui, sans-serif" font-size="72" font-weight="700" text-anchor="middle">
+    <tspan fill="url(#accent)">Adrián López Ibáñez</tspan>
+  </text>
+  <text x="600" y="340" font-family="system-ui, sans-serif" font-size="24" fill="#a3a3ff" text-anchor="middle">Full-Stack Developer &amp; AI Enthusiast</text>
+  <line x1="350" y1="380" x2="850" y2="380" stroke="#5b5bf7" stroke-opacity="0.2" stroke-width="1"/>
+  <text x="600" y="420" font-family="system-ui, sans-serif" font-size="16" fill="#7c7cff" text-anchor="middle" opacity="0.6">adrianlopez.dev</text>
+</svg>

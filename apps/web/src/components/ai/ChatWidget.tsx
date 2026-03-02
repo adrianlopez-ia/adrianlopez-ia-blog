@@ -42,10 +42,20 @@ export default function ChatWidget() {
   };
 
   return (
-    <div className="flex h-[500px] flex-col rounded-2xl border border-white/10 bg-white/[0.02]">
-      <div className="border-white/5 border-b px-4 py-3">
-        <h3 className="font-semibold text-sm">React AI Chatbot</h3>
-        <p className="text-gray-400 text-xs">Powered by Vercel AI SDK + OpenAI</p>
+    <div
+      className="flex h-[500px] flex-col rounded-2xl"
+      style={{
+        border: '1px solid var(--color-border)',
+        backgroundColor: 'var(--color-card-bg)',
+      }}
+    >
+      <div className="px-4 py-3" style={{ borderBottom: '1px solid var(--color-border-subtle)' }}>
+        <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
+          React AI Chatbot
+        </h3>
+        <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          Powered by Vercel AI SDK + OpenAI
+        </p>
       </div>
 
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
@@ -53,7 +63,9 @@ export default function ChatWidget() {
           <div className="flex h-full items-center justify-center text-center">
             <div>
               <p className="text-2xl">💬</p>
-              <p className="mt-2 text-gray-400 text-sm">Send a message to start chatting</p>
+              <p className="mt-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                Send a message to start chatting
+              </p>
             </div>
           </div>
         )}
@@ -65,8 +77,16 @@ export default function ChatWidget() {
           >
             <div
               className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
-                msg.role === 'user' ? 'bg-indigo-500 text-white' : 'bg-white/5 text-gray-200'
+                msg.role === 'user' ? 'bg-brand-500 text-white' : ''
               }`}
+              style={
+                msg.role === 'assistant'
+                  ? {
+                      backgroundColor: 'var(--color-overlay)',
+                      color: 'var(--color-text-secondary)',
+                    }
+                  : undefined
+              }
             >
               {msg.content}
             </div>
@@ -75,19 +95,22 @@ export default function ChatWidget() {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="rounded-2xl bg-white/5 px-4 py-2">
+            <div
+              className="rounded-2xl px-4 py-2"
+              style={{ backgroundColor: 'var(--color-overlay)' }}
+            >
               <div className="flex gap-1">
                 <span
-                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-                  style={{ animationDelay: '0ms' }}
+                  className="h-2 w-2 animate-bounce rounded-full"
+                  style={{ backgroundColor: 'var(--color-text-muted)', animationDelay: '0ms' }}
                 />
                 <span
-                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-                  style={{ animationDelay: '150ms' }}
+                  className="h-2 w-2 animate-bounce rounded-full"
+                  style={{ backgroundColor: 'var(--color-text-muted)', animationDelay: '150ms' }}
                 />
                 <span
-                  className="h-2 w-2 animate-bounce rounded-full bg-gray-400"
-                  style={{ animationDelay: '300ms' }}
+                  className="h-2 w-2 animate-bounce rounded-full"
+                  style={{ backgroundColor: 'var(--color-text-muted)', animationDelay: '300ms' }}
                 />
               </div>
             </div>
@@ -97,19 +120,28 @@ export default function ChatWidget() {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="border-white/5 border-t p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="p-4"
+        style={{ borderTop: '1px solid var(--color-border-subtle)' }}
+      >
         <div className="flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-indigo-500/50"
+            className="flex-1 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
+            style={{
+              border: '1px solid var(--color-border)',
+              backgroundColor: 'var(--color-overlay)',
+              color: 'var(--color-text)',
+            }}
           />
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="rounded-xl bg-indigo-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-indigo-600 disabled:opacity-50"
+            className="rounded-xl bg-brand-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
           >
             Send
           </button>

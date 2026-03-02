@@ -7,7 +7,7 @@ export async function GET(context: APIContext) {
   const posts = await getPublishedPosts();
 
   return rss({
-    title: 'Adrian Lopez Blog',
+    title: 'Adrián López Ibáñez Blog',
     description: 'Modern web development, AI, and cutting-edge technologies.',
     site: context.site?.toString() ?? 'https://adrianlopez.dev',
     items: posts.map((post: CollectionEntry<'blog'>) => ({

@@ -8,7 +8,7 @@ export interface AgentConfig {
 
 export const blogAssistant: AgentConfig = {
   name: 'Blog Assistant',
-  systemPrompt: `You are a helpful blog assistant for Adrian Lopez's tech blog. You specialize in:
+  systemPrompt: `You are a helpful blog assistant for Adrián López Ibáñez's tech blog. You specialize in:
 - Modern web development (Astro, React, Vue, Svelte, SolidJS)
 - AI/ML integration (Vercel AI SDK, LangChain, OpenAI, Anthropic)
 - Backend development (Hono, Node.js, edge computing)

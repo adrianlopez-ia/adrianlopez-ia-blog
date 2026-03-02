@@ -5,28 +5,28 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 <BaseLayout title="Vanilla Web Components Bot" description="AI bot built with native Web Components and zero dependencies.">
   <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
     <header class="mb-8">
-      <a href="/examples" class="text-sm text-brand-400 hover:underline">&larr; Back to Examples</a>
+      <a href="/examples" class="text-sm text-brand-500 dark:text-brand-400 hover:underline">&larr; Back to Examples</a>
       <h1 class="mt-4 font-display text-4xl font-bold tracking-tight">
         Vanilla <span class="gradient-text">Web Components</span> Bot
       </h1>
-      <p class="mt-2 text-surface-200">
+      <p class="mt-2" style="color: var(--color-text-secondary);">
         An AI bot built with native Web Components, Shadow DOM, and zero framework dependencies.
       </p>
       <div class="mt-4 flex flex-wrap gap-2">
-        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-400">Web Components</span>
-        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-400">Shadow DOM</span>
-        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-400">Fetch API</span>
+        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Web Components</span>
+        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Shadow DOM</span>
+        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Fetch API</span>
       </div>
     </header>
 
     <chat-bot></chat-bot>
 
-    <div class="mt-8 rounded-xl border border-white/5 bg-white/[0.02] p-6">
+    <div class="mt-8 rounded-xl p-6 themed-card">
       <h2 class="font-display text-lg font-semibold">How it works</h2>
-      <ul class="mt-3 space-y-2 text-sm text-surface-200">
-        <li>- Native <code class="text-yellow-400">customElements.define()</code> -- no framework</li>
+      <ul class="mt-3 space-y-2 text-sm" style="color: var(--color-text-secondary);">
+        <li>- Native <code class="text-yellow-600 dark:text-yellow-400">customElements.define()</code> -- no framework</li>
         <li>- Shadow DOM for encapsulated styles</li>
-        <li>- <code class="text-yellow-400">fetch()</code> API for communication</li>
+        <li>- <code class="text-yellow-600 dark:text-yellow-400">fetch()</code> API for communication</li>
         <li>- Zero dependencies, runs in any browser</li>
       </ul>
     </div>
@@ -49,17 +49,17 @@ import BaseLayout from '@layouts/BaseLayout.astro';
         <style>
           :host {
             display: block;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--color-border, rgba(255,255,255,0.1));
             border-radius: 1rem;
-            background: rgba(255,255,255,0.02);
+            background: var(--color-card-bg, rgba(255,255,255,0.02));
             overflow: hidden;
           }
           .header {
             padding: 0.75rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--color-border-subtle, rgba(255,255,255,0.05));
           }
-          .header h3 { font-size: 0.875rem; font-weight: 600; color: white; margin: 0; }
-          .header p { font-size: 0.75rem; color: #9ca3af; margin: 0.25rem 0 0; }
+          .header h3 { font-size: 0.875rem; font-weight: 600; color: var(--color-text, white); margin: 0; }
+          .header p { font-size: 0.75rem; color: var(--color-text-muted, #9ca3af); margin: 0.25rem 0 0; }
           .messages {
             height: 350px;
             overflow-y: auto;
@@ -74,7 +74,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
             justify-content: center;
             height: 100%;
             text-align: center;
-            color: #6b7280;
+            color: var(--color-text-muted, #6b7280);
             font-size: 0.875rem;
           }
           .msg {
@@ -90,12 +90,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
           }
           .msg.assistant {
             align-self: flex-start;
-            background: rgba(255,255,255,0.05);
-            color: #d1d5db;
+            background: var(--color-overlay, rgba(255,255,255,0.05));
+            color: var(--color-text-secondary, #d1d5db);
           }
           .input-area {
             padding: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--color-border-subtle, rgba(255,255,255,0.05));
             display: flex;
             gap: 0.5rem;
           }
@@ -103,9 +103,9 @@ import BaseLayout from '@layouts/BaseLayout.astro';
             flex: 1;
             padding: 0.5rem 1rem;
             border-radius: 0.75rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05);
-            color: white;
+            border: 1px solid var(--color-border, rgba(255,255,255,0.1));
+            background: var(--color-overlay, rgba(255,255,255,0.05));
+            color: var(--color-text, white);
             font-size: 0.875rem;
             outline: none;
           }

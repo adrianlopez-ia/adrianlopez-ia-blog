@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a0a1a"/>
+      <stop offset="100%" stop-color="#1a1a2e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7c7cff"/>
+      <stop offset="100%" stop-color="#4747e5"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#5b5bf7" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#5b5bf7" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <circle cx="200" cy="150" r="200" fill="#5b5bf7" opacity="0.05"/>
+  <circle cx="1000" cy="480" r="250" fill="#7c7cff" opacity="0.05"/>
+  <g transform="translate(600,250)">
+    <path d="M-40,-80 L0,-100 L40,-80 L40,0 L0,20 L-40,0 Z" fill="url(#accent)" opacity="0.9"/>
+    <path d="M0,-100 L0,20 L40,-80 L40,0 Z" fill="#5b5bf7" opacity="0.5"/>
+    <circle cx="0" cy="-40" r="15" fill="white" opacity="0.9"/>
+  </g>
+  <text x="600" y="370" font-family="system-ui, sans-serif" font-size="42" font-weight="700" fill="white" text-anchor="middle" letter-spacing="-1">Astro 5 + GSAP</text>
+  <text x="600" y="410" font-family="system-ui, sans-serif" font-size="20" fill="#a3a3ff" text-anchor="middle">Building a Modern Blog</text>
+  <line x1="250" y1="450" x2="950" y2="450" stroke="#5b5bf7" stroke-opacity="0.2" stroke-width="1"/>
+  <g transform="translate(420,480)">
+    <rect width="80" height="8" rx="4" fill="#5b5bf7" opacity="0.4"/>
+    <rect y="16" width="120" height="8" rx="4" fill="#5b5bf7" opacity="0.2"/>
+    <rect y="32" width="60" height="8" rx="4" fill="#5b5bf7" opacity="0.15"/>
+  </g>
+  <g transform="translate(620,480)">
+    <rect width="100" height="8" rx="4" fill="#7c7cff" opacity="0.4"/>
+    <rect y="16" width="80" height="8" rx="4" fill="#7c7cff" opacity="0.2"/>
+    <rect y="32" width="110" height="8" rx="4" fill="#7c7cff" opacity="0.15"/>
+  </g>
+</svg>

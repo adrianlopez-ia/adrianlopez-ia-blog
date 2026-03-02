@@ -2,8 +2,8 @@
   "name": "adrianlopez-ia-blog",
   "private": true,
   "version": "0.1.0",
-  "description": "Adrian Lopez IA Blog - Modern fullstack monorepo with Astro, Hono, and AI agents",
-  "author": "Adrian Lopez",
+  "description": "Adrián López Ibáñez Blog - Modern fullstack monorepo with Astro, Hono, and AI agents",
+  "author": "Adrián López Ibáñez",
   "license": "MIT",
   "packageManager": "pnpm@9.15.4",
   "engines": {
