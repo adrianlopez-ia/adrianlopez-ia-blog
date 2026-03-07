@@ -1,0 +1,291 @@
+---
+title: "House Bot: Automatizando la Busqueda de Vivienda en Madrid con IA"
+description: "Como construi un bot en Python que descubre cooperativas de vivienda, analiza oportunidades con Gemini AI, rellena formularios automaticamente y notifica via Telegram."
+publishedAt: 2026-03-07
+tags: ["Python", "AI", "Automation", "Telegram", "Web Scraping"]
+draft: false
+---
+
+import { MermaidDiagram } from '@components/blog/MermaidDiagram';
+
+# House Bot: Automatizando la Busqueda de Vivienda en Madrid con IA
+
+Buscar vivienda en Madrid es una tarea agotadora. Decenas de cooperativas, constructoras con webs desactualizadas, formularios de contacto interminables y la sensacion constante de que te estas perdiendo algo. Asi que hice lo que cualquier desarrollador haria: **automatizarlo todo**.
+
+[**house-bot**](https://github.com/adrianlopez-ia/house-bot) es un bot en Python que descubre webs de cooperativas y constructoras, analiza las oportunidades con IA, rellena formularios de contacto automaticamente y me envia alertas por Telegram. Todo gratis.
+
+## El Problema
+
+El mercado de vivienda nueva en Madrid (especialmente cooperativas en zonas norte, este y oeste) tiene varios problemas:
+
+- **Informacion dispersa**: cada cooperativa tiene su propia web, muchas con informacion pobre
+- **Formularios manuales**: para obtener info detallada hay que rellenar formularios de contacto en cada una
+- **Sin agregadores fiables**: los portales inmobiliarios se centran en segunda mano
+- **Ventanas de oportunidad cortas**: las mejores cooperativas se llenan rapido
+
+## La Solucion
+
+House Bot automatiza todo el ciclo de busqueda:
+
+<MermaidDiagram
+  client:load
+  chart={`
+    flowchart LR
+      A[🔍 Discovery] --> B[🤖 AI Analysis]
+      B --> C[📝 Auto Form Fill]
+      C --> D[📱 Telegram Alerts]
+      D --> E[📊 Web Dashboard]
+      E --> A
+  `}
+  caption="Ciclo completo de automatizacion de house-bot"
+/>
+
+## Arquitectura
+
+El proyecto sigue principios de **Dependency Injection**, **Repository Pattern** y abstracciones basadas en **Protocols**, lo que permite cambiar el proveedor de IA sin tocar el resto del codigo.
+
+<MermaidDiagram
+  client:load
+  chart={`
+    graph TB
+      subgraph Composition Root
+        M[main.py<br/>Scheduler + DI]
+      end
+
+      subgraph Services
+        D[DiscoveryService<br/>DuckDuckGo + Seed Sites]
+        S[ScraperService<br/>Playwright Browser]
+        F[FormService<br/>Auto-fill + Screenshots]
+        N[NotifierService<br/>Telegram Bot]
+      end
+
+      subgraph AI Layer
+        P[AIAnalyzer Protocol]
+        G[Gemini Implementation]
+        O[OpenAI-Compatible<br/>Cerebras / Groq / etc]
+      end
+
+      subgraph Data
+        R[Repository<br/>async context manager]
+        DB[(SQLite)]
+      end
+
+      subgraph Web
+        W[aiohttp Server]
+        API[REST API]
+        SSE[Server-Sent Events]
+        UI[SPA Dashboard]
+      end
+
+      M --> D
+      M --> S
+      M --> F
+      M --> N
+      M --> W
+
+      S --> P
+      F --> P
+      P --> G
+      P --> O
+
+      D --> R
+      S --> R
+      F --> R
+      N --> R
+      R --> DB
+
+      W --> API
+      W --> SSE
+      W --> UI
+  `}
+  caption="Arquitectura del sistema con Dependency Injection"
+/>
+
+## Stack Tecnologico
+
+| Componente | Tecnologia | Proposito |
+|------------|-----------|-----------|
+| **Runtime** | Python 3.9+ | Lenguaje principal |
+| **AI** | Gemini Flash-Lite (gratis) | Analisis de webs y oportunidades |
+| **Browser** | Playwright | Scraping y rellenado de formularios |
+| **Database** | SQLite + aiosqlite | Almacenamiento local, sin servidor |
+| **Notificaciones** | Telegram Bot API | Alertas y comandos interactivos |
+| **Busqueda** | DuckDuckGo | Descubrimiento de nuevas webs |
+| **Config** | Pydantic Settings | Validacion de configuracion |
+| **Scheduler** | APScheduler | Tareas periodicas |
+| **Web** | aiohttp | Dashboard y API REST |
+| **Deploy** | Render (Docker, free tier) | Hosting gratuito |
+
+## Como Funciona Cada Modulo
+
+### 1. Discovery: Encontrando Cooperativas
+
+El `DiscoveryService` combina dos fuentes para encontrar webs de cooperativas:
+
+- **Lista semilla**: sitios conocidos de cooperativas y constructoras en Madrid
+- **Busqueda activa**: queries automaticas en DuckDuckGo para descubrir nuevos sitios
+
+```python
+# Las queries se generan automaticamente para cada zona
+# "cooperativa vivienda Madrid norte"
+# "constructora pisos nuevos Madrid este"
+# "promocion obra nueva Madrid oeste"
+```
+
+Cada sitio descubierto se almacena en SQLite con su estado (activo, analizado, descartado).
+
+### 2. AI Analysis: Gemini Analiza Cada Web
+
+El `ScraperService` utiliza Playwright para navegar cada web, extraer el contenido y enviarlo a Gemini AI para su analisis:
+
+<MermaidDiagram
+  client:load
+  chart={`
+    sequenceDiagram
+      participant S as ScraperService
+      participant B as Playwright
+      participant AI as Gemini AI
+      participant DB as SQLite
+
+      S->>B: Navegar a URL
+      B-->>S: HTML + texto
+      S->>AI: Analizar contenido
+      Note over AI: Extraer oportunidades:<br/>Proyecto, zona, precio,<br/>plazos, puntuacion
+      AI-->>S: JSON estructurado
+      S->>DB: Guardar oportunidades
+  `}
+  caption="Flujo de analisis con IA"
+/>
+
+Gemini devuelve datos estructurados: nombre del proyecto, zona, rango de precios, plazos de entrega, si hay formulario de contacto, y una **puntuacion de interes** del 1 al 10.
+
+La capa de IA esta abstraida con un `Protocol`, lo que permite cambiar de proveedor sin modificar nada:
+
+```python
+class AIAnalyzer(Protocol):
+    async def analyze_site(self, url: str, content: str) -> list[Opportunity]: ...
+    async def analyze_form(self, url: str, html: str) -> FormAnalysis: ...
+```
+
+Se soportan multiples proveedores gratuitos: **Cerebras**, **Groq**, **Mistral**, **xAI** y **Gemini**.
+
+### 3. Form Filling: Formularios Automaticos
+
+El `FormService` detecta formularios de contacto en las webs y los rellena automaticamente con tus datos personales:
+
+1. **Deteccion**: funciones puras analizan el HTML buscando campos de formulario
+2. **Mapeo**: cada campo se asocia a un dato personal (nombre, email, telefono...)
+3. **Rellenado**: Playwright simula la interaccion humana para rellenar y enviar
+4. **Evidencia**: se toma un screenshot de cada formulario enviado
+
+```python
+# Configuracion de datos personales en .env
+USER_FULL_NAME=Tu Nombre
+USER_EMAIL=tu@email.com
+USER_PHONE=+34600000000
+```
+
+### 4. Telegram Bot: Control Remoto
+
+El bot de Telegram permite monitorizar y controlar house-bot desde el movil:
+
+| Comando | Que hace |
+|---------|----------|
+| `/oportunidades` | Lista de oportunidades activas con puntuacion |
+| `/futuras` | Proximos lanzamientos detectados |
+| `/formularios` | Estado de formularios enviados y pendientes |
+| `/buscar` | Forzar busqueda inmediata |
+| `/reporte` | Resumen completo con estadisticas |
+| `/sites` | Webs monitorizadas |
+
+### 5. Web Dashboard: Vista Completa
+
+House-bot incluye un dashboard web completo con:
+
+- **Estadisticas en tiempo real** via Server-Sent Events (SSE)
+- **Lista de oportunidades** filtrable por zona y estado
+- **Gestion de formularios** con evidencia de envio
+- **Control del AI provider** para cambiar de modelo en caliente
+- **Acciones manuales**: lanzar busqueda, scraping o rellenado de formularios
+
+El dashboard se sirve como SPA estatica desde aiohttp, con una API REST completa.
+
+> Puedes probar el dashboard en la seccion [Apps](/apps/house-bot) de este blog.
+
+## Principios de Diseno
+
+Lo que hace este proyecto interesante desde el punto de vista de ingenieria:
+
+<MermaidDiagram
+  client:load
+  chart={`
+    mindmap
+      root((house-bot))
+        Dependency Injection
+          Constructor injection
+          No estado global
+          Composition root
+        Protocol Abstractions
+          AIAnalyzer Protocol
+          Provider-agnostico
+          Plug and play
+        Repository Pattern
+          Async context manager
+          CRUD centralizado
+          SQLite local
+        Immutability
+          Frozen dataclasses
+          Enums, no magic strings
+          Pydantic validated config
+        Error Handling
+          Custom exception hierarchy
+          Domain-specific errors
+          Structured logging
+  `}
+  caption="Principios de diseno del proyecto"
+/>
+
+- **Dependency Injection**: todas las dependencias se inyectan via constructor. `main.py` es el unico lugar donde se cablea todo.
+- **Protocol-based abstractions**: el proveedor de IA se puede cambiar sin tocar el resto del codigo.
+- **Repository pattern**: acceso a datos centralizado con async context manager.
+- **Frozen dataclasses + Enums**: modelos inmutables, sin magic strings.
+- **Validated config**: Pydantic Settings valida todo al arrancar.
+
+## Tareas Programadas
+
+El scheduler ejecuta las tareas automaticamente:
+
+| Tarea | Frecuencia | Configurable |
+|-------|------------|-------------|
+| Scraping de sitios | Cada 6h | `SCRAPE_INTERVAL_HOURS` |
+| Descubrimiento | Cada 24h | `DISCOVERY_INTERVAL_HOURS` |
+| Rellenado de formularios | Cada 12h | `FORM_FILL_INTERVAL_HOURS` |
+| Reporte semanal | Lunes 9:00 | Fijo |
+
+## Coste: 0 EUR
+
+Todo el stack es gratuito:
+
+- **Gemini AI**: capa gratuita con 1.000 peticiones/dia (Flash-Lite)
+- **Telegram Bot**: completamente gratis
+- **DuckDuckGo**: sin API key
+- **SQLite**: base de datos local
+- **Render**: hosting Docker free tier
+
+## Codigo Fuente
+
+El proyecto es open source:
+
+- **GitHub**: [adrianlopez-ia/house-bot](https://github.com/adrianlopez-ia/house-bot)
+- **Dashboard**: [Probar en Apps](/apps/house-bot)
+
+## Que Sigue
+
+Estoy trabajando en varias mejoras:
+
+- **Filtros avanzados** por precio y metros cuadrados
+- **Comparador de cooperativas** con scoring multidimensional
+- **Integracion con Idealista** como fuente adicional
+- **Alertas inteligentes** que aprenden tus preferencias
+
+Si te interesa la busqueda de vivienda en Madrid o quieres adaptar el bot a otra ciudad, echa un vistazo al repo y abre un issue.
