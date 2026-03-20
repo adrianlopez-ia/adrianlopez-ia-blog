@@ -24,7 +24,7 @@
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install || true"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
