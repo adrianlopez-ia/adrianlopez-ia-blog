@@ -1,4 +1,6 @@
 ---
+import { UserMenu } from '@components/auth/UserMenu';
+
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blog' },
@@ -46,6 +48,8 @@ const currentPath = Astro.url.pathname;
     </div>
 
     <div class="flex items-center gap-3">
+      <UserMenu client:load />
+
       <button
         id="theme-toggle"
         class="rounded-lg p-2 transition-colors"

@@ -8,5 +8,6 @@ export const corsMiddleware = cors({
   ].filter(Boolean),
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
   maxAge: 86400,
 });

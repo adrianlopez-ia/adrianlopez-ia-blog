@@ -1,0 +1,13 @@
+---
+import { PadelBotApp } from '@components/private/PadelBotApp';
+import { PrivateLayout } from '@components/private/PrivateLayout';
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Padel Bot" description="Herramienta privada para lanzar reservas automaticas de pistas de padel.">
+  <div class="pt-20">
+    <PrivateLayout client:load currentPath="/private/padel-bot">
+      <PadelBotApp client:load />
+    </PrivateLayout>
+  </div>
+</BaseLayout>

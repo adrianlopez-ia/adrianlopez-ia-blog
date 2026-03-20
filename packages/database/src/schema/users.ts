@@ -6,6 +6,7 @@ import { posts } from './posts';
 export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
   email: text('email').notNull().unique(),
+  passwordHash: text('password_hash'),
   name: text('name').notNull(),
   avatar: text('avatar'),
   bio: text('bio'),
