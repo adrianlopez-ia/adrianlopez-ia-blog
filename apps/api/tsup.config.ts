@@ -5,5 +5,5 @@ export default defineConfig({
   format: ['esm'],
   target: 'node22',
   clean: true,
-  noExternal: ['@blog/database', '@blog/types', '@blog/utils'],
+  noExternal: ['@blog/ai', '@blog/database', '@blog/types', '@blog/utils'],
 });
