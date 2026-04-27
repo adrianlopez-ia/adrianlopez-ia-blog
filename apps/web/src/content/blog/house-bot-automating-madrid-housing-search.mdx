@@ -4,6 +4,7 @@ description: "Como construi un bot en Python que descubre cooperativas de vivien
 publishedAt: 2026-03-07
 tags: ["Python", "AI", "Automation", "Telegram", "Web Scraping"]
 draft: false
+coverImage: "/images/house-bot-cover.svg"
 ---
 
 import { MermaidDiagram } from '@components/blog/MermaidDiagram';
@@ -13,6 +14,8 @@ import { MermaidDiagram } from '@components/blog/MermaidDiagram';
 Buscar vivienda en Madrid es una tarea agotadora. Decenas de cooperativas, constructoras con webs desactualizadas, formularios de contacto interminables y la sensacion constante de que te estas perdiendo algo. Asi que hice lo que cualquier desarrollador haria: **automatizarlo todo**.
 
 [**house-bot**](https://github.com/adrianlopez-ia/house-bot) es un bot en Python que descubre webs de cooperativas y constructoras, analiza las oportunidades con IA, rellena formularios de contacto automaticamente y me envia alertas por Telegram. Todo gratis.
+
+House Bot is a specialized AI agent designed to navigate the complex Madrid housing market. By leveraging a **Multi-Provider AI Pool** (switching between OpenRouter and Groc), it ensures 24/7 availability even when API limits are reached.
 
 ## El Problema
 
@@ -167,7 +170,7 @@ class AIAnalyzer(Protocol):
     async def analyze_form(self, url: str, html: str) -> FormAnalysis: ...
 ```
 
-Se soportan multiples proveedores gratuitos: **Cerebras**, **Groq**, **Mistral**, **xAI** y **Gemini**.
+Se soportan multiples proveedores gratuitos: **Cerebras**, **Groc**, **Mistral**, **xAI** y **Gemini**. Actualmente, el blog implementa un **AI Pool Dinámico con Triple Failover**: el sistema intenta primero conectar con **OpenRouter**, si falla o alcanza su límite, salta instantáneamente a **Groc**, y como última capa de redundancia utiliza **Google Gemini**. Esto garantiza una disponibilidad total del servicio sin interrupciones.
 
 ### 3. Form Filling: Formularios Automaticos
 

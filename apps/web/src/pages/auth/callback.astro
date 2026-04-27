@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Iniciando sesión" description="Completando inicio de sesión con Google...">
+  <div class="mx-auto flex min-h-[calc(100vh-200px)] max-w-md items-center justify-center px-4">
+    <div class="w-full rounded-2xl p-8 themed-card text-center">
+      <div class="mb-6">
+        <div id="spinner" style="display:inline-block;width:40px;height:40px;border:3px solid rgba(124,58,237,0.3);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+      </div>
+      <h1 class="font-display text-xl font-semibold mb-2">Completando inicio de sesión</h1>
+      <p style="color: var(--color-text-secondary); font-size: 0.875rem;" id="status-msg">
+        Verificando tu cuenta de Google...
+      </p>
+    </div>
+  </div>
+
+  <style>
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+  <script>
+    (async () => {
+      const statusEl = document.getElementById('status-msg');
+
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
+
+        if (!token) {
+          if (statusEl) statusEl.textContent = 'No se recibió token. Redirigiendo al login...';
+          setTimeout(() => { window.location.href = '/login?error=no_token'; }, 2000);
+          return;
+        }
+
+        // Store JWT in localStorage
+        localStorage.setItem('auth_token', token);
+
+        if (statusEl) statusEl.textContent = '¡Sesión iniciada! Redirigiendo...';
+
+        // Small delay for UX
+        setTimeout(() => {
+          const redirect = params.get('redirect') ?? '/private';
+          window.location.href = redirect;
+        }, 800);
+      } catch (err) {
+        console.error(err);
+        if (statusEl) statusEl.textContent = 'Error inesperado. Redirigiendo...';
+        setTimeout(() => { window.location.href = '/login?error=callback_error'; }, 2000);
+      }
+    })();
+  </script>
+</BaseLayout>

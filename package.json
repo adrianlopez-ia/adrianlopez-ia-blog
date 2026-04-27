@@ -11,7 +11,7 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "cross-env NODE_OPTIONS=\"--max-old-space-size=4096\" turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
@@ -20,7 +20,7 @@
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "test:e2e": "turbo test:e2e",
-    "clean": "turbo clean && rm -rf node_modules",
+    "clean": "turbo clean && powershell -Command \"Remove-Item -Recurse -Force node_modules, **/.turbo, **/dist, .next, **/build\" -ErrorAction SilentlyContinue",
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:studio": "turbo db:studio",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.0",
+    "cross-env": "^10.1.0",
     "lefthook": "^1.9.0",
     "stylelint-config-standard": "^40.0.0",
     "turbo": "^2.4.0",

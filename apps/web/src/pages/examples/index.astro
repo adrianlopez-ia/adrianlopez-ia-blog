@@ -3,39 +3,47 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
 const examples = [
   {
+    title: 'LangChain AI Agent',
+    description:
+      'Advanced AI agent using LangChain, with a multi-provider pool (OpenRouter, Groc & Gemini) for high availability.',
+    href: '/examples/langchain-bot',
+    tech: ['LangChain', 'OpenRouter', 'AI Pool'],
+    color: 'blue-500',
+  },
+  {
     title: 'React AI Chatbot',
     description:
-      'Interactive chatbot built with React 19 and Vercel AI SDK with streaming responses.',
+      'Interactive chatbot with automatic triple failover. Uses OpenRouter first, falls back to Groc or Gemini if needed.',
     href: '/examples/react-chatbot',
-    tech: ['React', 'Vercel AI SDK', 'OpenAI'],
+    tech: ['React', 'Pool', 'Triple Failover'],
     color: 'brand-400',
   },
   {
     title: 'Vue Conversational Agent',
-    description: 'Conversational AI agent with Vue 3 Composition API and LangChain tools.',
+    description: 'Conversational AI agent with multi-model support via our smart triple AI pool.',
     href: '/examples/vue-agent',
-    tech: ['Vue 3', 'LangChain', 'Anthropic'],
+    tech: ['Vue 3', 'OpenRouter', 'Groc', 'Gemini'],
     color: 'green-400',
   },
   {
     title: 'Svelte Interactive Widget',
-    description: 'Lightweight interactive widget showcasing Svelte 5 runes and reactivity.',
+    description: 'Lightweight widget with reliable AI connectivity via triple failover logic.',
     href: '/examples/svelte-widget',
-    tech: ['Svelte 5', 'Runes', 'Web APIs'],
+    tech: ['Svelte 5', 'Triple Pool'],
     color: 'orange-400',
   },
   {
     title: 'SolidJS Dashboard',
-    description: 'Real-time metrics dashboard with SolidJS signals and fine-grained reactivity.',
+    description: 'Real-time metrics dashboard powered by a resilient triple AI provider stack.',
     href: '/examples/solid-dashboard',
-    tech: ['SolidJS', 'Signals', 'Charts'],
+    tech: ['SolidJS', 'AI Stack'],
     color: 'blue-400',
   },
   {
     title: 'Vanilla Web Components Bot',
-    description: 'AI bot built with native Web Components and zero dependencies.',
+    description: 'Native Web Component bot connected to our fault-tolerant triple AI backend.',
     href: '/examples/vanilla-bot',
-    tech: ['Web Components', 'Fetch API', 'Shadow DOM'],
+    tech: ['Web Components', 'Pool'],
     color: 'yellow-400',
   },
 ];

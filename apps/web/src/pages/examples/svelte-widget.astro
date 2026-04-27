@@ -1,39 +1,36 @@
 ---
+import SvelteChat from '@components/examples/SvelteChat.svelte';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Svelte Interactive Widget" description="Interactive widget built with Svelte 5 runes and modern reactivity.">
+<BaseLayout title="Svelte AI Widget" description="AI widget built with Svelte 5 and our resilient AI Pool.">
   <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
     <header class="mb-8">
       <a href="/examples" class="text-sm text-brand-500 dark:text-brand-400 hover:underline">&larr; Back to Examples</a>
       <h1 class="mt-4 font-display text-4xl font-bold tracking-tight">
-        Svelte Interactive <span class="gradient-text">Widget</span>
+        Svelte AI <span class="gradient-text">Widget</span>
       </h1>
       <p class="mt-2" style="color: var(--color-text-secondary);">
-        A lightweight interactive widget showcasing Svelte 5 runes and fine-grained reactivity.
+        A lightweight AI widget built with Svelte 5 (Runes) and connected to our **AI Pool**.
       </p>
       <div class="mt-4 flex flex-wrap gap-2">
         <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400">Svelte 5</span>
-        <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400">Runes</span>
-        <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400">Web APIs</span>
+        <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400">AI Pool</span>
+        <span class="rounded-full bg-orange-500/10 px-3 py-1 text-xs font-medium text-orange-600 dark:text-orange-400">Gemini Failover</span>
       </div>
     </header>
 
-    <div id="svelte-widget-app" class="rounded-2xl p-8 themed-card">
-      <div class="text-center">
-        <p class="text-4xl">🎨</p>
-        <p class="mt-2 text-sm" style="color: var(--color-text-muted);">Svelte 5 widget loading...</p>
-        <p class="mt-1 text-xs" style="color: var(--color-text-muted);">Add Svelte integration to activate this example</p>
-      </div>
+    <div class="rounded-2xl themed-card overflow-hidden">
+      <SvelteChat client:load />
     </div>
 
     <div class="mt-8 rounded-xl p-6 themed-card">
       <h2 class="font-display text-lg font-semibold">How it works</h2>
       <ul class="mt-3 space-y-2 text-sm" style="color: var(--color-text-secondary);">
-        <li>- Svelte 5 runes: <code class="text-orange-600 dark:text-orange-400">$state</code>, <code class="text-orange-600 dark:text-orange-400">$derived</code>, <code class="text-orange-600 dark:text-orange-400">$effect</code></li>
-        <li>- Compiled away reactivity -- zero runtime overhead</li>
-        <li>- Native Web API integration (Geolocation, Canvas, etc.)</li>
-        <li>- Minimal bundle size (~3KB gzipped)</li>
+        <li>- Svelte 5 reactivity system using <code class="text-orange-600 dark:text-orange-400">$state()</code> runes</li>
+        <li>- Automatic triple failover via our smart **AI Pool**</li>
+        <li>- Minimal bundle size and high-performance DOM updates</li>
+        <li>- Direct streaming integration for near-zero latency responses</li>
       </ul>
     </div>
   </div>

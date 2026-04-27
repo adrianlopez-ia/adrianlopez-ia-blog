@@ -10,11 +10,12 @@ export interface ChatStreamOptions {
   temperature?: number;
   maxTokens?: number;
   agent?: AgentConfig;
+  useLangChain?: boolean;
 }
 
 export function createChatStream({
   messages,
-  provider = 'openai',
+  provider = 'openrouter',
   model,
   temperature = 0.7,
   maxTokens = 1024,

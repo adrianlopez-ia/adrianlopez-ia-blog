@@ -1,0 +1,21 @@
+# Adrián López Ibáñez Project Rules
+
+## Design Principles
+
+### 1. Gestalt Laws
+All UI/UX developments MUST follow Gestalt principles to ensure cognitive clarity and premium aesthetics:
+- **Law of Proximity**: Related elements (like menu items in a group) should be closer to each other than to unrelated elements.
+- **Law of Similarity**: Elements with similar functions should share visual characteristics (colors, icons, typography).
+- **Law of Figure-Ground**: Ensure clear separation between the foreground (modals, dropdowns) and the background using contrast, shadows, and blurs (glassmorphism).
+- **Law of Continuity**: Align elements to create smooth paths for the eye, especially in lists and navigation.
+- **Law of Closure**: Use grouping and borders to help users perceive complex parts as a whole.
+
+### 2. Premium Dark Mode
+- Avoid pure black (#000) for large surfaces; use deep charcoals or navy blues.
+- Ensure a contrast ratio of at least 4.5:1 for text.
+- Use subtle borders (1px) and soft shadows to create depth.
+- Implement glassmorphism (`backdrop-filter: blur()`) for floating elements like headers and menus.
+
+### 3. Consistency
+- Maintain consistent spacing based on a 4px/8px grid.
+- Use the established design system tokens from `global.css`.

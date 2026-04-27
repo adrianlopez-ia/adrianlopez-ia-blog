@@ -10,12 +10,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
         Vanilla <span class="gradient-text">Web Components</span> Bot
       </h1>
       <p class="mt-2" style="color: var(--color-text-secondary);">
-        An AI bot built with native Web Components, Shadow DOM, and zero framework dependencies.
+        An AI bot built with native Web Components, Shadow DOM, and streaming responses from OpenRouter (Nvidia).
       </p>
       <div class="mt-4 flex flex-wrap gap-2">
         <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Web Components</span>
         <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Shadow DOM</span>
-        <span class="rounded-full bg-yellow-500/10 px-3 py-1 text-xs font-medium text-yellow-600 dark:text-yellow-400">Fetch API</span>
+        <span class="rounded-full bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-500 dark:text-brand-400">OpenRouter (Nvidia)</span>
       </div>
     </header>
 
@@ -26,17 +26,20 @@ import BaseLayout from '@layouts/BaseLayout.astro';
       <ul class="mt-3 space-y-2 text-sm" style="color: var(--color-text-secondary);">
         <li>- Native <code class="text-yellow-600 dark:text-yellow-400">customElements.define()</code> -- no framework</li>
         <li>- Shadow DOM for encapsulated styles</li>
-        <li>- <code class="text-yellow-600 dark:text-yellow-400">fetch()</code> API for communication</li>
-        <li>- Zero dependencies, runs in any browser</li>
+        <li>- <code class="text-brand-500 dark:text-brand-400">ReadableStream</code> for real-time AI token streaming</li>
+        <li>- Connects to <code class="text-brand-500 dark:text-brand-400">/api/ai/chat</code> with Nvidia Llama 3.1</li>
       </ul>
     </div>
   </div>
 </BaseLayout>
 
 <script>
+  import { getToken } from '../lib/api-client';
+
   class ChatBot extends HTMLElement {
     private shadow: ShadowRoot;
     private messages: Array<{ role: string; content: string }> = [];
+    private isLoading = false;
 
     constructor() {
       super();
@@ -82,11 +85,12 @@ import BaseLayout from '@layouts/BaseLayout.astro';
             padding: 0.5rem 1rem;
             border-radius: 1rem;
             font-size: 0.875rem;
+            white-space: pre-wrap;
           }
           .msg.user {
             align-self: flex-end;
-            background: #eab308;
-            color: black;
+            background: var(--color-brand, #7c3aed);
+            color: white;
           }
           .msg.assistant {
             align-self: flex-start;
@@ -109,29 +113,29 @@ import BaseLayout from '@layouts/BaseLayout.astro';
             font-size: 0.875rem;
             outline: none;
           }
-          input:focus { border-color: rgba(234,179,8,0.5); }
+          input:focus { border-color: var(--color-brand, #7c3aed); }
           button {
             padding: 0.5rem 1rem;
             border-radius: 0.75rem;
-            background: #eab308;
-            color: black;
+            background: var(--color-brand, #7c3aed);
+            color: white;
             font-size: 0.875rem;
             font-weight: 500;
             border: none;
             cursor: pointer;
           }
-          button:hover { background: #ca8a04; }
+          button:disabled { opacity: 0.5; cursor: not-allowed; }
         </style>
         <div class="header">
-          <h3>Vanilla Web Components Bot</h3>
-          <p>Zero dependencies, pure browser APIs</p>
+          <h3>Vanilla AI Bot</h3>
+          <p>Powered by OpenRouter (Nvidia Llama 3.1)</p>
         </div>
         <div class="messages" id="messages">
-          <div class="empty">Send a message to start</div>
+          <div class="empty">Envia un mensaje para empezar</div>
         </div>
         <form class="input-area" id="form">
-          <input type="text" id="input" placeholder="Type a message..." />
-          <button type="submit">Send</button>
+          <input type="text" id="input" placeholder="Escribe un mensaje..." />
+          <button type="submit" id="submit-btn">Enviar</button>
         </form>
       `;
 
@@ -141,29 +145,77 @@ import BaseLayout from '@layouts/BaseLayout.astro';
       });
     }
 
-    private handleSend() {
+    private async handleSend() {
+      if (this.isLoading) return;
+      
       const input = this.shadow.getElementById('input') as HTMLInputElement;
       const text = input.value.trim();
       if (!text) return;
 
+      this.isLoading = true;
+      const submitBtn = this.shadow.getElementById('submit-btn') as HTMLButtonElement;
+      submitBtn.disabled = true;
+
       this.messages.push({ role: 'user', content: text });
+      this.updateMessages();
       input.value = '';
 
-      setTimeout(() => {
-        this.messages.push({
-          role: 'assistant',
-          content: `Echo: "${text}". This is a vanilla Web Components demo -- connect an API for real responses!`,
-        });
-        this.updateMessages();
-      }, 500);
+      const assistantMsgIndex = this.messages.length;
+      this.messages.push({ role: 'assistant', content: '' });
 
-      this.updateMessages();
+      try {
+        const API_URL = (import.meta as any).env.PUBLIC_API_URL ?? 'http://localhost:3000/api';
+        const response = await fetch(`${API_URL}/ai/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify({
+            messages: this.messages.slice(0, -1),
+            provider: 'openrouter',
+            model: 'nvidia/llama-3.1-nemotron-70b-instruct:free',
+          }),
+        });
+
+        if (!response.ok || !response.body) throw new Error('Failed');
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.content) {
+                  this.messages[assistantMsgIndex].content += data.content;
+                  this.updateMessages();
+                }
+              } catch (e) {}
+            }
+          }
+        }
+      } catch (err) {
+        this.messages[assistantMsgIndex].content = 'Error al conectar con la IA.';
+        this.updateMessages();
+      } finally {
+        this.isLoading = false;
+        submitBtn.disabled = false;
+      }
     }
 
     private updateMessages() {
       const container = this.shadow.getElementById('messages');
       if (!container) return;
 
+      if (this.messages.length === 0) return;
+      
       container.innerHTML = this.messages
         .map((m) => `<div class="msg ${m.role}">${m.content}</div>`)
         .join('');

@@ -1,8 +1,9 @@
 ---
+import VueChat from '@components/examples/VueChat.vue';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Vue Conversational Agent" description="AI agent built with Vue 3 Composition API and LangChain.">
+<BaseLayout title="Vue Conversational Agent" description="AI agent built with Vue 3 Composition API and our smart AI Pool.">
   <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
     <header class="mb-8">
       <a href="/examples" class="text-sm text-brand-500 dark:text-brand-400 hover:underline">&larr; Back to Examples</a>
@@ -10,36 +11,26 @@ import BaseLayout from '@layouts/BaseLayout.astro';
         Vue Conversational <span class="gradient-text">Agent</span>
       </h1>
       <p class="mt-2" style="color: var(--color-text-secondary);">
-        A conversational AI agent using Vue 3 Composition API, LangChain tools, and Anthropic Claude.
+        A conversational AI agent using Vue 3 Composition API and our smart **AI Pool** (OpenRouter, Groc & Gemini).
       </p>
       <div class="mt-4 flex flex-wrap gap-2">
         <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400">Vue 3</span>
-        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400">LangChain</span>
-        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400">Anthropic</span>
+        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400">AI Pool</span>
+        <span class="rounded-full bg-green-500/10 px-3 py-1 text-xs font-medium text-green-600 dark:text-green-400">Groc Failover</span>
       </div>
     </header>
 
-    <div id="vue-agent-app" class="flex h-[500px] flex-col rounded-2xl themed-card">
-      <div class="px-4 py-3" style="border-bottom: 1px solid var(--color-border-subtle);">
-        <h3 class="text-sm font-semibold">Vue AI Agent</h3>
-        <p class="text-xs" style="color: var(--color-text-muted);">Powered by LangChain + Anthropic Claude</p>
-      </div>
-      <div class="flex flex-1 items-center justify-center p-4">
-        <div class="text-center">
-          <p class="text-4xl">🤖</p>
-          <p class="mt-2 text-sm" style="color: var(--color-text-muted);">Vue 3 agent loading...</p>
-          <p class="mt-1 text-xs" style="color: var(--color-text-muted);">Add Vue integration to activate this example</p>
-        </div>
-      </div>
+    <div class="rounded-2xl themed-card overflow-hidden">
+      <VueChat client:load />
     </div>
 
     <div class="mt-8 rounded-xl p-6 themed-card">
       <h2 class="font-display text-lg font-semibold">How it works</h2>
       <ul class="mt-3 space-y-2 text-sm" style="color: var(--color-text-secondary);">
-        <li>- Vue 3 Composition API with <code class="text-green-600 dark:text-green-400">ref()</code> and <code class="text-green-600 dark:text-green-400">computed()</code></li>
-        <li>- LangChain agent with tool-calling capabilities</li>
-        <li>- Anthropic Claude as the AI provider</li>
-        <li>- Reactive state management with Vue reactivity system</li>
+        <li>- Vue 3 Composition API with <code class="text-green-600 dark:text-green-400">setup</code> and <code class="text-green-600 dark:text-green-400">ref</code></li>
+        <li>- Integration with our custom **AI Pool** for triple failover redundancy</li>
+        <li>- Native Fetch API for streaming chunks from the backend</li>
+        <li>- Reactive UI that updates as tokens arrive from the provider</li>
       </ul>
     </div>
   </div>

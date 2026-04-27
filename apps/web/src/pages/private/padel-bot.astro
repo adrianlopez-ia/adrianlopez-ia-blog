@@ -6,8 +6,8 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
 <BaseLayout title="Padel Bot" description="Herramienta privada para lanzar reservas automaticas de pistas de padel.">
   <div class="pt-20">
-    <PrivateLayout client:load currentPath="/private/padel-bot">
-      <PadelBotApp client:load />
+    <PrivateLayout client:only="react" currentPath="/private/padel-bot">
+      <PadelBotApp client:only="react" />
     </PrivateLayout>
   </div>
 </BaseLayout>

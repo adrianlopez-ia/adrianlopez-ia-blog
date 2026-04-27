@@ -5,7 +5,14 @@ import { zValidator } from '@hono/zod-validator';
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { hashPassword, signJwt, verifyPassword } from '../lib/auth';
+import {
+  exchangeGoogleCode,
+  getGoogleAuthUrl,
+  getGoogleUserInfo,
+  hashPassword,
+  signJwt,
+  verifyPassword,
+} from '../lib/auth';
 import { authMiddleware } from '../middleware/auth';
 
 const RegisterSchema = z.object({
@@ -20,6 +27,90 @@ const LoginSchema = z.object({
 });
 
 export const authRoutes = new Hono();
+
+// ---------------------------------------------------------------------------
+// Google OAuth
+// ---------------------------------------------------------------------------
+
+authRoutes.get('/google', (c) => {
+  const siteUrl = process.env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
+  const redirectUri = `${c.req.url.split('/api/')[0]}/api/auth/google/callback`;
+
+  try {
+    const url = getGoogleAuthUrl(redirectUri);
+    return c.redirect(url);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Google OAuth not configured';
+    return c.json({ error: 'Configuration Error', message, success: false, statusCode: 500 }, 500);
+  }
+});
+
+authRoutes.get('/google/callback', async (c) => {
+  const code = c.req.query('code');
+  const error = c.req.query('error');
+  const siteUrl = process.env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
+
+  if (error || !code) {
+    return c.redirect(`${siteUrl}/login?error=google_denied`);
+  }
+
+  try {
+    const redirectUri = `${c.req.url.split('/callback')[0]}/callback`;
+    const tokens = await exchangeGoogleCode(code, redirectUri);
+    const googleUser = await getGoogleUserInfo(tokens.access_token);
+
+    if (!googleUser.verified_email) {
+      return c.redirect(`${siteUrl}/login?error=email_not_verified`);
+    }
+
+    // Upsert user: find by email or create
+    const [existing] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, googleUser.email))
+      .limit(1);
+
+    let userId: string;
+    let userRole: string;
+
+    if (existing) {
+      // Update avatar if changed
+      if (googleUser.picture && existing.avatar !== googleUser.picture) {
+        await db
+          .update(users)
+          .set({ avatar: googleUser.picture, updatedAt: new Date() })
+          .where(eq(users.id, existing.id));
+      }
+      userId = existing.id;
+      userRole = existing.role;
+    } else {
+      // Create new user — no password (Google-only account)
+      const id = generateId();
+      await db.insert(users).values({
+        id,
+        email: googleUser.email,
+        name: googleUser.name,
+        avatar: googleUser.picture ?? null,
+        passwordHash: null,
+        role: 'reader',
+      });
+      userId = id;
+      userRole = 'reader';
+    }
+
+    const jwtToken = await signJwt({ sub: userId, email: googleUser.email, role: userRole });
+
+    // Redirect back to the frontend with the JWT token as query param
+    return c.redirect(`${siteUrl}/auth/callback?token=${jwtToken}`);
+  } catch (err) {
+    console.error('[Google OAuth callback error]', err);
+    return c.redirect(`${siteUrl}/login?error=google_error`);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Classic email/password (kept for admin use)
+// ---------------------------------------------------------------------------
 
 authRoutes.post('/register', zValidator('json', RegisterSchema), async (c) => {
   const { email, password, name } = c.req.valid('json');

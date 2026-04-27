@@ -3,7 +3,7 @@ import { LoginForm } from '@components/auth/LoginForm';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Iniciar sesion" description="Inicia sesion en tu cuenta para acceder al area privada.">
+<BaseLayout title="Iniciar sesion" description="Inicia sesion con Google para acceder al area privada.">
   <div class="mx-auto flex min-h-[calc(100vh-200px)] max-w-md items-center px-4 sm:px-6">
     <div class="w-full rounded-2xl p-8 themed-card">
       <div class="mb-8 text-center">
@@ -11,7 +11,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
           Iniciar <span class="gradient-text">sesion</span>
         </h1>
         <p class="mt-2 text-sm" style="color: var(--color-text-secondary);">
-          Accede a tu area privada
+          Accede a tu area privada con tu cuenta de Google
         </p>
       </div>
       <LoginForm client:load />

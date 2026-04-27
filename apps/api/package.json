@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
-    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "build": "tsup",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
@@ -13,6 +16,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@blog/ai": "workspace:*",
     "@blog/database": "workspace:*",
     "@blog/types": "workspace:*",
     "@blog/utils": "workspace:*",
