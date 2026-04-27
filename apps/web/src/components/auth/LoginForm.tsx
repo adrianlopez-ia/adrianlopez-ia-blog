@@ -134,7 +134,7 @@ export function LoginForm() {
           }}
         >
           Al iniciar sesión aceptas nuestros{' '}
-          <a href="/terms" className="hover:text-brand-500 underline-offset-4 hover:underline">
+          <a href="/terms" className="underline-offset-4 hover:text-brand-500 hover:underline">
             términos de uso
           </a>
           .

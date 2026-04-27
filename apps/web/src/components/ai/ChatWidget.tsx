@@ -93,7 +93,7 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
                   ),
                 );
               }
-            } catch (e) {
+            } catch (_e) {
               // Ignore parse errors for incomplete chunks
             }
           }

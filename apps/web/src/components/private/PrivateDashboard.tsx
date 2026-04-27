@@ -87,9 +87,7 @@ export function PrivateDashboard() {
                   color: '#4ade80',
                 }}
               >
-                <span
-                  style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }}
-                ></span>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80' }} />
                 {app.status}
               </span>
             </div>

@@ -64,9 +64,8 @@ export async function* createPoolChatStream(options: ChatStreamOptions) {
 
       if (hasYieldedContent) {
         return; // Success!
-      } else {
-        throw new Error(`Provider ${provider.label} returned an empty stream`);
       }
+      throw new Error(`Provider ${provider.label} returned an empty stream`);
     } catch (err: any) {
       console.warn(`[AI Pool] ${provider.label} failed:`, err.message);
       lastError = err;

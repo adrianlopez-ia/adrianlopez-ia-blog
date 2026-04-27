@@ -43,7 +43,7 @@ aiRoutes.post('/chat', authMiddleware, zValidator('json', ChatRequestSchema), as
         }
       }
 
-      console.info(`[AI] Pool Chat completed`);
+      console.info('[AI] Pool Chat completed');
       await stream.write(`data: ${JSON.stringify({ content: '', done: true })}\n\n`);
     } catch (err) {
       console.error('[AI Pool Error]', err);

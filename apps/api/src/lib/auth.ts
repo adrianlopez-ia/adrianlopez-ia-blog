@@ -85,7 +85,7 @@ export function getGoogleAuthUrl(redirectUri: string): string {
 export async function exchangeGoogleCode(code: string, redirectUri: string): Promise<GoogleTokens> {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-  if (!clientId || !clientSecret) {
+  if (!(clientId && clientSecret)) {
     throw new Error('GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are required');
   }
 

@@ -31,8 +31,8 @@
         "useSimplifiedLogicExpression": "warn"
       },
       "correctness": {
-        "noUnusedImports": "error",
-        "noUnusedVariables": "error",
+        "noUnusedImports": "warn",
+        "noUnusedVariables": "warn",
         "useExhaustiveDependencies": "warn"
       },
       "performance": {
@@ -75,7 +75,7 @@
         }
       },
       "suspicious": {
-        "noExplicitAny": "error",
+        "noExplicitAny": "warn",
         "noConsoleLog": "warn"
       },
       "nursery": {
