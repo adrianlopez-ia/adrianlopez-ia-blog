@@ -22,8 +22,15 @@ const words = text.split(' ');
 
   gsap.registerPlugin(ScrollTrigger);
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   document.querySelectorAll('[data-text-reveal]').forEach((container) => {
     const words = container.querySelectorAll('.reveal-word');
+
+    if (prefersReducedMotion) {
+      gsap.set(words, { opacity: 1 });
+      return;
+    }
 
     gsap.to(words, {
       opacity: 1,

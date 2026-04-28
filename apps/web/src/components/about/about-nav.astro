@@ -1,0 +1,79 @@
+---
+const links = [
+  { href: '#what-i-do', label: 'What I do' },
+  { href: '#timeline', label: 'Timeline' },
+  { href: '#stack', label: 'Stack' },
+  { href: '#this-blog', label: 'This blog' },
+];
+---
+
+<nav class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8" aria-label="About page sections">
+  <div
+    class="about-nav themed-card mx-auto flex w-full max-w-3xl items-center justify-between gap-2 overflow-x-auto rounded-full px-3 py-2 backdrop-blur-xl"
+    style="background-color: color-mix(in srgb, var(--color-card-bg) 80%, transparent);"
+  >
+    {links.map((l) => (
+      <a
+        href={l.href}
+        class="about-nav-link whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-all"
+        style="color: var(--color-text-secondary);"
+      >
+        {l.label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .about-nav {
+    position: sticky;
+    top: 5.5rem;
+    z-index: 30;
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.about-nav-link'));
+  const sectionIds = links
+    .map((a) => a.getAttribute('href'))
+    .filter((href): href is string => typeof href === 'string' && href.startsWith('#'))
+    .map((href) => href.slice(1));
+
+  const sections = sectionIds
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el instanceof HTMLElement);
+
+  const setActive = (id: string | null) => {
+    links.forEach((a) => {
+      const href = a.getAttribute('href');
+      const isActive = href === `#${id}`;
+      if (isActive) {
+        a.style.color = 'var(--color-text)';
+        a.style.backgroundColor = 'var(--color-overlay-strong)';
+        a.style.border = '1px solid var(--color-border)';
+      } else {
+        a.style.color = 'var(--color-text-secondary)';
+        a.style.backgroundColor = 'transparent';
+        a.style.border = '1px solid transparent';
+      }
+    });
+  };
+
+  if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+    setActive(sections[0]?.id ?? null);
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0))[0];
+        setActive(visible?.target instanceof HTMLElement ? visible.target.id : null);
+      },
+      { rootMargin: '-35% 0px -55% 0px', threshold: [0.1, 0.2, 0.3, 0.4, 0.5] },
+    );
+
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

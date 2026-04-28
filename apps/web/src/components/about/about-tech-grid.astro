@@ -1,0 +1,113 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'stack' } = Astro.props;
+
+const groups = [
+  {
+    title: 'Frontend',
+    items: ['Astro 5', 'React 19', 'Tailwind CSS v4', 'Design tokens', 'Islands architecture'],
+  },
+  {
+    title: 'Backend',
+    items: [
+      'Hono',
+      'Type-safe validation',
+      'Drizzle ORM',
+      'Turso / libSQL',
+      'Edge-friendly patterns',
+    ],
+  },
+  {
+    title: 'AI',
+    items: [
+      'Provider failover pool',
+      'Streaming UX',
+      'Prompt boundaries',
+      'Tooling integration',
+      'Evaluation mindset',
+    ],
+  },
+  {
+    title: 'Tooling',
+    items: ['Turborepo', 'pnpm', 'Biome', 'Vitest', 'TypeScript strict'],
+  },
+];
+---
+
+<section class="relative py-32" id={id} data-about-stack>
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <header class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-medium tracking-wide uppercase" style="color: var(--color-text-muted);">Stack</p>
+      <h2 class="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        Tools I <span class="gradient-text">trust</span>
+      </h2>
+      <p class="mt-6 text-lg" style="color: var(--color-text-secondary);">
+        The goal isn’t trend-chasing—it's picking the smallest set of tools that ships reliably.
+      </p>
+    </header>
+
+    <div class="mt-14 grid gap-6 md:grid-cols-2">
+      {groups.map((g) => (
+        <div class="stack-card themed-card rounded-3xl p-6 opacity-0">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display text-xl font-bold">{g.title}</h3>
+            <span class="stack-dot h-2 w-2 rounded-full bg-brand-400/80" />
+          </div>
+
+          <ul class="mt-5 grid gap-3 sm:grid-cols-2">
+            {g.items.map((it) => (
+              <li
+                class="rounded-2xl px-4 py-3 text-sm transition-transform duration-300 will-change-transform hover:-translate-y-0.5"
+                style="border: 1px solid var(--color-border); background-color: var(--color-overlay); color: var(--color-text-secondary);"
+              >
+                {it}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.querySelector<HTMLElement>('[data-about-stack]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.stack-card'));
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!section || cards.length === 0 || prefersReducedMotion) {
+    gsap.set(cards, { opacity: 1, y: 0 });
+  } else {
+    const mm = gsap.matchMedia();
+    mm.add(
+      {
+        isDesktop: '(min-width: 768px)',
+        isMobile: '(max-width: 767px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop?: boolean };
+        gsap.set(cards, { y: isDesktop ? 26 : 18 });
+
+        gsap.to(cards, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 70%',
+          },
+        });
+      },
+    );
+  }
+</script>

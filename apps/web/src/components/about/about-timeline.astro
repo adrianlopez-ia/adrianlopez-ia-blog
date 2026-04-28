@@ -1,0 +1,115 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'timeline' } = Astro.props;
+
+const items = [
+  {
+    year: 'Now',
+    title: 'Shipping modern web + AI',
+    body: 'Building products with premium UX, strict TypeScript, and pragmatic AI integrations.',
+  },
+  {
+    year: 'Recently',
+    title: 'Monorepo experiments',
+    body: 'Astro + Hono + Turso, animated UI patterns, and multi-framework islands to validate ideas fast.',
+  },
+  {
+    year: 'Always',
+    title: 'Performance & accessibility',
+    body: 'I optimize the “last mile”: motion budgets, readable typography, and fast render paths.',
+  },
+];
+---
+
+<section class="relative py-32" id={id} data-about-timeline>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <header class="mx-auto max-w-3xl text-center">
+      <p class="text-xs font-medium tracking-wide uppercase" style="color: var(--color-text-muted);">Timeline</p>
+      <h2 class="mt-4 font-display text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+        A few <span class="gradient-text">chapters</span>
+      </h2>
+      <p class="mt-6 text-lg" style="color: var(--color-text-secondary);">
+        Not a résumé dump—just the highlights that shaped how I build.
+      </p>
+    </header>
+
+    <div class="mx-auto mt-14 max-w-4xl">
+      <ol class="relative space-y-6">
+        <div class="timeline-line absolute left-6 top-0 h-full w-px opacity-50" style="background-color: var(--color-border);" />
+
+        {items.map((it) => (
+          <li class="timeline-item themed-card relative overflow-hidden rounded-3xl p-6 pl-16 opacity-0">
+            <div class="absolute left-[1.125rem] top-8 h-3 w-3 -translate-x-1/2 rounded-full bg-brand-400 shadow-[0_0_0_6px] shadow-brand-500/10" />
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <span
+                class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
+                style="background-color: var(--color-overlay); color: var(--color-text-secondary); border: 1px solid var(--color-border);"
+              >
+                {it.year}
+              </span>
+              <h3 class="font-display text-xl font-bold">{it.title}</h3>
+            </div>
+
+            <p class="mt-3 text-sm sm:text-base" style="color: var(--color-text-secondary);">{it.body}</p>
+
+            <div class="timeline-glow pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl" />
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline-glow {
+    background: radial-gradient(
+      200px circle at 40% 40%,
+      color-mix(in srgb, var(--color-brand-500) 14%, transparent),
+      transparent 60%
+    );
+    opacity: 0.8;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const section = document.querySelector<HTMLElement>('[data-about-timeline]');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.timeline-item'));
+
+  if (prefersReducedMotion || items.length === 0 || !section) {
+    gsap.set(items, { opacity: 1, y: 0 });
+  } else {
+    const mm = gsap.matchMedia();
+    mm.add(
+      {
+        isDesktop: '(min-width: 768px)',
+        isMobile: '(max-width: 767px)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop?: boolean };
+
+        gsap.set(items, { y: isDesktop ? 24 : 18 });
+        gsap.to(items, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 70%',
+          },
+        });
+      },
+    );
+  }
+</script>

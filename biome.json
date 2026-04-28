@@ -56,7 +56,7 @@
         "useNamingConvention": "off"
       },
       "suspicious": {
-        "noExplicitAny": "off",
+        "noExplicitAny": "error",
         "noConsoleLog": "warn"
       },
       "nursery": {

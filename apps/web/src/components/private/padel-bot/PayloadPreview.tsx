@@ -1,5 +1,5 @@
 interface PayloadPreviewProps {
-  payload: any;
+  payload: unknown;
 }
 
 export function PayloadPreview({ payload }: PayloadPreviewProps) {

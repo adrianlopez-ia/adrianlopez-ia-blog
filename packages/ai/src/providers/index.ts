@@ -2,6 +2,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { createGroq } from '@ai-sdk/groq';
 import { createOpenAI } from '@ai-sdk/openai';
 import { type AiProvider, DEFAULT_MODELS } from '@blog/types';
+import type { LanguageModel } from 'ai';
 
 export interface ProviderConfig {
   openrouterKey?: string;
@@ -38,11 +39,19 @@ export function getProvider(provider: AiProvider, config?: ProviderConfig) {
   }
 }
 
-export function getModel(provider: AiProvider, modelId?: string, config?: ProviderConfig) {
+type ProviderModelFactory = (modelId: string) => LanguageModel;
+
+export function getModel(
+  provider: AiProvider,
+  modelId?: string,
+  config?: ProviderConfig,
+): LanguageModel {
   const model = modelId ?? DEFAULT_MODELS[provider];
+  if (!model) {
+    throw new Error(`Missing default model for provider: ${provider}`);
+  }
   const p = getProvider(provider, config);
-  // Cast to any to avoid complex Vercel AI SDK model overload errors
-  return (p as any)(model);
+  return (p as unknown as ProviderModelFactory)(model);
 }
 
 /** Returns the available providers list with their models */
@@ -51,7 +60,7 @@ export function getAvailableProviders() {
     {
       id: 'openrouter' as AiProvider,
       name: 'OpenRouter',
-      description: 'Acceso a cientos de modelos via una sola API',
+      description: 'Access hundreds of models via a single API',
       models: [
         {
           id: 'nvidia/llama-3.1-nemotron-70b-instruct',
@@ -65,13 +74,13 @@ export function getAvailableProviders() {
     {
       id: 'groc' as AiProvider,
       name: 'Groc',
-      description: 'Inferencia ultra-rapida con modelos Llama',
+      description: 'Ultra-fast inference for Llama models',
       models: [{ id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B Versatile', free: true }],
     },
     {
       id: 'gemini' as AiProvider,
       name: 'Google Gemini',
-      description: 'Modelos multimodales avanzados de Google',
+      description: 'Advanced multimodal models from Google',
       models: [{ id: 'gemini-2.0-flash', name: 'Gemini 2.0 Flash', free: true }],
     },
   ];

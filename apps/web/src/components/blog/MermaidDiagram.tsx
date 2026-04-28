@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
+type MermaidApi = {
+  initialize: (config: unknown) => void;
+  render: (id: string, diagramText: string) => Promise<{ svg: string }>;
+};
+
 interface MermaidDiagramProps {
   chart: string;
   caption?: string;
@@ -32,10 +37,10 @@ export function MermaidDiagram({ chart, caption }: MermaidDiagramProps) {
     const initMermaid = async () => {
       const mermaid = (await import('mermaid')).default;
       mermaid.initialize(mermaidConfig);
-      return mermaid;
+      return mermaid as unknown as MermaidApi;
     };
 
-    const performRender = async (mermaid: any, chart: string) => {
+    const performRender = async (mermaid: MermaidApi, chart: string) => {
       const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
       const { svg } = await mermaid.render(id, chart.trim());
       return svg;

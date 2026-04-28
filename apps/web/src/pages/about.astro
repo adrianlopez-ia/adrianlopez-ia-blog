@@ -1,42 +1,165 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
+import AboutHero from '@components/about/about-hero.astro';
+import AboutNav from '@components/about/about-nav.astro';
+import AboutTechGrid from '@components/about/about-tech-grid.astro';
+import AboutTimeline from '@components/about/about-timeline.astro';
+import CallToAction from '@components/landing/CallToAction.astro';
+import ParallaxSection from '@components/landing/ParallaxSection.astro';
+import TextReveal from '@components/landing/TextReveal.astro';
+import LandingLayout from '@layouts/LandingLayout.astro';
 ---
 
-<BaseLayout title="About" description="About Adrián López Ibáñez - Full-stack developer and AI enthusiast.">
-  <div class="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6 lg:px-8">
-    <header class="mb-12 text-center">
-      <h1 class="font-display text-5xl font-bold tracking-tight">
-        About <span class="gradient-text">Me</span>
-      </h1>
-    </header>
+<LandingLayout title="About" description="About Adrián López Ibáñez - Full-stack developer and AI enthusiast.">
+  <main>
+    <AboutHero />
 
-    <div class="prose mx-auto">
-      <p class="text-lg">
-        Hi, I'm <strong>Adrián López Ibáñez</strong> -- a full-stack developer and AI enthusiast
-        passionate about building modern web experiences.
-      </p>
-
-      <h2 class="font-display text-2xl font-bold mt-8">What I Do</h2>
-      <p>
-        I specialize in building scalable web applications using cutting-edge technologies.
-        From React and Astro on the frontend to Hono and Node.js on the backend, I love
-        exploring what's possible with modern tools.
-      </p>
-
-      <h2 class="font-display text-2xl font-bold mt-8">This Blog</h2>
-      <p>
-        This site is my playground for experimenting with the latest web technologies.
-        It's built as a monorepo with Turborepo, Astro 5, Hono, and features AI-powered
-        chatbots, parallax animations, and examples in multiple frameworks.
-      </p>
-
-      <h2 class="font-display text-2xl font-bold mt-8">Tech Stack</h2>
-      <ul class="space-y-2">
-        <li>Frontend: Astro 5, React 19, Tailwind CSS v4</li>
-        <li>Backend: Hono, Drizzle ORM, Turso</li>
-        <li>AI: Vercel AI SDK, LangChain.js</li>
-        <li>Tooling: Turborepo, pnpm, Biome, Vitest</li>
-      </ul>
+    <div class="relative z-10 -mt-10 pb-8">
+      <AboutNav />
     </div>
-  </div>
-</BaseLayout>
+
+    <ParallaxSection
+      id="what-i-do"
+      title={'What I <span class="gradient-text">Do</span>'}
+      subtitle="I build modern, performant web products—end to end. Clean architecture, premium UX, and practical AI."
+    >
+      <div slot="content" class="space-y-6">
+        <TextReveal
+          text="I care about details: motion, typography, accessibility, and the boring stuff that keeps systems reliable."
+          class="text-lg"
+        />
+
+        <ul class="grid gap-4 sm:grid-cols-2">
+          {[
+            { title: 'Frontend craft', body: 'Astro + React islands, Tailwind v4, design tokens, and fast interactions.' },
+            { title: 'Backend pragmatism', body: 'Hono APIs, typed schemas, and production-ready patterns.' },
+            { title: 'AI features', body: 'Provider failover, streaming UX, and safe boundaries for prompts/tools.' },
+            { title: 'DX & quality', body: 'Turborepo, strict TypeScript, Biome, and lean workflows.' },
+          ].map((item) => (
+            <li class="themed-card rounded-2xl p-5">
+              <p class="font-display text-base font-semibold">{item.title}</p>
+              <p class="mt-2 text-sm" style="color: var(--color-text-secondary);">{item.body}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div slot="visual" class="relative">
+        <div class="themed-card relative overflow-hidden rounded-3xl p-6">
+          <div class="absolute inset-0 opacity-60" style="background: radial-gradient(600px circle at 20% 20%, color-mix(in srgb, var(--color-brand-500) 18%, transparent), transparent 45%), radial-gradient(700px circle at 80% 70%, color-mix(in srgb, var(--color-brand-400) 14%, transparent), transparent 50%);" />
+
+          <div class="relative">
+            <div class="flex items-center justify-between">
+              <p class="text-xs font-medium tracking-wide uppercase" style="color: var(--color-text-muted);">
+                Current focus
+              </p>
+              <span class="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs"
+                style="border-color: var(--color-border); background-color: var(--color-overlay); color: var(--color-text-secondary);"
+              >
+                <span class="h-2 w-2 rounded-full bg-brand-400" />
+                Shipping
+              </span>
+            </div>
+
+            <div class="mt-6 space-y-3">
+              {[
+                { label: 'UX polish', value: 92 },
+                { label: 'Performance', value: 88 },
+                { label: 'Reliability', value: 86 },
+                { label: 'AI integration', value: 80 },
+              ].map((row) => (
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <span style="color: var(--color-text-secondary);">{row.label}</span>
+                    <span class="tabular-nums" style="color: var(--color-text-muted);">{row.value}%</span>
+                  </div>
+                  <div class="h-2 w-full rounded-full" style="background-color: var(--color-overlay-strong);">
+                    <div class="h-2 rounded-full bg-brand-500/70" style={`width: ${row.value}%`} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div class="pointer-events-none absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-brand-500/10 blur-3xl" />
+        <div class="pointer-events-none absolute -right-8 -top-8 h-56 w-56 rounded-full bg-brand-400/10 blur-3xl" />
+      </div>
+    </ParallaxSection>
+
+    <AboutTimeline id="timeline" />
+
+    <AboutTechGrid id="stack" />
+
+    <ParallaxSection
+      id="this-blog"
+      reverse
+      title={'This <span class="gradient-text">Blog</span>'}
+      subtitle="A playground for modern web + AI—built as a strict TypeScript monorepo."
+    >
+      <div slot="content" class="space-y-6">
+        <TextReveal
+          text="I use this site to test ideas: animated UI patterns, multi-framework islands, and AI features that don’t sacrifice reliability."
+          class="text-lg"
+        />
+
+        <div class="grid gap-3 sm:grid-cols-2">
+          {[
+            'Astro 5 + islands',
+            'Hono API + Zod boundaries',
+            'Turso/libSQL + Drizzle',
+            'AI provider pool + streaming UX',
+          ].map((pill) => (
+            <div
+              class="rounded-2xl px-4 py-3 text-sm"
+              style="border: 1px solid var(--color-border); background-color: var(--color-overlay); color: var(--color-text-secondary);"
+            >
+              {pill}
+            </div>
+          ))}
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="/blog"
+            class="inline-flex items-center gap-2 rounded-full bg-brand-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-500/25"
+          >
+            Read the Blog
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+          <a
+            href="/examples"
+            class="inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-300"
+            style="border: 1px solid var(--color-border); background-color: var(--color-overlay); color: var(--color-text);"
+          >
+            Explore Examples
+          </a>
+        </div>
+      </div>
+
+      <div slot="visual" class="relative">
+        <div class="themed-card rounded-3xl p-6">
+          <p class="text-xs font-medium tracking-wide uppercase" style="color: var(--color-text-muted);">
+            Monorepo snapshot
+          </p>
+          <div class="mt-4 grid gap-3">
+            {[
+              { k: 'apps/web', v: 'Astro UI, animations, MDX content' },
+              { k: 'apps/api', v: 'Hono routes, AI endpoints, validation' },
+              { k: 'packages/*', v: 'Shared AI pool, database, utils, types' },
+            ].map((row) => (
+              <div class="rounded-2xl p-4" style="background-color: var(--color-overlay); border: 1px solid var(--color-border);">
+                <p class="font-mono text-xs" style="color: var(--color-text);">{row.k}</p>
+                <p class="mt-2 text-sm" style="color: var(--color-text-secondary);">{row.v}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="pointer-events-none absolute -bottom-10 right-0 h-44 w-44 rounded-full bg-brand-500/10 blur-3xl" />
+      </div>
+    </ParallaxSection>
+
+    <CallToAction />
+  </main>
+</LandingLayout>

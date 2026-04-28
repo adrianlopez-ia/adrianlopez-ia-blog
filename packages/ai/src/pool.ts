@@ -1,3 +1,4 @@
+import type { AiProvider } from '@blog/types';
 import { createChatStream } from './chat';
 import type { ChatStreamOptions } from './chat';
 import { streamLangChainChat } from './langchain';
@@ -8,7 +9,7 @@ import { getConfig } from './providers';
  * Full pool: OpenRouter -> Groc (Groq) -> Gemini (Google)
  */
 async function* tryProvider(
-  provider: { id: string; apiKey: string; label: string },
+  provider: { id: AiProvider; apiKey: string; label: string },
   options: ChatStreamOptions,
 ) {
   console.info(`[AI Pool] Trying ${provider.label}...`);
@@ -31,7 +32,7 @@ async function* tryProvider(
   // Standard Vercel AI SDK stream
   const stream = createChatStream({
     ...options,
-    provider: provider.id as any,
+    provider: provider.id,
     model: modelToUse,
   });
 
@@ -56,10 +57,10 @@ export async function* createPoolChatStream(options: ChatStreamOptions) {
   const config = getConfig();
 
   const providersToTry = [
-    { id: 'openrouter', apiKey: config.openrouterKey, label: 'OpenRouter' },
-    { id: 'groc', apiKey: config.groqKey, label: 'Groc' },
-    { id: 'gemini', apiKey: config.geminiKey, label: 'Google Gemini' },
-  ].filter((p): p is { id: string; apiKey: string; label: string } => !!p.apiKey);
+    { id: 'openrouter' as const, apiKey: config.openrouterKey, label: 'OpenRouter' },
+    { id: 'groc' as const, apiKey: config.groqKey, label: 'Groc' },
+    { id: 'gemini' as const, apiKey: config.geminiKey, label: 'Google Gemini' },
+  ].filter((p): p is { id: AiProvider; apiKey: string; label: string } => !!p.apiKey);
 
   let lastError: unknown = null;
 
