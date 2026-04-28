@@ -34,7 +34,9 @@ export const authRoutes = new Hono();
 
 authRoutes.get('/google', (c) => {
   const redirectTo = c.req.query('redirectTo');
-  const redirectUri = `${c.req.url.split('/api/')[0]}/api/auth/google/callback`;
+  const apiUrl = process.env.PUBLIC_API_URL ?? c.req.url;
+  const baseUrl = apiUrl.replace(/\/api$/, '').replace(/\/api\/.*$/, '');
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
 
   try {
     const url = getGoogleAuthUrl(redirectUri, redirectTo);
@@ -48,7 +50,7 @@ authRoutes.get('/google', (c) => {
 authRoutes.get('/google/callback', async (c) => {
   const code = c.req.query('code');
   const error = c.req.query('error');
-  const siteUrl = process.env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
+  const siteUrl = process.env.PUBLIC_SITE_URL;
 
   if (error || !code) {
     return c.redirect(`${siteUrl}/login?error=google_denied`);
@@ -56,7 +58,9 @@ authRoutes.get('/google/callback', async (c) => {
 
   try {
     const state = c.req.query('state');
-    const redirectUri = `${c.req.url.split('/callback')[0]}/callback`;
+    const apiUrl = process.env.PUBLIC_API_URL ?? c.req.url;
+    const baseUrl = apiUrl.replace(/\/api$/, '').replace(/\/api\/.*$/, '');
+    const redirectUri = `${baseUrl}/api/auth/google/callback`;
     const tokens = await exchangeGoogleCode(code, redirectUri);
     const googleUser = await getGoogleUserInfo(tokens.access_token);
 
