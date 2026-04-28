@@ -1,6 +1,6 @@
 <script lang="ts">
 import { tick } from 'svelte';
-import { getToken } from '../../lib/api-client';
+import { getToken } from '@lib/api-client';
 
 let messages = $state<{ id: string; role: 'user' | 'assistant'; content: string }[]>([]);
 let input = $state('');
