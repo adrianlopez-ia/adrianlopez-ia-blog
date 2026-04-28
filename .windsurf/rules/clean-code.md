@@ -1,0 +1,49 @@
+---
+description: Clean code and maintainability standards (SOLID/DRY/KISS)
+activationMode: always
+---
+
+# Clean Code Standards
+
+## Principles (default choices)
+- **KISS**: pick the simplest solution that is correct and testable.
+- **DRY**: remove copy/paste by extracting helpers (but don't over-abstract).
+- **SRP**: each module/function/component should have one clear responsibility.
+- **SOLID (practical)**: prefer composition, small interfaces, and dependency injection at boundaries.
+
+## Functions & methods
+- Keep functions **small** and **single-purpose**.
+- Prefer **early returns** over deep nesting.
+- Avoid hidden side-effects; prefer pure helpers for data transforms.
+- Don't pass around "bags of params"; use typed objects when arguments grow.
+
+## Componentization (UI)
+- Split components that:
+  - exceed ~150 lines,
+  - mix data-fetching/state with presentation,
+  - or have multiple interaction domains.
+- Extract reusable logic into **custom hooks** (React) or utilities (framework-agnostic).
+- Keep UI consistent with design guidelines (Gestalt + dark mode guidance).
+
+## Architecture boundaries (monorepo)
+- **Apps** own routing and composition; **packages** own reusable primitives.
+- Keep API routes thin: validate input → call service → return response.
+- Share types via `packages/types`; share helpers via `packages/utils`.
+
+## Error handling
+- Validate all external input at the boundary (Zod).
+- Fail fast with clear messages; don't swallow errors.
+- Prefer explicit return types for public APIs.
+
+## Readability & naming
+- Prefer descriptive names over comments.
+- Avoid "magic numbers/strings"; centralize constants when reused.
+- Keep imports at the top; avoid inline/dynamic imports unless required.
+
+## Refactoring guardrails
+- No "drive-by" refactors unrelated to the task.
+- Keep diffs reviewable: separate formatting-only changes from behavior changes when possible.
+
+## Verification expectations
+- Run the repo checks (Turbo + Biome) relevant to the touched code.
+- Don't claim "done" without running/observing validation output.

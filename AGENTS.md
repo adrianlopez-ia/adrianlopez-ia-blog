@@ -6,7 +6,8 @@ This repo is a monorepo with **lefthook**, **turborepo**, **Biome**, and **TypeS
 - **API**: Hono (see `apps/api/src`)
 - **DB**: Turso / libSQL (see `packages/database`)
 - **AI**: provider pool exists (OpenRouter → Groc → Google Gemini) (see `packages/ai`)
-- **UI rules**: Gestalt + “premium dark mode” guidance lives in `.cursorrules`
+- **UI rules**: Gestalt + "premium dark mode" guidance lives in `.cursorrules` and `.windsurf/rules/`
+- **IDE rules**: Cursor (`.cursor/rules/*.mdc`) + Windsurf (`.windsurf/rules/*.md`) + Antigravity (AGENTS.md)
 
 ## Core principles
 1. **AI failover**: prefer the AI pool for reliability; don’t hardcode a single provider.
