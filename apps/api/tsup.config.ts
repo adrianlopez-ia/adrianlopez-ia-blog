@@ -5,5 +5,16 @@ export default defineConfig({
   format: ['esm'],
   target: 'node22',
   clean: true,
-  noExternal: ['@blog/ai', '@blog/database', '@blog/types', '@blog/utils'],
+  noExternal: [
+    '@blog/ai',
+    '@blog/database',
+    '@blog/types',
+    '@blog/utils',
+    'ai',
+    'langchain',
+    '@langchain/openai',
+    '@ai-sdk/openai',
+    '@ai-sdk/google',
+    '@ai-sdk/groq',
+  ],
 });

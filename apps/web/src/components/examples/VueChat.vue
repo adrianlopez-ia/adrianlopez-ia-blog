@@ -15,6 +15,7 @@ const scrollToBottom = async () => {
   messagesEndRef.value?.scrollIntoView({ behavior: 'smooth' });
 };
 
+// biome-ignore lint/correctness/noUnusedVariables: used in template
 const handleSubmit = async () => {
   if (!input.value.trim() || isLoading.value) return;
 
@@ -36,57 +37,55 @@ const handleSubmit = async () => {
     content: '',
   });
 
+  const handleStreamLine = (line: string, assistantMsgId: string, currentAccumulated: string) => {
+    if (!line.startsWith('data: ')) return currentAccumulated;
+    try {
+      const data = JSON.parse(line.slice(6));
+      if (data.type === 'start') {
+        activeProvider.value = { id: data.provider, model: data.model };
+      } else if (data.content) {
+        const newAccumulated = currentAccumulated + data.content;
+        const msg = messages.value.find((m) => m.id === assistantMsgId);
+        if (msg) msg.content = newAccumulated;
+        scrollToBottom();
+        return newAccumulated;
+      }
+    } catch (_e) {}
+    return currentAccumulated;
+  };
+
+  const processStream = async (
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    assistantMsgId: string,
+  ) => {
+    const decoder = new TextDecoder();
+    let accumulated = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of decoder.decode(value).split('\n')) {
+        accumulated = handleStreamLine(line, assistantMsgId, accumulated);
+      }
+    }
+  };
+
   try {
     const response = await fetch(`${PUBLIC_API_URL}/ai/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getToken()}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify({
         messages: messages.value
           .filter((m) => m.content)
           .map(({ role, content }) => ({ role, content })),
-        provider: 'openrouter', // Will use pool failover
+        provider: 'openrouter',
       }),
     });
 
-    if (!response.ok) throw new Error('Chat request failed');
-    if (!response.body) throw new Error('No response body');
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let accumulatedContent = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
-
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-
-            if (data.type === 'start') {
-              activeProvider.value = { id: data.provider, model: data.model };
-              continue;
-            }
-
-            if (data.content) {
-              accumulatedContent += data.content;
-              const msg = messages.value.find((m) => m.id === assistantMsgId);
-              if (msg) msg.content = accumulatedContent;
-              await scrollToBottom();
-            }
-          } catch (e) {
-            // Ignore parse errors for incomplete chunks
-          }
-        }
-      }
-    }
+    if (!(response.ok && response.body)) throw new Error('Request failed');
+    await processStream(response.body.getReader(), assistantMsgId);
   } catch (err) {
     console.error(err);
     const msg = messages.value.find((m) => m.id === assistantMsgId);

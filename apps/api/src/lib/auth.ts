@@ -93,7 +93,7 @@ export async function exchangeGoogleCode(code: string, redirectUri: string): Pro
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      code,
+      code: code,
       client_id: clientId,
       client_secret: clientSecret,
       redirect_uri: redirectUri,
@@ -111,7 +111,7 @@ export async function exchangeGoogleCode(code: string, redirectUri: string): Pro
 
 export async function getGoogleUserInfo(accessToken: string): Promise<GoogleUserInfo> {
   const res = await fetch(GOOGLE_USERINFO_URL, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: { authorization: `Bearer ${accessToken}` },
   });
 
   if (!res.ok) {

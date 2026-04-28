@@ -5,6 +5,7 @@ import { getToken } from '../../lib/api-client';
 let messages = $state<{ id: string; role: 'user' | 'assistant'; content: string }[]>([]);
 let input = $state('');
 let isLoading = $state(false);
+// biome-ignore lint/correctness/noUnusedVariables: Biome fails to see usage in Svelte 5 template
 let activeProvider = $state<{ id: string; model: string } | null>(null);
 let messagesEndRef: HTMLDivElement;
 
@@ -15,6 +16,7 @@ async function scrollToBottom() {
   messagesEndRef?.scrollIntoView({ behavior: 'smooth' });
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: used in template
 async function handleSubmit(e: Event) {
   e.preventDefault();
   if (!input.trim() || isLoading) return;
@@ -38,12 +40,48 @@ async function handleSubmit(e: Event) {
   };
   messages = [...messages, assistantMsg];
 
+  const processLine = (line: string, assistantMsgId: string, accumulated: string) => {
+    if (!line.startsWith('data: ')) return { accumulated, updated: false };
+    try {
+      const data = JSON.parse(line.slice(6));
+      if (data.type === 'start') {
+        activeProvider = { id: data.provider, model: data.model };
+        return { accumulated, updated: false };
+      }
+      if (data.content) {
+        const nextAccumulated = accumulated + data.content;
+        messages = messages.map((m) =>
+          m.id === assistantMsgId ? { ...m, content: nextAccumulated } : m,
+        );
+        scrollToBottom();
+        return { accumulated: nextAccumulated, updated: true };
+      }
+    } catch (_e) {}
+    return { accumulated, updated: false };
+  };
+
+  const processStream = async (
+    reader: ReadableStreamDefaultReader<Uint8Array>,
+    assistantMsgId: string,
+  ) => {
+    const decoder = new TextDecoder();
+    let currentAccumulated = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      for (const line of decoder.decode(value).split('\n')) {
+        const result = processLine(line, assistantMsgId, currentAccumulated);
+        currentAccumulated = result.accumulated;
+      }
+    }
+  };
+
   try {
     const response = await fetch(`${PUBLIC_API_URL}/ai/chat`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${getToken()}`,
+        authorization: `Bearer ${getToken()}`,
       },
       body: JSON.stringify({
         messages: messages.filter((m) => m.content).map(({ role, content }) => ({ role, content })),
@@ -51,43 +89,8 @@ async function handleSubmit(e: Event) {
       }),
     });
 
-    if (!response.ok) throw new Error('Chat request failed');
-    if (!response.body) throw new Error('No response body');
-
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let accumulatedContent = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
-
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-
-            if (data.type === 'start') {
-              activeProvider = { id: data.provider, model: data.model };
-              continue;
-            }
-
-            if (data.content) {
-              accumulatedContent += data.content;
-              messages = messages.map((m) =>
-                m.id === assistantMsgId ? { ...m, content: accumulatedContent } : m,
-              );
-              scrollToBottom();
-            }
-          } catch (e) {
-            // Ignore
-          }
-        }
-      }
-    }
+    if (!(response.ok && response.body)) throw new Error('Request failed');
+    await processStream(response.body.getReader(), assistantMsgId);
   } catch (err) {
     console.error(err);
     messages = messages.map((m) =>

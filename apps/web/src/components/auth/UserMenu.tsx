@@ -152,7 +152,9 @@ export function UserMenu() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth="2"
+                    role="img"
                   >
+                    <title>Área Privada Icon</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -190,7 +192,9 @@ export function UserMenu() {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     strokeWidth="2"
+                    role="img"
                   >
+                    <title>Cerrar sesión Icon</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -225,7 +229,9 @@ export function UserMenu() {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                   strokeWidth="2"
+                  role="img"
                 >
+                  <title>Iniciar sesión Icon</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

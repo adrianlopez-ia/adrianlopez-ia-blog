@@ -33,7 +33,6 @@ export const authRoutes = new Hono();
 // ---------------------------------------------------------------------------
 
 authRoutes.get('/google', (c) => {
-  const siteUrl = process.env.PUBLIC_SITE_URL ?? 'http://localhost:4321';
   const redirectUri = `${c.req.url.split('/api/')[0]}/api/auth/google/callback`;
 
   try {

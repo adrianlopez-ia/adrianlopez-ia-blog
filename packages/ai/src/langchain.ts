@@ -1,8 +1,5 @@
-import { createRequire } from 'node:module';
-const require = createRequire(import.meta.url);
-
-const { ChatOpenAI } = require('@langchain/openai');
-const { HumanMessage, SystemMessage } = require('@langchain/core/messages');
+import { HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { ChatOpenAI } from '@langchain/openai';
 
 /**
  * Example of using LangChain with OpenRouter

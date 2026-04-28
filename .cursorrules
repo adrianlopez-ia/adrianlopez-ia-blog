@@ -16,6 +16,8 @@ All UI/UX developments MUST follow Gestalt principles to ensure cognitive clarit
 - Use subtle borders (1px) and soft shadows to create depth.
 - Implement glassmorphism (`backdrop-filter: blur()`) for floating elements like headers and menus.
 
-### 3. Consistency
-- Maintain consistent spacing based on a 4px/8px grid.
-- Use the established design system tokens from `global.css`.
+### 4. Operational Rules
+- **No Auto-Commit/Push**: NEVER perform a git commit or push unless explicitly requested by the USER for that specific turn.
+- **Privacy**: NEVER read or access `.env` files unless explicitly instructed by the USER. Use environment variables or ask for the required keys if needed.
+- **Bash Preference**: Prefer standard `bash` commands and `pnpm` over Windows-specific ones. Assume a Linux-like environment for CI/CD compatibility.
+- **Mandatory Validation**: ALWAYS run `pnpm lint` and `pnpm typecheck` (or their turbo equivalents) before finishing a task to ensure compliance with Biome and TypeScript.

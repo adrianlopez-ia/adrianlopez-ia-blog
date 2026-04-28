@@ -46,12 +46,45 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
     };
     setMessages((prev) => [...prev, assistantMessage]);
 
+    const handleStreamLine = (line: string, assistantMsgId: string, currentAccumulated: string) => {
+      if (!line.startsWith('data: ')) return currentAccumulated;
+      try {
+        const data = JSON.parse(line.slice(6));
+        if (data.type === 'start') {
+          setActiveProvider({ id: data.provider, model: data.model });
+        } else if (data.content) {
+          const newAccumulated = currentAccumulated + data.content;
+          setMessages((prev) =>
+            prev.map((m) => (m.id === assistantMsgId ? { ...m, content: newAccumulated } : m)),
+          );
+          return newAccumulated;
+        }
+      } catch (_e) {}
+      return currentAccumulated;
+    };
+
+    const processStream = async (
+      reader: ReadableStreamDefaultReader<Uint8Array>,
+      assistantMsgId: string,
+    ) => {
+      const decoder = new TextDecoder();
+      let accumulated = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const lines = decoder.decode(value).split('\n');
+        for (const line of lines) {
+          accumulated = handleStreamLine(line, assistantMsgId, accumulated);
+        }
+      }
+    };
+
     try {
       const response = await fetch(`${PUBLIC_API_URL}/ai/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${getToken()}`,
+          authorization: `Bearer ${getToken()}`,
         },
         body: JSON.stringify({
           messages: [...messages, userMessage].map(({ role, content }) => ({ role, content })),
@@ -61,44 +94,8 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
         }),
       });
 
-      if (!response.ok) throw new Error('Chat request failed');
-      if (!response.body) throw new Error('No response body');
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulatedContent = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value);
-        const lines = chunk.split('\n');
-
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const data = JSON.parse(line.slice(6));
-
-              if (data.type === 'start') {
-                setActiveProvider({ id: data.provider, model: data.model });
-                continue;
-              }
-
-              if (data.content) {
-                accumulatedContent += data.content;
-                setMessages((prev) =>
-                  prev.map((m) =>
-                    m.id === assistantMsgId ? { ...m, content: accumulatedContent } : m,
-                  ),
-                );
-              }
-            } catch (_e) {
-              // Ignore parse errors for incomplete chunks
-            }
-          }
-        }
-      }
+      if (!(response.ok && response.body)) throw new Error('Chat request failed');
+      await processStream(response.body.getReader(), assistantMsgId);
     } catch (err) {
       console.error(err);
       const errorMessage = err instanceof Error ? err.message : 'Error desconocido';

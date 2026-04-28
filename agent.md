@@ -24,6 +24,13 @@ This is a modern monorepo built with:
 - [ ] Integration of Padel Bot as a background worker.
 - [ ] Newsletter system with automated AI summaries.
 
+## 🛡️ Operational Principles
+- **Controlled Actions**: No commits or pushes without explicit user confirmation.
+- **Data Privacy**: No `.env` reading without direct instructions.
+- **Validation Mandate**: Always run Biome and Turbo Typecheck before completion.
+- **Bash First**: Use standard bash/pnpm commands for compatibility.
+- **Gestalt Design**: Prioritize proximity, similarity, and figure-ground in all UI changes.
+
 ## Agent Guidelines
 - **Be Concise**: Minimize talk, maximize code and action.
 - **Proactive Fixes**: If you see a bug or a design flaw, fix it without waiting for instructions.

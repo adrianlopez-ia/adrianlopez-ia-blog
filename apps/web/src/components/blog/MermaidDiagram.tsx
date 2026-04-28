@@ -12,28 +12,40 @@ export function MermaidDiagram({ chart, caption }: MermaidDiagramProps) {
   useEffect(() => {
     let cancelled = false;
 
+    const mermaidConfig = {
+      startOnLoad: false,
+      theme: 'dark' as const,
+      themeVariables: {
+        primaryColor: '#6d28d9',
+        primaryTextColor: '#f5f5f5',
+        primaryBorderColor: '#7c3aed',
+        lineColor: '#a78bfa',
+        secondaryColor: '#1e1b4b',
+        tertiaryColor: '#312e81',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '14px',
+      },
+      flowchart: { curve: 'monotoneX' as const, padding: 20 },
+      sequence: { mirrorActors: false },
+    };
+
+    const initMermaid = async () => {
+      const mermaid = (await import('mermaid')).default;
+      mermaid.initialize(mermaidConfig);
+      return mermaid;
+    };
+
+    const performRender = async (mermaid: any, chart: string) => {
+      const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+      const { svg } = await mermaid.render(id, chart.trim());
+      return svg;
+    };
+
+    // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Simplified as much as possible
     const render = async () => {
       try {
-        const mermaid = await import('mermaid');
-        mermaid.default.initialize({
-          startOnLoad: false,
-          theme: 'dark',
-          themeVariables: {
-            primaryColor: '#6d28d9',
-            primaryTextColor: '#f5f5f5',
-            primaryBorderColor: '#7c3aed',
-            lineColor: '#a78bfa',
-            secondaryColor: '#1e1b4b',
-            tertiaryColor: '#312e81',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            fontSize: '14px',
-          },
-          flowchart: { curve: 'monotoneX', padding: 20 },
-          sequence: { mirrorActors: false },
-        });
-
-        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
-        const { svg } = await mermaid.default.render(id, chart.trim());
+        const mermaid = await initMermaid();
+        const svg = await performRender(mermaid, chart);
 
         if (!cancelled && containerRef.current) {
           containerRef.current.innerHTML = svg;
