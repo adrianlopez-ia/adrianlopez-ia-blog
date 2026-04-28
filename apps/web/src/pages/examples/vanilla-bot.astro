@@ -19,7 +19,25 @@ import BaseLayout from '@layouts/BaseLayout.astro';
       </div>
     </header>
 
-    <chat-bot></chat-bot>
+    <div class="relative rounded-2xl themed-card overflow-hidden">
+      <chat-bot></chat-bot>
+
+      <div id="auth-disclaimer" class="hidden absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 text-center">
+        <div class="max-w-xs rounded-2xl border border-brand-500/30 bg-gray-900/90 p-6 shadow-2xl">
+          <div class="mb-4 text-3xl">🔒</div>
+          <h4 class="mb-2 font-semibold text-white">Restricted Access</h4>
+          <p class="mb-6 text-xs text-gray-400">
+            This demo uses our private **AI Pool**. You need to sign in to interact with the models.
+          </p>
+          <a 
+            href="/login" 
+            class="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
+          >
+            Sign In
+          </a>
+        </div>
+      </div>
+    </div>
 
     <div class="mt-8 rounded-xl p-6 themed-card">
       <h2 class="font-display text-lg font-semibold">How it works</h2>
@@ -35,6 +53,11 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 
 <script>
   import { getToken } from '@lib/api-client';
+
+  // Show disclaimer if not logged in
+  if (!getToken()) {
+    document.getElementById('auth-disclaimer')?.classList.remove('hidden');
+  }
 
   class ChatBot extends HTMLElement {
     private shadow: ShadowRoot;
@@ -131,11 +154,11 @@ import BaseLayout from '@layouts/BaseLayout.astro';
           <p>Powered by OpenRouter (Nvidia Llama 3.1)</p>
         </div>
         <div class="messages" id="messages">
-          <div class="empty">Envia un mensaje para empezar</div>
+          <div class="empty">Send a message to start</div>
         </div>
         <form class="input-area" id="form">
-          <input type="text" id="input" placeholder="Escribe un mensaje..." />
-          <button type="submit" id="submit-btn">Enviar</button>
+          <input type="text" id="input" placeholder="Type a message..." />
+          <button type="submit" id="submit-btn">Send</button>
         </form>
       `;
 

@@ -113,7 +113,7 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
 
   return (
     <div
-      className="flex h-[500px] flex-col rounded-2xl"
+      className="relative flex h-[500px] flex-col rounded-2xl"
       style={{
         border: '1px solid var(--color-border)',
         backgroundColor: 'var(--color-card-bg)',
@@ -136,7 +136,7 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
             <div>
               <p className="text-2xl">⚡</p>
               <p className="mt-2 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-                Preguntale algo a la IA de Nvidia
+                Ask something to Nvidia's AI
               </p>
             </div>
           </div>
@@ -192,6 +192,24 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
         <div ref={messagesEndRef} />
       </div>
 
+      {!getToken() && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 text-center">
+          <div className="max-w-xs rounded-2xl border border-brand-500/30 bg-gray-900/90 p-6 shadow-2xl">
+            <div className="mb-4 text-3xl">🔒</div>
+            <h4 className="mb-2 font-semibold text-white">Restricted Access</h4>
+            <p className="mb-6 text-xs text-gray-400">
+              This demo uses our private **AI Pool**. You need to sign in to interact with the models.
+            </p>
+            <a 
+              href="/login" 
+              className="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
+            >
+              Sign In
+            </a>
+          </div>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="p-4"
@@ -202,7 +220,7 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe un mensaje..."
+            placeholder="Type a message..."
             className="flex-1 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
             style={{
               border: '1px solid var(--color-border)',
@@ -215,7 +233,7 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
             disabled={isLoading || !input.trim()}
             className="rounded-xl bg-brand-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
           >
-            {isLoading ? '...' : 'Enviar'}
+            {isLoading ? '...' : 'Send'}
           </button>
         </div>
       </form>

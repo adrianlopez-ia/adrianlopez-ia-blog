@@ -9,19 +9,19 @@ import { healthRoutes } from './routes/health';
 import { postsRoutes } from './routes/posts';
 import { tagsRoutes } from './routes/tags';
 
-export const app = new Hono().basePath('/api');
+export const app = new Hono();
 
 app.use('*', loggerMiddleware);
 app.use('*', corsMiddleware);
-app.use('/ai/*', rateLimitMiddleware);
-app.use('/auth/*', rateLimitMiddleware);
+app.use('/api/ai/*', rateLimitMiddleware);
+app.use('/api/auth/*', rateLimitMiddleware);
 
-app.route('/', healthRoutes);
-app.route('/auth', authRoutes);
-app.route('/posts', postsRoutes);
-app.route('/comments', commentsRoutes);
-app.route('/tags', tagsRoutes);
-app.route('/ai', aiRoutes);
+app.route('/api', healthRoutes);
+app.route('/api/auth', authRoutes);
+app.route('/api/posts', postsRoutes);
+app.route('/api/comments', commentsRoutes);
+app.route('/api/tags', tagsRoutes);
+app.route('/api/ai', aiRoutes);
 
 app.notFound((c) =>
   c.json({ error: 'Not Found', message: 'Route not found', success: false, statusCode: 404 }, 404),

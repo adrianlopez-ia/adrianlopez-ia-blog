@@ -97,7 +97,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="flex h-full flex-col overflow-hidden bg-transparent">
+  <div class="relative flex h-full flex-col overflow-hidden bg-transparent">
     <div class="px-4 py-3" style="border-bottom: 1px solid var(--color-border-subtle)">
       <h3 class="text-sm font-semibold">Vue Agent (Composition API)</h3>
       <p class="text-xs" style="color: var(--color-text-muted)">
@@ -139,7 +139,24 @@ const handleSubmit = async () => {
         </div>
       </div>
 
-      <div ref="messagesEndRef" />
+    <div ref="messagesEndRef" />
+    </div>
+
+    <!-- Auth Disclaimer Overlay -->
+    <div v-if="!getToken()" class="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 text-center">
+      <div class="max-w-xs rounded-2xl border border-brand-500/30 bg-gray-900/90 p-6 shadow-2xl">
+        <div class="mb-4 text-3xl">🔒</div>
+        <h4 class="mb-2 font-semibold text-white">Restricted Access</h4>
+        <p class="mb-6 text-xs text-gray-400">
+          This demo uses our private **AI Pool**. You need to sign in to interact with the models.
+        </p>
+        <a 
+          href="/login" 
+          class="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
+        >
+          Sign In
+        </a>
+      </div>
     </div>
 
     <form @submit.prevent="handleSubmit" class="p-4" style="border-top: 1px solid var(--color-border-subtle)">
@@ -147,7 +164,7 @@ const handleSubmit = async () => {
         <input
           v-model="input"
           type="text"
-          placeholder="Pregunta algo..."
+          placeholder="Ask something..."
           class="flex-1 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
           style="border: 1px solid var(--color-border); background-color: var(--color-overlay); color: var(--color-text)"
         />
@@ -156,7 +173,7 @@ const handleSubmit = async () => {
           :disabled="isLoading || !input.trim()"
           class="rounded-xl bg-brand-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
         >
-          {{ isLoading ? '...' : 'Enviar' }}
+          {{ isLoading ? '...' : 'Send' }}
         </button>
       </div>
     </form>
