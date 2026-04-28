@@ -11,7 +11,8 @@ pre-commit:
 commit-msg:
   commands:
     conventional-commits:
-      run: echo "Commit message verified" && exit 0
+      run: |
+        node ".cursor/hooks/conventional-commit-msg.cjs" {1}
 
 pre-push:
   commands:
