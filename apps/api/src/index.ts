@@ -16,6 +16,7 @@ if (!process.env.OPENAI_API_KEY && process.env.OPENROUTER_API_KEY) {
 // Now dynamically import the app so env vars are available for all modules
 const { serve } = await import('@hono/node-server');
 const { app } = await import('./app');
+const { startScheduler } = await import('./lib/scheduler');
 
 const port = Number(process.env.PORT) || 3000;
 
@@ -26,4 +27,7 @@ serve({ fetch: app.fetch, port }, (info) => {
   console.info(`   Groc: ${process.env.GROQ_API_KEY ? '✅ configured' : '❌ missing'}`);
   console.info(`   Gemini: ${process.env.GEMINI_API_KEY ? '✅ configured' : '❌ missing'}`);
   console.info(`   Google OAuth: ${process.env.GOOGLE_CLIENT_ID ? '✅ configured' : '❌ missing'}`);
+
+  // Start the reservation scheduler
+  startScheduler();
 });

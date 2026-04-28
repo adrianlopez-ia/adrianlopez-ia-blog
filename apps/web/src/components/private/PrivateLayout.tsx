@@ -1,5 +1,6 @@
 import { type AuthUser, authApi, getToken } from '@lib/api-client';
 import { type ReactNode, useEffect, useState } from 'react';
+import { NotificationProvider } from '../ui/NotificationContext';
 
 const ALL_PRIVATE_APPS = [
   {
@@ -147,8 +148,10 @@ export function PrivateLayout({ children, currentPath = '' }: PrivateLayoutProps
       </aside>
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
-        {/* Pass user to children if they are components that can receive props */}
-        {children}
+        <NotificationProvider>
+          {/* Pass user to children if they are components that can receive props */}
+          {children}
+        </NotificationProvider>
       </main>
     </div>
   );

@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { comments } from './comments';
 import { posts } from './posts';
+import { reservations } from './reservations';
 
 export const users = sqliteTable('users', {
   id: text('id').primaryKey(),
@@ -24,4 +25,5 @@ export const users = sqliteTable('users', {
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
   comments: many(comments),
+  reservations: many(reservations),
 }));

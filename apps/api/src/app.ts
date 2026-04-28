@@ -7,6 +7,7 @@ import { authRoutes } from './routes/auth';
 import { commentsRoutes } from './routes/comments';
 import { healthRoutes } from './routes/health';
 import { postsRoutes } from './routes/posts';
+import { reservationsRoutes } from './routes/reservations';
 import { tagsRoutes } from './routes/tags';
 
 export const app = new Hono();
@@ -22,6 +23,7 @@ app.route('/api/posts', postsRoutes);
 app.route('/api/comments', commentsRoutes);
 app.route('/api/tags', tagsRoutes);
 app.route('/api/ai', aiRoutes);
+app.route('/api/reservations', reservationsRoutes);
 
 app.notFound((c) =>
   c.json({ error: 'Not Found', message: 'Route not found', success: false, statusCode: 404 }, 404),
