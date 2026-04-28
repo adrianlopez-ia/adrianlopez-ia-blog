@@ -79,7 +79,7 @@ export function PadelBotApp() {
   const handleSubmit = useCallback(async () => {
     if (!apiUrl.trim()) {
       setStatus('error');
-      setResponse('Configura la URL primero');
+      setResponse('Configure the URL first');
       return;
     }
 
@@ -145,7 +145,7 @@ export function PadelBotApp() {
         </span>
       </h1>
       <p style={{ marginTop: 8, fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-        Configura y lanza el bot de reservas de padel.
+        Configure and launch the padel reservation bot.
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginTop: 32 }}>
@@ -158,14 +158,12 @@ export function PadelBotApp() {
             background: 'var(--color-bg-primary)',
           }}
         >
-          <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: 20 }}>
-            Configuracion del Bot
-          </h2>
+          <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: 20 }}>Bot Configuration</h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
               <label htmlFor="target-hour" style={labelStyle}>
-                Hora objetivo
+                Target hour
               </label>
               <input
                 id="target-hour"
@@ -178,7 +176,7 @@ export function PadelBotApp() {
 
             <div>
               <label htmlFor="days-ahead" style={labelStyle}>
-                Dias con antelacion
+                Days in advance
               </label>
               <input
                 id="days-ahead"
@@ -193,7 +191,7 @@ export function PadelBotApp() {
 
             <div>
               <label htmlFor="max-wait" style={labelStyle}>
-                Tiempo maximo de espera (min)
+                Max wait time (min)
               </label>
               <input
                 id="max-wait"
@@ -223,7 +221,7 @@ export function PadelBotApp() {
                   onChange={(e) => setWithLight(e.target.checked)}
                   style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
                 />
-                Con luz
+                With light
               </label>
               <label
                 style={{
@@ -241,7 +239,7 @@ export function PadelBotApp() {
                   onChange={(e) => setTwoHours(e.target.checked)}
                   style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
                 />
-                2 horas
+                2 hours
               </label>
             </div>
           </div>
@@ -304,13 +302,13 @@ export function PadelBotApp() {
           }}
         >
           <h2 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: 20 }}>
-            Configuracion del Lanzador
+            Launcher Configuration
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
               <label htmlFor="api-url" style={labelStyle}>
-                URL del endpoint
+                Endpoint URL
               </label>
               <input
                 id="api-url"
@@ -346,7 +344,7 @@ export function PadelBotApp() {
                     cursor: 'pointer',
                   }}
                 >
-                  + Anadir
+                  + Add
                 </button>
               </div>
 
@@ -407,7 +405,7 @@ export function PadelBotApp() {
                 alignSelf: 'flex-start',
               }}
             >
-              Guardar config
+              Save config
             </button>
           </div>
         </div>
@@ -432,12 +430,12 @@ export function PadelBotApp() {
             opacity: status === 'loading' ? 0.7 : 1,
           }}
         >
-          {status === 'loading' ? 'Lanzando...' : '🚀 Lanzar Bot'}
+          {status === 'loading' ? 'Launching...' : '🚀 Launch Bot'}
         </button>
 
         {status === 'success' && (
           <span style={{ fontSize: '0.875rem', color: '#4ade80', fontWeight: 500 }}>
-            Enviado correctamente
+            Sent successfully
           </span>
         )}
         {status === 'error' && !response.includes('\n') && (
@@ -468,7 +466,7 @@ export function PadelBotApp() {
               marginBottom: 8,
             }}
           >
-            Respuesta
+            Response
           </p>
           <pre
             style={{

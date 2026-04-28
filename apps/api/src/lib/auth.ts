@@ -66,7 +66,7 @@ export interface GoogleUserInfo {
   verified_email: boolean;
 }
 
-export function getGoogleAuthUrl(redirectUri: string): string {
+export function getGoogleAuthUrl(redirectUri: string, state?: string): string {
   const clientId = process.env.GOOGLE_CLIENT_ID;
   if (!clientId) throw new Error('GOOGLE_CLIENT_ID environment variable is required');
 
@@ -78,6 +78,10 @@ export function getGoogleAuthUrl(redirectUri: string): string {
     access_type: 'offline',
     prompt: 'select_account',
   });
+
+  if (state) {
+    params.append('state', state);
+  }
 
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 }

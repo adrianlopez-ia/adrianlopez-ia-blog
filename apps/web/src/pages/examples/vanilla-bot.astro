@@ -225,7 +225,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
           }
         }
       } catch (err) {
-        this.messages[assistantMsgIndex].content = 'Error al conectar con la IA.';
+        this.messages[assistantMsgIndex].content = 'Error connecting to the AI.';
         this.updateMessages();
       } finally {
         this.isLoading = false;

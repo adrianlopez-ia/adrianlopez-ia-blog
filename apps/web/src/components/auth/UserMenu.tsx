@@ -154,14 +154,14 @@ export function UserMenu() {
                     strokeWidth="2"
                     role="img"
                   >
-                    <title>Área Privada Icon</title>
+                    <title>Private Area Icon</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
-                  Área Privada
+                  Private Area
                 </a>
                 <div
                   style={{ height: 1, background: 'var(--color-border-subtle)', margin: '4px 8px' }}
@@ -194,14 +194,14 @@ export function UserMenu() {
                     strokeWidth="2"
                     role="img"
                   >
-                    <title>Cerrar sesión Icon</title>
+                    <title>Sign Out Icon</title>
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                     />
                   </svg>
-                  Cerrar sesión
+                  Sign Out
                 </button>
               </div>
             </>
@@ -231,14 +231,14 @@ export function UserMenu() {
                   strokeWidth="2"
                   role="img"
                 >
-                  <title>Iniciar sesión Icon</title>
+                  <title>Sign In Icon</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                   />
                 </svg>
-                Iniciar sesión
+                Sign In
               </a>
             </div>
           )}

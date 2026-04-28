@@ -33,10 +33,11 @@ export const authRoutes = new Hono();
 // ---------------------------------------------------------------------------
 
 authRoutes.get('/google', (c) => {
+  const redirectTo = c.req.query('redirectTo');
   const redirectUri = `${c.req.url.split('/api/')[0]}/api/auth/google/callback`;
 
   try {
-    const url = getGoogleAuthUrl(redirectUri);
+    const url = getGoogleAuthUrl(redirectUri, redirectTo);
     return c.redirect(url);
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Google OAuth not configured';
@@ -54,6 +55,7 @@ authRoutes.get('/google/callback', async (c) => {
   }
 
   try {
+    const state = c.req.query('state');
     const redirectUri = `${c.req.url.split('/callback')[0]}/callback`;
     const tokens = await exchangeGoogleCode(code, redirectUri);
     const googleUser = await getGoogleUserInfo(tokens.access_token);
@@ -100,7 +102,9 @@ authRoutes.get('/google/callback', async (c) => {
     const jwtToken = await signJwt({ sub: userId, email: googleUser.email, role: userRole });
 
     // Redirect back to the frontend with the JWT token as query param
-    return c.redirect(`${siteUrl}/auth/callback?token=${jwtToken}`);
+    // Also include the original redirect URL if present
+    const finalRedirect = state ? `&redirect=${encodeURIComponent(state)}` : '';
+    return c.redirect(`${siteUrl}/auth/callback?token=${jwtToken}${finalRedirect}`);
   } catch (err) {
     console.error('[Google OAuth callback error]', err);
     return c.redirect(`${siteUrl}/login?error=google_error`);

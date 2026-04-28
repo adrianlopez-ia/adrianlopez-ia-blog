@@ -5,10 +5,10 @@ const appUrl = 'https://house-bot-bhcu.onrender.com/';
 const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
 ---
 
-<BaseLayout title="House Bot" description="Dashboard del bot de busqueda de vivienda en Madrid con IA.">
+<BaseLayout title="House Bot" description="Dashboard of the housing search bot in Madrid with AI.">
   <div class="mx-auto max-w-7xl px-4 pt-28 pb-8 sm:px-6 lg:px-8">
     <header class="mb-6">
-      <a href="/apps" class="text-sm text-brand-500 dark:text-brand-400 hover:underline">&larr; Todas las Apps</a>
+      <a href="/apps" class="text-sm text-brand-500 dark:text-brand-400 hover:underline">&larr; All Apps</a>
 
       <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -23,8 +23,8 @@ const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
             </span>
           </div>
           <p class="mt-2 max-w-2xl text-sm" style="color: var(--color-text-secondary);">
-            Bot que busca cooperativas de vivienda en Madrid, analiza oportunidades con Gemini AI,
-            rellena formularios automaticamente y notifica via Telegram.
+            Bot that searches for housing cooperatives in Madrid, analyzes opportunities with Gemini AI,
+            automatically fills out forms, and notifies via Telegram.
           </p>
         </div>
 
@@ -60,7 +60,7 @@ const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-            Abrir Externo
+            Open External
           </a>
         </div>
       </div>
@@ -83,7 +83,7 @@ const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
       <div id="iframe-loader" class="absolute inset-0 flex items-center justify-center" style="background-color: var(--color-bg-primary);">
         <div class="text-center">
           <div class="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent"></div>
-          <p class="mt-3 text-sm" style="color: var(--color-text-muted);">Cargando dashboard...</p>
+          <p class="mt-3 text-sm" style="color: var(--color-text-muted);">Loading dashboard...</p>
         </div>
       </div>
 
@@ -104,10 +104,10 @@ const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         <div>
-          <p class="text-sm font-medium" style="color: var(--color-text-primary);">Nota sobre el hosting</p>
+          <p class="text-sm font-medium" style="color: var(--color-text-primary);">Note about hosting</p>
           <p class="mt-1 text-xs" style="color: var(--color-text-muted);">
-            House Bot esta alojado en Render (free tier). La primera carga puede tardar 30-60 segundos si el servicio esta en reposo.
-            Si el iframe no carga, puedes <a href={appUrl} target="_blank" rel="noopener noreferrer" class="text-brand-500 dark:text-brand-400 hover:underline">abrirlo directamente</a>.
+            House Bot is hosted on Render (free tier). The first load may take 30-60 seconds if the service is asleep.
+            If the iframe doesn't load, you can <a href={appUrl} target="_blank" rel="noopener noreferrer" class="text-brand-500 dark:text-brand-400 hover:underline">open it directly</a>.
           </p>
         </div>
       </div>
@@ -126,7 +126,7 @@ const githubUrl = 'https://github.com/adrianlopez-ia/house-bot';
     });
 
     setTimeout(() => {
-      if (loader.style.display !== 'none') {
+      if (loader && loader.style.display !== 'none') {
         iframe.style.opacity = '1';
         loader.style.display = 'none';
       }

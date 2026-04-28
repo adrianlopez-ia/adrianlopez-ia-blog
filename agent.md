@@ -16,6 +16,7 @@ This is a modern monorepo built with:
 2. **Framework Agnostic**: The project supports React, Vue, and Svelte. Choose the best tool for the task.
 3. **Gestalt Design**: Every UI change must follow the rules in `.cursorrules`.
 4. **Clean Monorepo**: Keep packages decoupled. Shared types in `@blog/types`, utils in `@blog/utils`.
+5. **English Only**: Everything MUST be in English. All UI, content, and code comments.
 
 ## Current State & Roadmap
 - [x] AI Pool with Triple Failover (OpenRouter, Groc, Gemini).
@@ -36,3 +37,4 @@ This is a modern monorepo built with:
 - **Proactive Fixes**: If you see a bug or a design flaw, fix it without waiting for instructions.
 - **Environment Awareness**: Always check Node version (v22+) and pnpm usage on Windows.
 - **Security First**: Never expose `.env` values. Use environment variables.
+- **Modern Engineering**: Always apply Clean Code, Object Calisthenics, and SRP. Componentize complex logic and use descriptive naming.

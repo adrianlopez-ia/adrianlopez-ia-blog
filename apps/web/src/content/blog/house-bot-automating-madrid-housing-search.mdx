@@ -1,6 +1,6 @@
 ---
-title: "House Bot: Automatizando la Busqueda de Vivienda en Madrid con IA"
-description: "Como construi un bot en Python que descubre cooperativas de vivienda, analiza oportunidades con Gemini AI, rellena formularios automaticamente y notifica via Telegram."
+title: "House Bot: Automating Madrid Housing Search with AI"
+description: "How I built a Python bot that discovers housing cooperatives, analyzes opportunities with Gemini AI, fills out forms automatically, and notifies via Telegram."
 publishedAt: 2026-03-07
 tags: ["Python", "AI", "Automation", "Telegram", "Web Scraping"]
 draft: false
@@ -9,26 +9,26 @@ coverImage: "/images/house-bot-cover.svg"
 
 import { MermaidDiagram } from '@components/blog/MermaidDiagram';
 
-# House Bot: Automatizando la Busqueda de Vivienda en Madrid con IA
+# House Bot: Automating Madrid Housing Search with AI
 
-Buscar vivienda en Madrid es una tarea agotadora. Decenas de cooperativas, constructoras con webs desactualizadas, formularios de contacto interminables y la sensacion constante de que te estas perdiendo algo. Asi que hice lo que cualquier desarrollador haria: **automatizarlo todo**.
+Finding a home in Madrid is an exhausting task. Dozens of cooperatives, construction companies with outdated websites, endless contact forms, and the constant feeling that you're missing something. So I did what any developer would do: **automate everything**.
 
-[**house-bot**](https://github.com/adrianlopez-ia/house-bot) es un bot en Python que descubre webs de cooperativas y constructoras, analiza las oportunidades con IA, rellena formularios de contacto automaticamente y me envia alertas por Telegram. Todo gratis.
+[**house-bot**](https://github.com/adrianlopez-ia/house-bot) is a Python bot that discovers cooperative and developer websites, analyzes opportunities with AI, fills out contact forms automatically, and sends me alerts via Telegram. All for free.
 
-House Bot is a specialized AI agent designed to navigate the complex Madrid housing market. By leveraging a **Multi-Provider AI Pool** (switching between OpenRouter and Groc), it ensures 24/7 availability even when API limits are reached.
+House Bot is a specialized AI agent designed to navigate the complex Madrid housing market. By leveraging a **Multi-Provider AI Pool** (switching between OpenRouter and Groq), it ensures 24/7 availability even when API limits are reached.
 
-## El Problema
+## The Problem
 
-El mercado de vivienda nueva en Madrid (especialmente cooperativas en zonas norte, este y oeste) tiene varios problemas:
+The new housing market in Madrid (especially cooperatives in northern, eastern, and western zones) faces several issues:
 
-- **Informacion dispersa**: cada cooperativa tiene su propia web, muchas con informacion pobre
-- **Formularios manuales**: para obtener info detallada hay que rellenar formularios de contacto en cada una
-- **Sin agregadores fiables**: los portales inmobiliarios se centran en segunda mano
-- **Ventanas de oportunidad cortas**: las mejores cooperativas se llenan rapido
+- **Scattered Information**: each cooperative has its own website, many with poor information.
+- **Manual Forms**: to get detailed info, you must fill out contact forms on each one.
+- **No Reliable Aggregators**: real estate portals focus on second-hand properties.
+- **Short Windows of Opportunity**: the best cooperatives fill up fast.
 
-## La Solucion
+## The Solution
 
-House Bot automatiza todo el ciclo de busqueda:
+House Bot automates the entire search cycle:
 
 <MermaidDiagram
   client:load
@@ -40,12 +40,12 @@ House Bot automatiza todo el ciclo de busqueda:
       D --> E[📊 Web Dashboard]
       E --> A
   `}
-  caption="Ciclo completo de automatizacion de house-bot"
+  caption="Complete house-bot automation cycle"
 />
 
-## Arquitectura
+## Architecture
 
-El proyecto sigue principios de **Dependency Injection**, **Repository Pattern** y abstracciones basadas en **Protocols**, lo que permite cambiar el proveedor de IA sin tocar el resto del codigo.
+The project follows principles of **Dependency Injection**, **Repository Pattern**, and abstractions based on **Protocols**, which allows changing the AI provider without touching the rest of the code.
 
 <MermaidDiagram
   client:load
@@ -101,45 +101,45 @@ El proyecto sigue principios de **Dependency Injection**, **Repository Pattern**
       W --> SSE
       W --> UI
   `}
-  caption="Arquitectura del sistema con Dependency Injection"
+  caption="System architecture with Dependency Injection"
 />
 
-## Stack Tecnologico
+## Tech Stack
 
-| Componente | Tecnologia | Proposito |
+| Component | Technology | Purpose |
 |------------|-----------|-----------|
-| **Runtime** | Python 3.9+ | Lenguaje principal |
-| **AI** | Gemini Flash-Lite (gratis) | Analisis de webs y oportunidades |
-| **Browser** | Playwright | Scraping y rellenado de formularios |
-| **Database** | SQLite + aiosqlite | Almacenamiento local, sin servidor |
-| **Notificaciones** | Telegram Bot API | Alertas y comandos interactivos |
-| **Busqueda** | DuckDuckGo | Descubrimiento de nuevas webs |
-| **Config** | Pydantic Settings | Validacion de configuracion |
-| **Scheduler** | APScheduler | Tareas periodicas |
-| **Web** | aiohttp | Dashboard y API REST |
-| **Deploy** | Render (Docker, free tier) | Hosting gratuito |
+| **Runtime** | Python 3.9+ | Main language |
+| **AI** | Gemini Flash-Lite (free) | Website and opportunity analysis |
+| **Browser** | Playwright | Scraping and form filling |
+| **Database** | SQLite + aiosqlite | Local storage, serverless |
+| **Notifications** | Telegram Bot API | Interactive alerts and commands |
+| **Search** | DuckDuckGo | Discovery of new websites |
+| **Config** | Pydantic Settings | Configuration validation |
+| **Scheduler** | APScheduler | Periodic tasks |
+| **Web** | aiohttp | Dashboard and REST API |
+| **Deploy** | Render (Docker, free tier) | Free hosting |
 
-## Como Funciona Cada Modulo
+## How Each Module Works
 
-### 1. Discovery: Encontrando Cooperativas
+### 1. Discovery: Finding Cooperatives
 
-El `DiscoveryService` combina dos fuentes para encontrar webs de cooperativas:
+The `DiscoveryService` combines two sources to find cooperative websites:
 
-- **Lista semilla**: sitios conocidos de cooperativas y constructoras en Madrid
-- **Busqueda activa**: queries automaticas en DuckDuckGo para descubrir nuevos sitios
+- **Seed List**: known cooperative and developer sites in Madrid.
+- **Active Search**: automated DuckDuckGo queries to discover new sites.
 
 ```python
-# Las queries se generan automaticamente para cada zona
-# "cooperativa vivienda Madrid norte"
-# "constructora pisos nuevos Madrid este"
-# "promocion obra nueva Madrid oeste"
+# Queries are generated automatically for each zone
+# "housing cooperative Madrid north"
+# "new apartment construction Madrid east"
+# "new build development Madrid west"
 ```
 
-Cada sitio descubierto se almacena en SQLite con su estado (activo, analizado, descartado).
+Each discovered site is stored in SQLite with its status (active, analyzed, discarded).
 
-### 2. AI Analysis: Gemini Analiza Cada Web
+### 2. AI Analysis: Gemini Analyzes Each Web
 
-El `ScraperService` utiliza Playwright para navegar cada web, extraer el contenido y enviarlo a Gemini AI para su analisis:
+The `ScraperService` uses Playwright to navigate each site, extract content, and send it to Gemini AI for analysis:
 
 <MermaidDiagram
   client:load
@@ -150,19 +150,19 @@ El `ScraperService` utiliza Playwright para navegar cada web, extraer el conteni
       participant AI as Gemini AI
       participant DB as SQLite
 
-      S->>B: Navegar a URL
-      B-->>S: HTML + texto
-      S->>AI: Analizar contenido
-      Note over AI: Extraer oportunidades:<br/>Proyecto, zona, precio,<br/>plazos, puntuacion
-      AI-->>S: JSON estructurado
-      S->>DB: Guardar oportunidades
+      S->>B: Navigate to URL
+      B-->>S: HTML + text
+      S->>AI: Analyze content
+      Note over AI: Extract opportunities:<br/>Project, zone, price,<br/>deadlines, score
+      AI-->>S: Structured JSON
+      S->>DB: Save opportunities
   `}
-  caption="Flujo de analisis con IA"
+  caption="AI analysis flow"
 />
 
-Gemini devuelve datos estructurados: nombre del proyecto, zona, rango de precios, plazos de entrega, si hay formulario de contacto, y una **puntuacion de interes** del 1 al 10.
+Gemini returns structured data: project name, zone, price range, delivery deadlines, whether there is a contact form, and an **interest score** from 1 to 10.
 
-La capa de IA esta abstraida con un `Protocol`, lo que permite cambiar de proveedor sin modificar nada:
+The AI layer is abstracted with a `Protocol`, allowing for provider changes without modification:
 
 ```python
 class AIAnalyzer(Protocol):
@@ -170,54 +170,54 @@ class AIAnalyzer(Protocol):
     async def analyze_form(self, url: str, html: str) -> FormAnalysis: ...
 ```
 
-Se soportan multiples proveedores gratuitos: **Cerebras**, **Groc**, **Mistral**, **xAI** y **Gemini**. Actualmente, el blog implementa un **AI Pool Dinámico con Triple Failover**: el sistema intenta primero conectar con **OpenRouter**, si falla o alcanza su límite, salta instantáneamente a **Groc**, y como última capa de redundancia utiliza **Google Gemini**. Esto garantiza una disponibilidad total del servicio sin interrupciones.
+Multiple free providers are supported: **Cerebras**, **Groq**, **Mistral**, **xAI**, and **Gemini**. Currently, the blog implements a **Dynamic AI Pool with Triple Failover**: the system first tries to connect with **OpenRouter**, if it fails or reaches its limit, it instantly jumps to **Groq**, and as a final redundancy layer, it uses **Google Gemini**. This ensures total service availability without interruptions.
 
-### 3. Form Filling: Formularios Automaticos
+### 3. Form Filling: Automatic Forms
 
-El `FormService` detecta formularios de contacto en las webs y los rellena automaticamente con tus datos personales:
+The `FormService` detects contact forms on websites and fills them automatically with your personal data:
 
-1. **Deteccion**: funciones puras analizan el HTML buscando campos de formulario
-2. **Mapeo**: cada campo se asocia a un dato personal (nombre, email, telefono...)
-3. **Rellenado**: Playwright simula la interaccion humana para rellenar y enviar
-4. **Evidencia**: se toma un screenshot de cada formulario enviado
+1. **Detection**: pure functions analyze the HTML looking for form fields.
+2. **Mapping**: each field is associated with personal data (name, email, phone...).
+3. **Filling**: Playwright simulates human interaction to fill and submit.
+4. **Evidence**: a screenshot is taken for each submitted form.
 
 ```python
-# Configuracion de datos personales en .env
-USER_FULL_NAME=Tu Nombre
-USER_EMAIL=tu@email.com
+# Personal data configuration in .env
+USER_FULL_NAME=Your Name
+USER_EMAIL=your@email.com
 USER_PHONE=+34600000000
 ```
 
-### 4. Telegram Bot: Control Remoto
+### 4. Telegram Bot: Remote Control
 
-El bot de Telegram permite monitorizar y controlar house-bot desde el movil:
+The Telegram bot allows monitoring and controlling house-bot from your mobile:
 
-| Comando | Que hace |
+| Command | Action |
 |---------|----------|
-| `/oportunidades` | Lista de oportunidades activas con puntuacion |
-| `/futuras` | Proximos lanzamientos detectados |
-| `/formularios` | Estado de formularios enviados y pendientes |
-| `/buscar` | Forzar busqueda inmediata |
-| `/reporte` | Resumen completo con estadisticas |
-| `/sites` | Webs monitorizadas |
+| `/opportunities` | List of active opportunities with scores |
+| `/future` | Detected upcoming launches |
+| `/forms` | Status of sent and pending forms |
+| `/search` | Force immediate search |
+| `/report` | Full summary with statistics |
+| `/sites` | Monitored websites |
 
-### 5. Web Dashboard: Vista Completa
+### 5. Web Dashboard: Complete View
 
-House-bot incluye un dashboard web completo con:
+House-bot includes a full web dashboard with:
 
-- **Estadisticas en tiempo real** via Server-Sent Events (SSE)
-- **Lista de oportunidades** filtrable por zona y estado
-- **Gestion de formularios** con evidencia de envio
-- **Control del AI provider** para cambiar de modelo en caliente
-- **Acciones manuales**: lanzar busqueda, scraping o rellenado de formularios
+- **Real-time Statistics** via Server-Sent Events (SSE)
+- **Opportunity List** filterable by zone and status
+- **Form Management** with submission evidence
+- **AI Provider Control** to switch models on the fly
+- **Manual Actions**: launch search, scraping, or form filling
 
-El dashboard se sirve como SPA estatica desde aiohttp, con una API REST completa.
+The dashboard is served as a static SPA from aiohttp, with a full REST API.
 
-> Puedes probar el dashboard en la seccion [Apps](/apps/house-bot) de este blog.
+> You can try the dashboard in the [Apps](/apps/house-bot) section of this blog.
 
-## Principios de Diseno
+## Design Principles
 
-Lo que hace este proyecto interesante desde el punto de vista de ingenieria:
+What makes this project interesting from an engineering perspective:
 
 <MermaidDiagram
   client:load
@@ -226,16 +226,16 @@ Lo que hace este proyecto interesante desde el punto de vista de ingenieria:
       root((house-bot))
         Dependency Injection
           Constructor injection
-          No estado global
+          No global state
           Composition root
         Protocol Abstractions
           AIAnalyzer Protocol
-          Provider-agnostico
+          Provider-agnostic
           Plug and play
         Repository Pattern
           Async context manager
-          CRUD centralizado
-          SQLite local
+          Centralized CRUD
+          Local SQLite
         Immutability
           Frozen dataclasses
           Enums, no magic strings
@@ -245,50 +245,50 @@ Lo que hace este proyecto interesante desde el punto de vista de ingenieria:
           Domain-specific errors
           Structured logging
   `}
-  caption="Principios de diseno del proyecto"
+  caption="Project design principles"
 />
 
-- **Dependency Injection**: todas las dependencias se inyectan via constructor. `main.py` es el unico lugar donde se cablea todo.
-- **Protocol-based abstractions**: el proveedor de IA se puede cambiar sin tocar el resto del codigo.
-- **Repository pattern**: acceso a datos centralizado con async context manager.
-- **Frozen dataclasses + Enums**: modelos inmutables, sin magic strings.
-- **Validated config**: Pydantic Settings valida todo al arrancar.
+- **Dependency Injection**: all dependencies are injected via constructor. `main.py` is the only place where everything is wired.
+- **Protocol-based abstractions**: the AI provider can be changed without touching the rest of the code.
+- **Repository pattern**: centralized data access with async context manager.
+- **Frozen dataclasses + Enums**: immutable models, no magic strings.
+- **Validated config**: Pydantic Settings validates everything at startup.
 
-## Tareas Programadas
+## Scheduled Tasks
 
-El scheduler ejecuta las tareas automaticamente:
+The scheduler executes tasks automatically:
 
-| Tarea | Frecuencia | Configurable |
+| Task | Frequency | Configurable |
 |-------|------------|-------------|
-| Scraping de sitios | Cada 6h | `SCRAPE_INTERVAL_HOURS` |
-| Descubrimiento | Cada 24h | `DISCOVERY_INTERVAL_HOURS` |
-| Rellenado de formularios | Cada 12h | `FORM_FILL_INTERVAL_HOURS` |
-| Reporte semanal | Lunes 9:00 | Fijo |
+| Site Scraping | Every 6h | `SCRAPE_INTERVAL_HOURS` |
+| Discovery | Every 24h | `DISCOVERY_INTERVAL_HOURS` |
+| Form Filling | Every 12h | `FORM_FILL_INTERVAL_HOURS` |
+| Weekly Report | Monday 9:00 | Fixed |
 
-## Coste: 0 EUR
+## Cost: 0 EUR
 
-Todo el stack es gratuito:
+The entire stack is free:
 
-- **Gemini AI**: capa gratuita con 1.000 peticiones/dia (Flash-Lite)
-- **Telegram Bot**: completamente gratis
-- **DuckDuckGo**: sin API key
-- **SQLite**: base de datos local
-- **Render**: hosting Docker free tier
+- **Gemini AI**: free tier with 1,000 requests/day (Flash-Lite)
+- **Telegram Bot**: completely free
+- **DuckDuckGo**: no API key needed
+- **SQLite**: local database
+- **Render**: free tier Docker hosting
 
-## Codigo Fuente
+## Source Code
 
-El proyecto es open source:
+The project is open source:
 
 - **GitHub**: [adrianlopez-ia/house-bot](https://github.com/adrianlopez-ia/house-bot)
-- **Dashboard**: [Probar en Apps](/apps/house-bot)
+- **Dashboard**: [Try in Apps](/apps/house-bot)
 
-## Que Sigue
+## What's Next
 
-Estoy trabajando en varias mejoras:
+I'm working on several improvements:
 
-- **Filtros avanzados** por precio y metros cuadrados
-- **Comparador de cooperativas** con scoring multidimensional
-- **Integracion con Idealista** como fuente adicional
-- **Alertas inteligentes** que aprenden tus preferencias
+- **Advanced Filters** by price and square meters.
+- **Cooperative Comparator** with multi-dimensional scoring.
+- **Idealista Integration** as an additional source.
+- **Smart Alerts** that learn your preferences.
 
-Si te interesa la busqueda de vivienda en Madrid o quieres adaptar el bot a otra ciudad, echa un vistazo al repo y abre un issue.
+If you're interested in housing search in Madrid or want to adapt the bot to another city, check out the repo and open an issue.

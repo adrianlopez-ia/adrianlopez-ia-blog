@@ -21,3 +21,20 @@ All UI/UX developments MUST follow Gestalt principles to ensure cognitive clarit
 - **Privacy**: NEVER read or access `.env` files unless explicitly instructed by the USER. Use environment variables or ask for the required keys if needed.
 - **Bash Preference**: Prefer standard `bash` commands and `pnpm` over Windows-specific ones. Assume a Linux-like environment for CI/CD compatibility.
 - **Mandatory Validation**: ALWAYS run `pnpm lint` and `pnpm typecheck` (or their turbo equivalents) before finishing a task to ensure compliance with Biome and TypeScript.
+
+### 5. Language Consistency
+- **English Only**: ALL application content, UI text, metadata, blog posts, and comments MUST be in English. NEVER introduce Spanish (or other languages) text unless specifically required for technical reasons or explicitly requested for a localized test.
+
+### 6. Coding Standards & Quality
+- **Clean Code & Object Calisthenics**: 
+  - Keep methods and functions short (ideally < 20 lines).
+  - Use highly descriptive, self-documenting names for variables, functions, and classes.
+  - Limit indentation to one level per method where possible.
+  - No `else` keyword; use early returns instead.
+- **Componentization (SRP)**: 
+  - Split components that exceed 150 lines or handle more than one responsibility.
+  - Use React/Vue/Svelte islands efficiently in Astro to minimize hydration.
+- **Architecture**:
+  - **Frontend**: Prefer functional components and hooks. Keep logic separate from presentation.
+  - **Backend**: Use the Repository pattern for database access and Service layer for business logic. Keep Hono routes as thin wrappers for services.
+- **DRY & SOLID**: Avoid code duplication. Design for extensibility and ease of testing.

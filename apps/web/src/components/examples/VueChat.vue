@@ -89,7 +89,7 @@ const handleSubmit = async () => {
   } catch (err) {
     console.error(err);
     const msg = messages.value.find((m) => m.id === assistantMsgId);
-    if (msg) msg.content = 'Error al conectar con la pool de IA.';
+    if (msg) msg.content = 'Error connecting to the AI pool.';
   } finally {
     isLoading.value = false;
   }
@@ -101,7 +101,7 @@ const handleSubmit = async () => {
     <div class="px-4 py-3" style="border-bottom: 1px solid var(--color-border-subtle)">
       <h3 class="text-sm font-semibold">Vue Agent (Composition API)</h3>
       <p class="text-xs" style="color: var(--color-text-muted)">
-        {{ activeProvider ? `Activo: ${activeProvider.id.toUpperCase()} (${activeProvider.model})` : 'Conectado a la pool multi-IA' }}
+        {{ activeProvider ? `Active: ${activeProvider.id.toUpperCase()} (${activeProvider.model})` : 'Connected to multi-AI pool' }}
       </p>
     </div>
 
@@ -109,7 +109,7 @@ const handleSubmit = async () => {
       <div v-if="messages.length === 0" class="flex h-full items-center justify-center text-center">
         <div>
           <p class="text-2xl">🌱</p>
-          <p class="mt-2 text-sm" style="color: var(--color-text-muted)">Inicia una conversación reactiva con Vue 3</p>
+          <p class="mt-2 text-sm" style="color: var(--color-text-muted)">Start a reactive conversation with Vue 3</p>
         </div>
       </div>
 
@@ -151,7 +151,7 @@ const handleSubmit = async () => {
           This demo uses our private **AI Pool**. You need to sign in to interact with the models.
         </p>
         <a 
-          href="/login" 
+          :href="`/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '')}`"
           class="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
         >
           Sign In

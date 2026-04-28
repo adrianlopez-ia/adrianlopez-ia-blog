@@ -11,17 +11,22 @@ export function LoginForm() {
     const urlError = params.get('error');
     if (urlError && !error) {
       const errorMessages: Record<string, string> = {
-        google_denied: 'Cancelaste el inicio de sesión con Google.',
-        email_not_verified: 'Tu cuenta de Google no tiene el email verificado.',
-        google_error: 'Ocurrió un error con Google. Inténtalo de nuevo.',
+        google_denied: 'You canceled the sign-in with Google.',
+        email_not_verified: 'Your Google account does not have a verified email.',
+        google_error: 'An error occurred with Google. Please try again.',
       };
-      setError(errorMessages[urlError] ?? 'Error desconocido.');
+      setError(errorMessages[urlError] ?? 'Unknown error.');
     }
   }
 
   const handleGoogleLogin = () => {
     setLoading(true);
-    window.location.href = getGoogleLoginUrl();
+    let redirectTo = '/private';
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      redirectTo = params.get('redirect') ?? '/private';
+    }
+    window.location.href = getGoogleLoginUrl(redirectTo);
   };
 
   return (
@@ -124,7 +129,7 @@ export function LoginForm() {
             fill="#EA4335"
           />
         </svg>
-        {loading ? 'Redirigiendo...' : 'Continuar con Google'}
+        {loading ? 'Redirecting...' : 'Continue with Google'}
       </button>
 
       <div style={{ padding: '0 8px' }}>
@@ -137,13 +142,13 @@ export function LoginForm() {
             margin: 0,
           }}
         >
-          Al iniciar sesión aceptas nuestros{' '}
+          By signing in you accept our{' '}
           <a href="/terms" className="underline-offset-4 hover:text-brand-500 hover:underline">
-            términos de uso
+            terms of use
           </a>
           .
           <br />
-          Solo usamos Google para identificarte de forma segura.
+          We only use Google to securely identify you.
         </p>
       </div>
     </div>

@@ -45,10 +45,10 @@ export function PrivateDashboard() {
           letterSpacing: '-0.025em',
         }}
       >
-        Mis <span className="gradient-text">Apps Privadas</span>
+        My <span className="gradient-text">Private Apps</span>
       </h1>
       <p style={{ marginTop: 8, fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
-        Herramientas y micro-apps exclusivas.
+        Exclusive tools and micro-apps.
       </p>
 
       <div

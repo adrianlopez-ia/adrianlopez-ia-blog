@@ -4,7 +4,7 @@ import { PrivateLayout } from '@components/private/PrivateLayout';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Padel Bot" description="Herramienta privada para lanzar reservas automaticas de pistas de padel.">
+<BaseLayout title="Padel Bot" description="Private tool for automated padel court bookings.">
   <div class="pt-20">
     <PrivateLayout client:only="react" currentPath="/private/padel-bot">
       <PadelBotApp client:only="react" />

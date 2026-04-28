@@ -4,7 +4,7 @@ import { PrivateLayout } from '@components/private/PrivateLayout';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Area Privada" description="Tu area privada con herramientas y apps exclusivas.">
+<BaseLayout title="Private Area" description="Your private area with exclusive tools and apps.">
   <div class="pt-20">
     <PrivateLayout client:only="react" currentPath="/private">
       <PrivateDashboard client:only="react" />

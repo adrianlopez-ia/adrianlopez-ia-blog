@@ -1,6 +1,6 @@
 <script lang="ts">
-import { tick } from 'svelte';
 import { getToken } from '@lib/api-client';
+import { tick } from 'svelte';
 
 let messages = $state<{ id: string; role: 'user' | 'assistant'; content: string }[]>([]);
 let input = $state('');
@@ -94,7 +94,7 @@ async function handleSubmit(e: Event) {
   } catch (err) {
     console.error(err);
     messages = messages.map((m) =>
-      m.id === assistantMsgId ? { ...m, content: 'Error en la conexión con la pool Svelte.' } : m,
+      m.id === assistantMsgId ? { ...m, content: 'Error connecting to the Svelte pool.' } : m,
     );
   } finally {
     isLoading = false;
@@ -106,7 +106,7 @@ async function handleSubmit(e: Event) {
   <div class="px-4 py-3" style="border-bottom: 1px solid var(--color-border-subtle)">
     <h3 class="text-sm font-semibold">Svelte 5 Widget (Runes)</h3>
     <p class="text-xs" style="color: var(--color-text-muted)">
-      {activeProvider ? `Activo: ${activeProvider.id.toUpperCase()} (${activeProvider.model})` : 'IA Pool dinámica habilitada'}
+      {activeProvider ? `Active: ${activeProvider.id.toUpperCase()} (${activeProvider.model})` : 'Dynamic AI Pool enabled'}
     </p>
   </div>
 
@@ -115,7 +115,7 @@ async function handleSubmit(e: Event) {
       <div class="flex h-full items-center justify-center text-center">
         <div>
           <p class="text-2xl">🔥</p>
-          <p class="mt-2 text-sm" style="color: var(--color-text-muted)">Experimenta la velocidad de Svelte 5 + AI Pool</p>
+          <p class="mt-2 text-sm" style="color: var(--color-text-muted)">Experience the speed of Svelte 5 + AI Pool</p>
         </div>
       </div>
     {/if}
@@ -155,7 +155,7 @@ async function handleSubmit(e: Event) {
           This demo uses our private **AI Pool**. You need to sign in to interact with the models.
         </p>
         <a 
-          href="/login" 
+          href={`/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '')}`} 
           class="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
         >
           Sign In

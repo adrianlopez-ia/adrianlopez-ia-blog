@@ -98,11 +98,11 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
       await processStream(response.body.getReader(), assistantMsgId);
     } catch (err) {
       console.error(err);
-      const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantMsgId
-            ? { ...m, content: `Error al conectar con la IA: ${errorMessage}` }
+            ? { ...m, content: `Error connecting to the AI: ${errorMessage}` }
             : m,
         ),
       );
@@ -125,8 +125,8 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
         </h3>
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
           {activeProvider
-            ? `Activo: ${activeProvider.id.toUpperCase()} (${activeProvider.model})`
-            : 'Conectando con la pool de IA...'}
+            ? `Active: ${activeProvider.id.toUpperCase()} (${activeProvider.model})`
+            : 'Connecting to AI pool...'}
         </p>
       </div>
 
@@ -193,16 +193,17 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
       </div>
 
       {!getToken() && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-sm p-6 text-center">
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 p-6 text-center backdrop-blur-sm">
           <div className="max-w-xs rounded-2xl border border-brand-500/30 bg-gray-900/90 p-6 shadow-2xl">
             <div className="mb-4 text-3xl">🔒</div>
             <h4 className="mb-2 font-semibold text-white">Restricted Access</h4>
-            <p className="mb-6 text-xs text-gray-400">
-              This demo uses our private **AI Pool**. You need to sign in to interact with the models.
+            <p className="mb-6 text-gray-400 text-xs">
+              This demo uses our private **AI Pool**. You need to sign in to interact with the
+              models.
             </p>
-            <a 
-              href="/login" 
-              className="inline-block w-full rounded-xl bg-brand-500 py-2.5 text-sm font-medium text-white transition-all hover:bg-brand-600 hover:scale-[1.02] active:scale-95"
+            <a
+              href={`/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '')}`}
+              className="inline-block w-full rounded-xl bg-brand-500 py-2.5 font-medium text-sm text-white transition-all hover:scale-[1.02] hover:bg-brand-600 active:scale-95"
             >
               Sign In
             </a>
