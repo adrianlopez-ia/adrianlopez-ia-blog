@@ -31,10 +31,10 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@langchain/core": "^1.1.42",
+    "@langchain/openai": "^1.4.5",
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^25.3.3",
-    "@langchain/openai": "^1.4.4",
-    "@langchain/core": "^0.3.0",
     "tsup": "^8.3.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
