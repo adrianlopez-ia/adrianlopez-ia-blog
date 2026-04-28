@@ -1,13 +1,10 @@
 ---
-import { PadelBotApp } from '@components/private/PadelBotApp';
-import { PrivateLayout } from '@components/private/PrivateLayout';
+import { PadelBotWrapper } from '@components/private/PadelBotWrapper';
 import BaseLayout from '@layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="Padel Bot" description="Private tool for automated padel court bookings.">
   <div class="pt-20">
-    <PrivateLayout client:only="react" currentPath="/private/padel-bot">
-      <PadelBotApp client:only="react" />
-    </PrivateLayout>
+    <PadelBotWrapper client:only="react" />
   </div>
 </BaseLayout>

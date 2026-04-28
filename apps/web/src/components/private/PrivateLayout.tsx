@@ -1,11 +1,10 @@
 import { type AuthUser, authApi, getToken } from '@lib/api-client';
 import { type ReactNode, useEffect, useState } from 'react';
-import { NotificationProvider } from '../ui/NotificationContext';
 
 const ALL_PRIVATE_APPS = [
   {
     title: 'Padel Bot',
-    description: 'Lanza reservas automaticas de pistas de padel.',
+    description: 'Automated padel court booking system.',
     href: '/private/padel-bot',
     icon: '🎾',
     status: 'live' as const,
@@ -148,10 +147,8 @@ export function PrivateLayout({ children, currentPath = '' }: PrivateLayoutProps
       </aside>
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
-        <NotificationProvider>
-          {/* Pass user to children if they are components that can receive props */}
-          {children}
-        </NotificationProvider>
+        {/* Pass user to children if they are components that can receive props */}
+        {children}
       </main>
     </div>
   );

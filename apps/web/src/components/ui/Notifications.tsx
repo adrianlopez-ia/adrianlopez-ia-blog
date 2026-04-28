@@ -46,8 +46,8 @@ export function Notifications() {
     <div
       style={{
         position: 'fixed',
-        top: 24,
-        right: 24,
+        bottom: 24,
+        left: 24,
         zIndex: 9999,
         display: 'flex',
         flexDirection: 'column',
