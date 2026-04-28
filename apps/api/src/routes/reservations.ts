@@ -109,6 +109,69 @@ reservationsRoutes.get('/', authMiddleware, async (c) => {
   return c.json({ success: true, data: results });
 });
 
+// GET /api/reservations/stats - Get statistics for charts
+// MUST be before /:id to avoid route matching issues
+reservationsRoutes.get('/stats', authMiddleware, async (c) => {
+  const { sub } = c.get('user');
+  const month = c.req.query('month'); // format: YYYY-MM
+
+  const conditions = [eq(reservations.userId, sub)];
+
+  if (month) {
+    const [year, monthNum] = month.split('-').map(Number);
+    if (year && monthNum) {
+      const startDate = new Date(year, monthNum - 1, 1);
+      const endDate = new Date(year, monthNum, 0, 23, 59, 59);
+      conditions.push(gte(reservations.scheduledFor, startDate));
+      conditions.push(lte(reservations.scheduledFor, endDate));
+    }
+  }
+
+  // Get all reservations for the period
+  const allReservations = await db
+    .select()
+    .from(reservations)
+    .where(and(...conditions))
+    .orderBy(reservations.scheduledFor);
+
+  // Calculate totals
+  const totalSpent = allReservations.reduce((sum, r) => sum + r.totalCost, 0);
+  const totalReceived = allReservations.reduce((sum, r) => sum + r.moneyReceived, 0);
+  const netBalance = totalReceived - totalSpent;
+
+  // Group by day for daily spending chart
+  const dailySpending: Record<string, number> = {};
+  const dailyReceived: Record<string, number> = {};
+
+  for (const r of allReservations) {
+    const dayKey = r.scheduledFor.toISOString().split('T')[0];
+    if (!dayKey) continue;
+    if (!dailySpending[dayKey]) {
+      dailySpending[dayKey] = 0;
+      dailyReceived[dayKey] = 0;
+    }
+    dailySpending[dayKey] += r.totalCost;
+    dailyReceived[dayKey] = (dailyReceived[dayKey] ?? 0) + r.moneyReceived;
+  }
+
+  const dailyData = Object.entries(dailySpending).map(([date, spent]) => ({
+    date,
+    spent,
+    received: dailyReceived[date] || 0,
+  }));
+
+  return c.json({
+    success: true,
+    data: {
+      totalSpent,
+      totalReceived,
+      netBalance,
+      totalReservations: allReservations.length,
+      dailyData,
+    },
+  });
+});
+
 // GET /api/reservations/:id - Get single reservation
 reservationsRoutes.get('/:id', authMiddleware, async (c) => {
   const { sub } = c.get('user');
@@ -200,66 +263,4 @@ reservationsRoutes.delete('/:id', authMiddleware, async (c) => {
   await db.delete(reservations).where(and(eq(reservations.id, id), eq(reservations.userId, sub)));
 
   return c.json({ success: true, message: 'Reservation cancelled' });
-});
-
-// GET /api/reservations/stats - Get statistics for charts
-reservationsRoutes.get('/stats', authMiddleware, async (c) => {
-  const { sub } = c.get('user');
-  const month = c.req.query('month'); // format: YYYY-MM
-
-  const conditions = [eq(reservations.userId, sub)];
-
-  if (month) {
-    const [year, monthNum] = month.split('-').map(Number);
-    if (year && monthNum) {
-      const startDate = new Date(year, monthNum - 1, 1);
-      const endDate = new Date(year, monthNum, 0, 23, 59, 59);
-      conditions.push(gte(reservations.scheduledFor, startDate));
-      conditions.push(lte(reservations.scheduledFor, endDate));
-    }
-  }
-
-  // Get all reservations for the period
-  const allReservations = await db
-    .select()
-    .from(reservations)
-    .where(and(...conditions))
-    .orderBy(reservations.scheduledFor);
-
-  // Calculate totals
-  const totalSpent = allReservations.reduce((sum, r) => sum + r.totalCost, 0);
-  const totalReceived = allReservations.reduce((sum, r) => sum + r.moneyReceived, 0);
-  const netBalance = totalReceived - totalSpent;
-
-  // Group by day for daily spending chart
-  const dailySpending: Record<string, number> = {};
-  const dailyReceived: Record<string, number> = {};
-
-  for (const r of allReservations) {
-    const dayKey = r.scheduledFor.toISOString().split('T')[0];
-    if (!dayKey) continue;
-    if (!dailySpending[dayKey]) {
-      dailySpending[dayKey] = 0;
-      dailyReceived[dayKey] = 0;
-    }
-    dailySpending[dayKey] += r.totalCost;
-    dailyReceived[dayKey] = (dailyReceived[dayKey] ?? 0) + r.moneyReceived;
-  }
-
-  const dailyData = Object.entries(dailySpending).map(([date, spent]) => ({
-    date,
-    spent,
-    received: dailyReceived[date] || 0,
-  }));
-
-  return c.json({
-    success: true,
-    data: {
-      totalSpent,
-      totalReceived,
-      netBalance,
-      totalReservations: allReservations.length,
-      dailyData,
-    },
-  });
 });

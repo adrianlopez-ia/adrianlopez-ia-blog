@@ -97,7 +97,7 @@ export function BotConfigForm({
           />
         </div>
 
-        <div style={{ display: 'flex', gap: 24, marginTop: 4 }}>
+        <div style={{ display: 'flex', gap: 16, marginTop: 4, flexWrap: 'wrap' }}>
           <label
             style={{
               display: 'flex',
@@ -112,7 +112,7 @@ export function BotConfigForm({
               type="checkbox"
               checked={withLight}
               onChange={(e) => setWithLight(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
+              style={{ accentColor: '#7c3aed', width: 18, height: 18, minWidth: 18, minHeight: 18 }}
             />
             With light
           </label>
@@ -130,7 +130,7 @@ export function BotConfigForm({
               type="checkbox"
               checked={twoHours}
               onChange={(e) => setTwoHours(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
+              style={{ accentColor: '#7c3aed', width: 18, height: 18, minWidth: 18, minHeight: 18 }}
             />
             2 hours
           </label>

@@ -80,7 +80,7 @@ export function LauncherConfig({
               type="button"
               onClick={addHeader}
               style={{
-                padding: '4px 10px',
+                padding: '8px 12px',
                 borderRadius: 6,
                 fontSize: '0.75rem',
                 fontWeight: 500,
@@ -88,6 +88,7 @@ export function LauncherConfig({
                 color: '#7c3aed',
                 border: 'none',
                 cursor: 'pointer',
+                minHeight: 36,
               }}
             >
               + Add
@@ -98,27 +99,27 @@ export function LauncherConfig({
             {headers.map((h, i) => (
               <div
                 key={`header-${h.key}-${i}`}
-                style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+                style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}
               >
                 <input
                   type="text"
                   placeholder="Key"
                   value={h.key}
                   onChange={(e) => updateHeader(i, 'key', e.target.value)}
-                  style={{ ...inputStyle, flex: 1 }}
+                  style={{ ...inputStyle, flex: 1, minWidth: 120 }}
                 />
                 <input
                   type="text"
                   placeholder="Value"
                   value={h.value}
                   onChange={(e) => updateHeader(i, 'value', e.target.value)}
-                  style={{ ...inputStyle, flex: 2 }}
+                  style={{ ...inputStyle, flex: 2, minWidth: 120 }}
                 />
                 <button
                   type="button"
                   onClick={() => removeHeader(i)}
                   style={{
-                    padding: '8px',
+                    padding: '10px',
                     borderRadius: 6,
                     background: 'none',
                     border: 'none',
@@ -126,6 +127,8 @@ export function LauncherConfig({
                     cursor: 'pointer',
                     fontSize: '1rem',
                     flexShrink: 0,
+                    minWidth: 40,
+                    minHeight: 40,
                   }}
                   aria-label="Remove header"
                 >
@@ -140,7 +143,7 @@ export function LauncherConfig({
           type="button"
           onClick={saveConfig}
           style={{
-            padding: '8px 16px',
+            padding: '10px 16px',
             borderRadius: 8,
             fontSize: '0.8rem',
             fontWeight: 500,
@@ -149,6 +152,7 @@ export function LauncherConfig({
             border: 'none',
             cursor: 'pointer',
             alignSelf: 'flex-start',
+            minHeight: 40,
           }}
         >
           Save config

@@ -146,12 +146,12 @@ export function PadelBotApp() {
   ]);
 
   return (
-    <div>
+    <div style={{ padding: '0 16px' }}>
       <Notifications />
       <h1
         style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '1.875rem',
+          fontSize: '1.5rem',
           fontWeight: 700,
           letterSpacing: '-0.025em',
         }}
@@ -175,10 +175,11 @@ export function PadelBotApp() {
       <div
         style={{
           display: 'flex',
-          gap: 8,
+          gap: 4,
           marginTop: 24,
           borderBottom: '1px solid var(--color-border-subtle)',
           paddingBottom: 0,
+          overflowX: 'auto',
         }}
       >
         <TabButton
@@ -201,7 +202,13 @@ export function PadelBotApp() {
       {/* Tab Content */}
       <div style={{ marginTop: 24 }}>
         {activeTab === 'launch' && (
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+              gap: 24,
+            }}
+          >
             <BotConfigForm
               targetHour={targetHour}
               setTargetHour={setTargetHour}
@@ -262,13 +269,21 @@ export function PadelBotApp() {
       {/* Launch Button (only show on launch tab) */}
       {activeTab === 'launch' && (
         <>
-          <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div
+            style={{
+              marginTop: 24,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 16,
+              flexWrap: 'wrap',
+            }}
+          >
             <button
               type="button"
               onClick={handleSubmit}
               disabled={status === 'loading'}
               style={{
-                padding: '12px 32px',
+                padding: '12px 24px',
                 borderRadius: 10,
                 background:
                   status === 'loading' ? '#4c1d95' : 'linear-gradient(135deg, #7c3aed, #06b6d4)',
@@ -349,12 +364,13 @@ function TabButton({ active, onClick, label }: TabButtonProps) {
       type="button"
       onClick={onClick}
       style={{
-        padding: '12px 24px',
+        padding: '10px 16px',
         borderRadius: '8px 8px 0 0',
+        whiteSpace: 'nowrap',
         background: active ? 'var(--color-bg-primary)' : 'transparent',
         color: active ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
         fontWeight: active ? 600 : 500,
-        fontSize: '0.875rem',
+        fontSize: '0.8rem',
         border: active ? '1px solid var(--color-border-subtle)' : 'none',
         borderBottom: active
           ? '1px solid var(--color-bg-primary)'
