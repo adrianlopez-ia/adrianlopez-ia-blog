@@ -88,22 +88,29 @@ export function LauncherConfig({
             {headers.map((h, i) => (
               <div
                 key={`header-${h.key}-${i}`}
-                style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr auto',
+                  gap: 8,
+                  alignItems: 'center',
+                }}
               >
-                <input
-                  type="text"
-                  placeholder="Key"
-                  value={h.key}
-                  onChange={(e) => updateHeader(i, 'key', e.target.value)}
-                  style={{ ...inputStyle, flex: 1, minWidth: 120 }}
-                />
-                <input
-                  type="text"
-                  placeholder="Value"
-                  value={h.value}
-                  onChange={(e) => updateHeader(i, 'value', e.target.value)}
-                  style={{ ...inputStyle, flex: 2, minWidth: 120 }}
-                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Key"
+                    value={h.key}
+                    onChange={(e) => updateHeader(i, 'key', e.target.value)}
+                    style={{ ...inputStyle, minWidth: 0 }}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Value"
+                    value={h.value}
+                    onChange={(e) => updateHeader(i, 'value', e.target.value)}
+                    style={{ ...inputStyle, minWidth: 0 }}
+                  />
+                </div>
                 <Button
                   type="button"
                   onClick={() => removeHeader(i)}

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNotifications } from '../ui/NotificationContext';
 import { Notifications } from '../ui/Notifications';
-import { Tab, Tabs as UITabs } from '../ui/Tab';
+import { Select, type SelectOption } from '../ui/Select';
 import { BotConfigForm } from './padel-bot/BotConfigForm';
 import { LauncherConfig } from './padel-bot/LauncherConfig';
 import { ReservationsList } from './padel-bot/ReservationsList';
@@ -234,41 +234,25 @@ function Header() {
 
 interface TabsProps {
   activeTab: 'launch' | 'schedule' | 'stats' | 'reservations';
-  setActiveTab: (tab: 'launch' | 'schedule' | 'stats' | 'reservations') => void;
+  setActiveTab: (val: 'launch' | 'schedule' | 'stats' | 'reservations') => void;
 }
 
 function PadelBotTabs({ activeTab, setActiveTab }: TabsProps) {
+  const options: SelectOption[] = [
+    { value: 'launch', label: '🚀 Launch Now' },
+    { value: 'schedule', label: '📅 Schedule' },
+    { value: 'stats', label: '📊 Statistics' },
+    { value: 'reservations', label: '📋 Reservations' },
+  ];
+
   return (
-    <UITabs className="tabs" style={{ marginTop: 24 }}>
-      <Tab
-        value="launch"
-        activeValue={activeTab}
-        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
-      >
-        🚀 Launch Now
-      </Tab>
-      <Tab
-        value="schedule"
-        activeValue={activeTab}
-        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
-      >
-        📅 Schedule
-      </Tab>
-      <Tab
-        value="stats"
-        activeValue={activeTab}
-        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
-      >
-        📊 Statistics
-      </Tab>
-      <Tab
-        value="reservations"
-        activeValue={activeTab}
-        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
-      >
-        📋 Reservations
-      </Tab>
-    </UITabs>
+    <div style={{ marginTop: 24 }}>
+      <Select
+        value={activeTab}
+        onChange={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
+        options={options}
+      />
+    </div>
   );
 }
 
