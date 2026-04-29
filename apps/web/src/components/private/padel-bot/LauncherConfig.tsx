@@ -11,6 +11,19 @@ interface LauncherConfigProps {
   saveConfig: () => void;
 }
 
+const inputStyle: React.CSSProperties = {
+  padding: '12px 16px',
+  borderRadius: 8,
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-tertiary)',
+  color: 'var(--color-text-primary)',
+  fontSize: '1rem',
+  outline: 'none',
+  width: '100%',
+  minHeight: 44,
+  transition: 'border-color 0.2s, background-color 0.2s',
+};
+
 const labelStyle: React.CSSProperties = {
   fontSize: '0.75rem',
   fontWeight: 500,
@@ -52,8 +65,7 @@ export function LauncherConfig({
             value={apiUrl}
             onChange={(e) => setApiUrl(e.target.value)}
             placeholder="https://api.github.com/repos/..."
-            className="input-field"
-            style={{ marginTop: 4 }}
+            style={{ ...inputStyle, marginTop: 4 }}
           />
         </div>
 
@@ -83,16 +95,14 @@ export function LauncherConfig({
                   placeholder="Key"
                   value={h.key}
                   onChange={(e) => updateHeader(i, 'key', e.target.value)}
-                  className="input-field"
-                  style={{ flex: 1, minWidth: 120 }}
+                  style={{ ...inputStyle, flex: 1, minWidth: 120 }}
                 />
                 <input
                   type="text"
                   placeholder="Value"
                   value={h.value}
                   onChange={(e) => updateHeader(i, 'value', e.target.value)}
-                  className="input-field"
-                  style={{ flex: 2, minWidth: 120 }}
+                  style={{ ...inputStyle, flex: 2, minWidth: 120 }}
                 />
                 <Button
                   type="button"

@@ -8,6 +8,19 @@ interface ScheduleFormProps {
   onSuccess?: () => void;
 }
 
+const inputStyle: React.CSSProperties = {
+  padding: '12px 16px',
+  borderRadius: 8,
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-tertiary)',
+  color: 'var(--color-text-primary)',
+  fontSize: '1rem',
+  outline: 'none',
+  width: '100%',
+  minHeight: 44,
+  transition: 'border-color 0.2s, background-color 0.2s',
+};
+
 const labelStyle: React.CSSProperties = {
   fontSize: '0.75rem',
   fontWeight: 500,
@@ -92,8 +105,7 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             type="datetime-local"
             value={scheduledFor}
             onChange={(e) => setScheduledFor(e.target.value)}
-            className="input-field"
-            style={{ marginTop: 4 }}
+            style={{ ...inputStyle, marginTop: 4 }}
             required
           />
         </div>
@@ -107,8 +119,7 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             type="time"
             value={targetHour}
             onChange={(e) => setTargetHour(e.target.value)}
-            className="input-field"
-            style={{ marginTop: 4 }}
+            style={{ ...inputStyle, marginTop: 4 }}
           />
         </div>
 
@@ -123,8 +134,7 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             max="14"
             value={daysAhead}
             onChange={(e) => setDaysAhead(e.target.value)}
-            className="input-field"
-            style={{ marginTop: 4 }}
+            style={{ ...inputStyle, marginTop: 4 }}
           />
         </div>
 
@@ -139,8 +149,7 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             max="60"
             value={maxWait}
             onChange={(e) => setMaxWait(e.target.value)}
-            className="input-field"
-            style={{ marginTop: 4 }}
+            style={{ ...inputStyle, marginTop: 4 }}
           />
         </div>
 

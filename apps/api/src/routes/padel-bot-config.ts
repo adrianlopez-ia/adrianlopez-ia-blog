@@ -7,15 +7,17 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 import { authMiddleware } from '../middleware/auth';
 
-const SaveConfigSchema = z.object({
-  targetHour: z.string().default('19:00'),
-  daysAhead: z.number().default(5),
-  withLight: z.boolean().default(true),
-  twoHours: z.boolean().default(true),
-  maxWaitMinutes: z.number().default(12),
-  apiUrl: z.string().default(''),
-  headers: z.array(z.object({ key: z.string(), value: z.string() })).default([]),
-});
+const SaveConfigSchema = z
+  .object({
+    targetHour: z.string().default('19:00'),
+    daysAhead: z.number().default(5),
+    withLight: z.boolean().default(true),
+    twoHours: z.boolean().default(true),
+    maxWaitMinutes: z.number().default(12),
+    apiUrl: z.string().default(''),
+    headers: z.array(z.object({ key: z.string(), value: z.string() })).default([]),
+  })
+  .passthrough();
 
 export const padelBotConfigRoutes = new Hono();
 
