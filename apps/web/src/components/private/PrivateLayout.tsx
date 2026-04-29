@@ -1,5 +1,6 @@
 import { type AuthUser, authApi, getToken } from '@lib/api-client';
 import { type ReactNode, useEffect, useState } from 'react';
+import { Link } from '../ui/Link';
 
 const ALL_PRIVATE_APPS = [
   {
@@ -105,43 +106,14 @@ export function PrivateLayout({ children, currentPath = '' }: PrivateLayoutProps
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <a
-            href="/private"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '8px 12px',
-              borderRadius: 8,
-              fontSize: '0.875rem',
-              textDecoration: 'none',
-              color: currentPath === '/private' ? '#7c3aed' : 'var(--color-text-secondary)',
-              background: currentPath === '/private' ? 'rgba(124, 58, 237, 0.1)' : 'transparent',
-              fontWeight: currentPath === '/private' ? 600 : 400,
-            }}
-          >
+          <Link href="/private" variant="nav" active={currentPath === '/private'}>
             <span>📋</span> Dashboard
-          </a>
+          </Link>
 
           {visibleApps.map((app) => (
-            <a
-              key={app.href}
-              href={app.href}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '8px 12px',
-                borderRadius: 8,
-                fontSize: '0.875rem',
-                textDecoration: 'none',
-                color: currentPath === app.href ? '#7c3aed' : 'var(--color-text-secondary)',
-                background: currentPath === app.href ? 'rgba(124, 58, 237, 0.1)' : 'transparent',
-                fontWeight: currentPath === app.href ? 600 : 400,
-              }}
-            >
+            <Link key={app.href} href={app.href} variant="nav" active={currentPath === app.href}>
               <span>{app.icon}</span> {app.title}
-            </a>
+            </Link>
           ))}
         </nav>
       </aside>

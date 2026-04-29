@@ -36,10 +36,10 @@ export function LoginForm() {
           style={{
             padding: '14px 18px',
             borderRadius: 12,
-            background: 'rgba(239, 68, 68, 0.08)',
+            background: 'rgba(239, 68, 68, 0.15)',
             color: '#f87171',
             fontSize: '0.85rem',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
             display: 'flex',
             alignItems: 'center',
             gap: 10,
@@ -69,6 +69,8 @@ export function LoginForm() {
         type="button"
         onClick={handleGoogleLogin}
         disabled={loading}
+        className="btn btn-google"
+        aria-label="Sign in with Google"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -76,7 +78,7 @@ export function LoginForm() {
           gap: 14,
           padding: '14px 24px',
           borderRadius: 14,
-          background: loading ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.06)',
+          background: loading ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.12)',
           color: 'var(--color-text)',
           fontWeight: 600,
           fontSize: '1rem',
@@ -87,20 +89,6 @@ export function LoginForm() {
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           width: '100%',
         }}
-        onMouseEnter={(e) => {
-          if (!loading) {
-            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.1)';
-            (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)';
-            (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 6px 20px rgba(0,0,0,0.15)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.background = loading
-            ? 'rgba(255,255,255,0.03)'
-            : 'rgba(255,255,255,0.06)';
-          (e.currentTarget as HTMLButtonElement).style.transform = 'none';
-          (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-        }}
       >
         {/* Google SVG icon */}
         <svg
@@ -109,9 +97,8 @@ export function LoginForm() {
           viewBox="0 0 24 24"
           aria-hidden="true"
           style={{ flexShrink: 0 }}
-          role="img"
         >
-          <title>Google Icon</title>
+          <title>Google Logo</title>
           <path
             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
             fill="#4285F4"
@@ -143,7 +130,7 @@ export function LoginForm() {
           }}
         >
           By signing in you accept our{' '}
-          <a href="/terms" className="underline-offset-4 hover:text-brand-500 hover:underline">
+          <a href="/terms" className="link link-default" aria-label="Read terms of use">
             terms of use
           </a>
           .

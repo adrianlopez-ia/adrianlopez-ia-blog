@@ -1,5 +1,6 @@
 import { type AuthUser, authApi, getToken } from '@lib/api-client';
 import { useEffect, useState } from 'react';
+import { Card } from '../ui/Card';
 
 const APPS = [
   {
@@ -60,8 +61,10 @@ export function PrivateDashboard() {
         }}
       >
         {visibleApps.map((app) => (
-          <a
+          <Card
             key={app.href}
+            hoverable
+            as="a"
             href={app.href}
             className="group themed-card"
             style={{
@@ -122,18 +125,15 @@ export function PrivateDashboard() {
                 </span>
               ))}
             </div>
-          </a>
+          </Card>
         ))}
 
         {visibleApps.length === 0 && (
-          <div
-            className="themed-card"
-            style={{ padding: 24, borderRadius: 16, textAlign: 'center' }}
-          >
+          <Card className="themed-card" style={{ textAlign: 'center' }}>
             <p style={{ color: 'var(--color-text-secondary)' }}>
               No tienes apps privadas disponibles.
             </p>
-          </div>
+          </Card>
         )}
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { Button } from '../../ui/Button';
 import type { HeaderField } from './types';
 
 interface LauncherConfigProps {
@@ -9,17 +10,6 @@ interface LauncherConfigProps {
   updateHeader: (index: number, field: 'key' | 'value', val: string) => void;
   saveConfig: () => void;
 }
-
-const inputStyle: React.CSSProperties = {
-  padding: '10px 14px',
-  borderRadius: 8,
-  border: '1px solid var(--color-border-subtle)',
-  background: 'var(--color-bg-secondary, #0f0a1a)',
-  color: 'var(--color-text-primary)',
-  fontSize: '0.875rem',
-  outline: 'none',
-  width: '100%',
-};
 
 const labelStyle: React.CSSProperties = {
   fontSize: '0.75rem',
@@ -62,7 +52,8 @@ export function LauncherConfig({
             value={apiUrl}
             onChange={(e) => setApiUrl(e.target.value)}
             placeholder="https://api.github.com/repos/..."
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -76,23 +67,9 @@ export function LauncherConfig({
             }}
           >
             <span style={labelStyle}>Headers</span>
-            <button
-              type="button"
-              onClick={addHeader}
-              style={{
-                padding: '8px 12px',
-                borderRadius: 6,
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                background: 'rgba(124, 58, 237, 0.1)',
-                color: '#7c3aed',
-                border: 'none',
-                cursor: 'pointer',
-                minHeight: 36,
-              }}
-            >
+            <Button type="button" onClick={addHeader} variant="accent" size="sm">
               + Add
-            </button>
+            </Button>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -106,57 +83,45 @@ export function LauncherConfig({
                   placeholder="Key"
                   value={h.key}
                   onChange={(e) => updateHeader(i, 'key', e.target.value)}
-                  style={{ ...inputStyle, flex: 1, minWidth: 120 }}
+                  className="input-field"
+                  style={{ flex: 1, minWidth: 120 }}
                 />
                 <input
                   type="text"
                   placeholder="Value"
                   value={h.value}
                   onChange={(e) => updateHeader(i, 'value', e.target.value)}
-                  style={{ ...inputStyle, flex: 2, minWidth: 120 }}
+                  className="input-field"
+                  style={{ flex: 2, minWidth: 120 }}
                 />
-                <button
+                <Button
                   type="button"
                   onClick={() => removeHeader(i)}
+                  variant="ghost"
+                  size="sm"
                   style={{
-                    padding: '10px',
-                    borderRadius: 6,
-                    background: 'none',
-                    border: 'none',
-                    color: '#f87171',
-                    cursor: 'pointer',
-                    fontSize: '1rem',
-                    flexShrink: 0,
-                    minWidth: 40,
-                    minHeight: 40,
+                    color: 'var(--color-error, #f87171)',
+                    minWidth: 44,
+                    minHeight: 44,
                   }}
                   aria-label="Remove header"
                 >
                   ✕
-                </button>
+                </Button>
               </div>
             ))}
           </div>
         </div>
 
-        <button
+        <Button
           type="button"
           onClick={saveConfig}
-          style={{
-            padding: '10px 16px',
-            borderRadius: 8,
-            fontSize: '0.8rem',
-            fontWeight: 500,
-            background: 'var(--color-overlay)',
-            color: 'var(--color-text-secondary)',
-            border: 'none',
-            cursor: 'pointer',
-            alignSelf: 'flex-start',
-            minHeight: 40,
-          }}
+          variant="secondary"
+          size="md"
+          style={{ alignSelf: 'flex-start' }}
         >
           Save config
-        </button>
+        </Button>
       </div>
     </div>
   );

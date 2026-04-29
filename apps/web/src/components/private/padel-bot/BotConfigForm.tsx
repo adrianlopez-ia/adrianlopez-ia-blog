@@ -11,17 +11,6 @@ interface BotConfigFormProps {
   setTwoHours: (val: boolean) => void;
 }
 
-const inputStyle: React.CSSProperties = {
-  padding: '10px 14px',
-  borderRadius: 8,
-  border: '1px solid var(--color-border-subtle)',
-  background: 'var(--color-bg-secondary, #0f0a1a)',
-  color: 'var(--color-text-primary)',
-  fontSize: '0.875rem',
-  outline: 'none',
-  width: '100%',
-};
-
 const labelStyle: React.CSSProperties = {
   fontSize: '0.75rem',
   fontWeight: 500,
@@ -63,7 +52,8 @@ export function BotConfigForm({
             type="time"
             value={targetHour}
             onChange={(e) => setTargetHour(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -78,7 +68,8 @@ export function BotConfigForm({
             max="14"
             value={daysAhead}
             onChange={(e) => setDaysAhead(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -93,7 +84,8 @@ export function BotConfigForm({
             max="60"
             value={maxWait}
             onChange={(e) => setMaxWait(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -112,7 +104,13 @@ export function BotConfigForm({
               type="checkbox"
               checked={withLight}
               onChange={(e) => setWithLight(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 18, height: 18, minWidth: 18, minHeight: 18 }}
+              style={{
+                accentColor: 'var(--color-accent-primary)',
+                width: 20,
+                height: 20,
+                minWidth: 20,
+                minHeight: 20,
+              }}
             />
             With light
           </label>
@@ -130,7 +128,13 @@ export function BotConfigForm({
               type="checkbox"
               checked={twoHours}
               onChange={(e) => setTwoHours(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 18, height: 18, minWidth: 18, minHeight: 18 }}
+              style={{
+                accentColor: 'var(--color-accent-primary)',
+                width: 20,
+                height: 20,
+                minWidth: 20,
+                minHeight: 20,
+              }}
             />
             2 hours
           </label>

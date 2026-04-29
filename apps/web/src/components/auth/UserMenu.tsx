@@ -1,5 +1,7 @@
 import { type AuthUser, authApi, getToken } from '@lib/api-client';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button } from '../ui/Button';
+import { Link } from '../ui/Link';
 
 export function UserMenu() {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -49,14 +51,12 @@ export function UserMenu() {
     <div ref={menuRef} style={{ position: 'relative' }}>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="rounded-lg transition-colors"
+        className="btn btn-ghost"
         style={{
           color: 'var(--color-text-muted)',
           width: 36,
           height: 36,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          padding: 0,
         }}
         aria-label="User menu"
         type="button"
@@ -131,20 +131,7 @@ export function UserMenu() {
                 </p>
               </div>
               <div style={{ padding: 6 }}>
-                <a
-                  href="/private"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '10px 12px',
-                    borderRadius: 10,
-                    fontSize: '0.9rem',
-                    color: 'var(--color-text-secondary)',
-                    textDecoration: 'none',
-                  }}
-                  className="transition-colors hover:bg-white/5 hover:text-brand-500"
-                >
+                <Link href="/private" variant="nav" className="flex items-center gap-2">
                   <svg
                     width="18"
                     height="18"
@@ -162,28 +149,14 @@ export function UserMenu() {
                     />
                   </svg>
                   Private Area
-                </a>
+                </Link>
                 <div
                   style={{ height: 1, background: 'var(--color-border-subtle)', margin: '4px 8px' }}
                 />
-                <button
+                <Button
+                  variant="danger"
                   onClick={handleLogout}
-                  type="button"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    width: '100%',
-                    textAlign: 'left',
-                    padding: '10px 12px',
-                    borderRadius: 10,
-                    fontSize: '0.9rem',
-                    color: '#f87171',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
-                  className="transition-colors hover:bg-red-500/10"
+                  style={{ width: '100%', justifyContent: 'flex-start' }}
                 >
                   <svg
                     width="18"
@@ -202,7 +175,7 @@ export function UserMenu() {
                     />
                   </svg>
                   Sign Out
-                </button>
+                </Button>
               </div>
             </>
           ) : (

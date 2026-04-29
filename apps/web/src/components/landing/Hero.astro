@@ -1,5 +1,6 @@
 ---
 
+import { Button } from '@components/ui/Button';
 ---
 
 <section class="relative flex min-h-screen items-center justify-center overflow-hidden" id="hero">
@@ -39,22 +40,15 @@
     </p>
 
     <div class="hero-cta mt-10 flex flex-wrap items-center justify-center gap-4 opacity-0">
-      <a
-        href="/blog"
-        class="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-brand-500 px-8 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-500/25"
-      >
+      <Button variant="primary" size="lg" href="/blog">
         Read the Blog
         <svg class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
         </svg>
-      </a>
-      <a
-        href="/examples"
-        class="inline-flex items-center gap-2 rounded-full px-8 py-3 text-sm font-semibold transition-all duration-300"
-        style="border: 1px solid var(--color-border); background-color: var(--color-overlay); color: var(--color-text);"
-      >
+      </Button>
+      <Button variant="secondary" size="lg" href="/examples">
         Explore Examples
-      </a>
+      </Button>
     </div>
   </div>
 

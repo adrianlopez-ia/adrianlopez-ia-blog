@@ -156,3 +156,51 @@ export function calculateCost(withLight: boolean, twoHours: boolean): number {
   const hourlyRate = withLight ? 12.6 : 8.9;
   return twoHours ? hourlyRate * 2 : hourlyRate;
 }
+
+export interface PadelBotConfig {
+  targetHour: string;
+  daysAhead: number;
+  withLight: boolean;
+  twoHours: boolean;
+  maxWaitMinutes: number;
+  apiUrl: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+export async function getPadelBotConfig(token: string): Promise<PadelBotConfig> {
+  const res = await fetch('/api/padel-bot/config', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'Failed to fetch Padel Bot config');
+  }
+
+  const { data } = await res.json();
+  return data;
+}
+
+export async function savePadelBotConfig(
+  config: PadelBotConfig,
+  token: string,
+): Promise<PadelBotConfig> {
+  const res = await fetch('/api/padel-bot/config', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(config),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || 'Failed to save Padel Bot config');
+  }
+
+  const { data } = await res.json();
+  return data;
+}

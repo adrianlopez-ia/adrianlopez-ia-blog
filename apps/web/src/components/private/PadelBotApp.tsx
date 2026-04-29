@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNotifications } from '../ui/NotificationContext';
 import { Notifications } from '../ui/Notifications';
+import { Tab, Tabs as UITabs } from '../ui/Tab';
 import { BotConfigForm } from './padel-bot/BotConfigForm';
 import { LauncherConfig } from './padel-bot/LauncherConfig';
+import { ReservationsList } from './padel-bot/ReservationsList';
 import { ScheduleForm } from './padel-bot/ScheduleForm';
 import { StatisticsDashboard } from './padel-bot/StatisticsDashboard';
+import { type PadelBotConfig, getPadelBotConfig, savePadelBotConfig } from './padel-bot/api';
 import type { HeaderField } from './padel-bot/types';
 
 const DEFAULT_PAYLOAD = {
@@ -15,23 +18,11 @@ const DEFAULT_PAYLOAD = {
   max_wait_minutes: '12',
 };
 
-const STORAGE_KEY = 'padel-bot-config';
-
-function loadSavedConfig(): { url: string; headers: HeaderField[] } {
-  if (typeof window === 'undefined') return { url: '', headers: [{ key: '', value: '' }] };
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {
-    /* ignore */
-  }
-  return { url: '', headers: [{ key: '', value: '' }] };
-}
-
 export function PadelBotApp() {
-  const savedConfig = loadSavedConfig();
   const { addNotification } = useNotifications();
-  const [activeTab, setActiveTab] = useState<'launch' | 'schedule' | 'stats'>('launch');
+  const [activeTab, setActiveTab] = useState<'launch' | 'schedule' | 'stats' | 'reservations'>(
+    'launch',
+  );
   const [token, setToken] = useState<string>('');
 
   const [targetHour, setTargetHour] = useState(DEFAULT_PAYLOAD.target_hour);
@@ -40,8 +31,8 @@ export function PadelBotApp() {
   const [twoHours, setTwoHours] = useState(DEFAULT_PAYLOAD.two_hours === 'true');
   const [maxWait, setMaxWait] = useState(DEFAULT_PAYLOAD.max_wait_minutes);
 
-  const [apiUrl, setApiUrl] = useState(savedConfig.url);
-  const [headers, setHeaders] = useState<HeaderField[]>(savedConfig.headers);
+  const [apiUrl, setApiUrl] = useState('');
+  const [headers, setHeaders] = useState<HeaderField[]>([{ key: '', value: '' }]);
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [response, setResponse] = useState<string>('');
@@ -54,10 +45,61 @@ export function PadelBotApp() {
     }
   }, []);
 
-  const saveConfig = useCallback(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ url: apiUrl, headers }));
-    addNotification('success', 'Configuration saved successfully');
-  }, [apiUrl, headers, addNotification]);
+  // Load config from database when token is available
+  useEffect(() => {
+    if (!token) return;
+
+    const loadConfig = async () => {
+      try {
+        const config = await getPadelBotConfig(token);
+        setTargetHour(config.targetHour);
+        setDaysAhead(String(config.daysAhead));
+        setWithLight(config.withLight);
+        setTwoHours(config.twoHours);
+        setMaxWait(String(config.maxWaitMinutes));
+        setApiUrl(config.apiUrl);
+        setHeaders(config.headers.map((h) => ({ key: h.key, value: h.value })));
+      } catch (err) {
+        console.error('Failed to load config:', err);
+        // Keep default values on error
+      }
+    };
+
+    loadConfig();
+  }, [token]);
+
+  const saveConfig = useCallback(async () => {
+    if (!token) {
+      addNotification('error', 'Please log in to save configuration');
+      return;
+    }
+
+    try {
+      const config: PadelBotConfig = {
+        targetHour,
+        daysAhead: Number.parseInt(daysAhead, 10),
+        withLight,
+        twoHours,
+        maxWaitMinutes: Number.parseInt(maxWait, 10),
+        apiUrl,
+        headers: headers.map((h) => ({ key: h.key, value: h.value })),
+      };
+      await savePadelBotConfig(config, token);
+      addNotification('success', 'Configuration saved successfully');
+    } catch (err) {
+      addNotification('error', err instanceof Error ? err.message : 'Failed to save configuration');
+    }
+  }, [
+    targetHour,
+    daysAhead,
+    withLight,
+    twoHours,
+    maxWait,
+    apiUrl,
+    headers,
+    token,
+    addNotification,
+  ]);
 
   const addHeader = useCallback(() => {
     setHeaders((prev) => [...prev, { key: '', value: '' }]);
@@ -110,27 +152,7 @@ export function PadelBotApp() {
     const body = buildRequestBody();
     const reqHeaders = buildRequestHeaders();
 
-    try {
-      const res = await fetch(apiUrl.trim(), {
-        method: 'POST',
-        headers: reqHeaders,
-        body: JSON.stringify(body),
-      });
-
-      const text = await res.text();
-      setStatus(res.ok ? 'success' : 'error');
-      setResponse(`${res.status} ${res.statusText}\n\n${text || '(empty body)'}`);
-
-      if (res.ok) {
-        addNotification('success', 'Bot launched successfully');
-      } else {
-        addNotification('error', 'Failed to launch bot');
-      }
-    } catch (err) {
-      setStatus('error');
-      setResponse(err instanceof Error ? err.message : 'Network error');
-      addNotification('error', 'Network error while launching bot');
-    }
+    await executeLaunch(apiUrl.trim(), reqHeaders, body, setStatus, setResponse, addNotification);
   }, [
     apiUrl,
     headers,
@@ -148,6 +170,42 @@ export function PadelBotApp() {
   return (
     <div style={{ padding: '0 16px' }}>
       <Notifications />
+      <Header />
+      <PadelBotTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TabContent
+        activeTab={activeTab}
+        token={token}
+        targetHour={targetHour}
+        setTargetHour={setTargetHour}
+        daysAhead={daysAhead}
+        setDaysAhead={setDaysAhead}
+        maxWait={maxWait}
+        setMaxWait={setMaxWait}
+        withLight={withLight}
+        setWithLight={setWithLight}
+        twoHours={twoHours}
+        setTwoHours={setTwoHours}
+        apiUrl={apiUrl}
+        setApiUrl={setApiUrl}
+        headers={headers}
+        addHeader={addHeader}
+        removeHeader={removeHeader}
+        updateHeader={updateHeader}
+        saveConfig={saveConfig}
+      />
+      <LaunchSection
+        activeTab={activeTab}
+        status={status}
+        response={response}
+        handleSubmit={handleSubmit}
+      />
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <>
       <h1
         style={{
           fontFamily: 'var(--font-display)',
@@ -170,216 +228,307 @@ export function PadelBotApp() {
       <p style={{ marginTop: 8, fontSize: '0.875rem', color: 'var(--color-text-secondary)' }}>
         Configure, schedule, and track padel reservations.
       </p>
+    </>
+  );
+}
 
-      {/* Tabs */}
-      <div
-        style={{
-          display: 'flex',
-          gap: 4,
-          marginTop: 24,
-          borderBottom: '1px solid var(--color-border-subtle)',
-          paddingBottom: 0,
-          overflowX: 'auto',
-        }}
+interface TabsProps {
+  activeTab: 'launch' | 'schedule' | 'stats' | 'reservations';
+  setActiveTab: (tab: 'launch' | 'schedule' | 'stats' | 'reservations') => void;
+}
+
+function PadelBotTabs({ activeTab, setActiveTab }: TabsProps) {
+  return (
+    <UITabs className="tabs" style={{ marginTop: 24 }}>
+      <Tab
+        value="launch"
+        activeValue={activeTab}
+        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
       >
-        <TabButton
-          active={activeTab === 'launch'}
-          onClick={() => setActiveTab('launch')}
-          label="🚀 Launch Now"
-        />
-        <TabButton
-          active={activeTab === 'schedule'}
-          onClick={() => setActiveTab('schedule')}
-          label="📅 Schedule"
-        />
-        <TabButton
-          active={activeTab === 'stats'}
-          onClick={() => setActiveTab('stats')}
-          label="📊 Statistics"
-        />
-      </div>
+        🚀 Launch Now
+      </Tab>
+      <Tab
+        value="schedule"
+        activeValue={activeTab}
+        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
+      >
+        📅 Schedule
+      </Tab>
+      <Tab
+        value="stats"
+        activeValue={activeTab}
+        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
+      >
+        📊 Statistics
+      </Tab>
+      <Tab
+        value="reservations"
+        activeValue={activeTab}
+        onClick={(v) => setActiveTab(v as 'launch' | 'schedule' | 'stats' | 'reservations')}
+      >
+        📋 Reservations
+      </Tab>
+    </UITabs>
+  );
+}
 
-      {/* Tab Content */}
-      <div style={{ marginTop: 24 }}>
-        {activeTab === 'launch' && (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: 24,
-            }}
-          >
-            <BotConfigForm
-              targetHour={targetHour}
-              setTargetHour={setTargetHour}
-              daysAhead={daysAhead}
-              setDaysAhead={setDaysAhead}
-              maxWait={maxWait}
-              setMaxWait={setMaxWait}
-              withLight={withLight}
-              setWithLight={setWithLight}
-              twoHours={twoHours}
-              setTwoHours={setTwoHours}
-            />
-            <LauncherConfig
-              apiUrl={apiUrl}
-              setApiUrl={setApiUrl}
-              headers={headers}
-              addHeader={addHeader}
-              removeHeader={removeHeader}
-              updateHeader={updateHeader}
-              saveConfig={saveConfig}
-            />
-          </div>
-        )}
+interface TabContentProps {
+  activeTab: 'launch' | 'schedule' | 'stats' | 'reservations';
+  token: string;
+  targetHour: string;
+  setTargetHour: (val: string) => void;
+  daysAhead: string;
+  setDaysAhead: (val: string) => void;
+  maxWait: string;
+  setMaxWait: (val: string) => void;
+  withLight: boolean;
+  setWithLight: (val: boolean) => void;
+  twoHours: boolean;
+  setTwoHours: (val: boolean) => void;
+  apiUrl: string;
+  setApiUrl: (val: string) => void;
+  headers: HeaderField[];
+  addHeader: () => void;
+  removeHeader: (index: number) => void;
+  updateHeader: (index: number, field: 'key' | 'value', val: string) => void;
+  saveConfig: () => void;
+}
 
-        {activeTab === 'schedule' && token && <ScheduleForm token={token} onSuccess={() => {}} />}
-
-        {activeTab === 'schedule' && !token && (
-          <div
-            style={{
-              padding: 24,
-              borderRadius: 16,
-              border: '1px solid var(--color-border-subtle)',
-              background: 'var(--color-bg-primary)',
-              textAlign: 'center',
-            }}
-          >
-            Please log in to schedule reservations.
-          </div>
-        )}
-
-        {activeTab === 'stats' && token && <StatisticsDashboard token={token} />}
-
-        {activeTab === 'stats' && !token && (
-          <div
-            style={{
-              padding: 24,
-              borderRadius: 16,
-              border: '1px solid var(--color-border-subtle)',
-              background: 'var(--color-bg-primary)',
-              textAlign: 'center',
-            }}
-          >
-            Please log in to view statistics.
-          </div>
-        )}
-      </div>
-
-      {/* Launch Button (only show on launch tab) */}
+function TabContent({
+  activeTab,
+  token,
+  targetHour,
+  setTargetHour,
+  daysAhead,
+  setDaysAhead,
+  maxWait,
+  setMaxWait,
+  withLight,
+  setWithLight,
+  twoHours,
+  setTwoHours,
+  apiUrl,
+  setApiUrl,
+  headers,
+  addHeader,
+  removeHeader,
+  updateHeader,
+  saveConfig,
+}: TabContentProps) {
+  return (
+    <div style={{ marginTop: 24 }}>
       {activeTab === 'launch' && (
-        <>
-          <div
-            style={{
-              marginTop: 24,
-              display: 'flex',
-              alignItems: 'center',
-              gap: 16,
-              flexWrap: 'wrap',
-            }}
-          >
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={status === 'loading'}
-              style={{
-                padding: '12px 24px',
-                borderRadius: 10,
-                background:
-                  status === 'loading' ? '#4c1d95' : 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-                color: '#fff',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                border: 'none',
-                cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-                opacity: status === 'loading' ? 0.7 : 1,
-              }}
-            >
-              {status === 'loading' ? 'Launching...' : '🚀 Launch Bot'}
-            </button>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: 24,
+          }}
+        >
+          <BotConfigForm
+            targetHour={targetHour}
+            setTargetHour={setTargetHour}
+            daysAhead={daysAhead}
+            setDaysAhead={setDaysAhead}
+            maxWait={maxWait}
+            setMaxWait={setMaxWait}
+            withLight={withLight}
+            setWithLight={setWithLight}
+            twoHours={twoHours}
+            setTwoHours={setTwoHours}
+          />
+          <LauncherConfig
+            apiUrl={apiUrl}
+            setApiUrl={setApiUrl}
+            headers={headers}
+            addHeader={addHeader}
+            removeHeader={removeHeader}
+            updateHeader={updateHeader}
+            saveConfig={saveConfig}
+          />
+        </div>
+      )}
 
-            {status === 'success' && (
-              <span style={{ fontSize: '0.875rem', color: '#4ade80', fontWeight: 500 }}>
-                Sent successfully
-              </span>
-            )}
-            {status === 'error' && !response.includes('\n') && (
-              <span style={{ fontSize: '0.875rem', color: '#f87171', fontWeight: 500 }}>
-                {response}
-              </span>
-            )}
-          </div>
+      {activeTab === 'schedule' && (
+        <AuthRequired token={token} message="Please log in to schedule reservations.">
+          <ScheduleForm token={token} onSuccess={() => {}} />
+        </AuthRequired>
+      )}
 
-          {/* Response */}
-          {response?.includes('\n') && (
-            <div
-              style={{
-                marginTop: 16,
-                padding: 16,
-                borderRadius: 12,
-                border: `1px solid ${status === 'success' ? 'rgba(74, 222, 128, 0.2)' : 'rgba(248, 113, 113, 0.2)'}`,
-                background:
-                  status === 'success' ? 'rgba(74, 222, 128, 0.05)' : 'rgba(248, 113, 113, 0.05)',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '0.7rem',
-                  fontWeight: 600,
-                  color: 'var(--color-text-muted)',
-                  textTransform: 'uppercase',
-                  marginBottom: 8,
-                }}
-              >
-                Response
-              </p>
-              <pre
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'var(--color-text-secondary)',
-                  whiteSpace: 'pre-wrap',
-                  fontFamily: 'JetBrains Mono, monospace',
-                  margin: 0,
-                }}
-              >
-                {response}
-              </pre>
-            </div>
-          )}
-        </>
+      {activeTab === 'stats' && (
+        <AuthRequired token={token} message="Please log in to view statistics.">
+          <StatisticsDashboard token={token} />
+        </AuthRequired>
+      )}
+
+      {activeTab === 'reservations' && (
+        <AuthRequired token={token} message="Please log in to view reservations.">
+          <ReservationsList token={token} />
+        </AuthRequired>
       )}
     </div>
   );
 }
 
-interface TabButtonProps {
-  active: boolean;
-  onClick: () => void;
-  label: string;
+interface AuthRequiredProps {
+  token: string;
+  message: string;
+  children: React.ReactNode;
 }
 
-function TabButton({ active, onClick, label }: TabButtonProps) {
+function AuthRequired({ token, message, children }: AuthRequiredProps) {
+  if (!token) {
+    return (
+      <div
+        style={{
+          padding: 24,
+          borderRadius: 16,
+          border: '1px solid var(--color-border-subtle)',
+          background: 'var(--color-bg-primary)',
+          textAlign: 'center',
+        }}
+      >
+        {message}
+      </div>
+    );
+  }
+  return <>{children}</>;
+}
+
+interface LaunchSectionProps {
+  activeTab: 'launch' | 'schedule' | 'stats' | 'reservations';
+  status: 'idle' | 'loading' | 'success' | 'error';
+  response: string;
+  handleSubmit: () => void;
+}
+
+function LaunchSection({ activeTab, status, response, handleSubmit }: LaunchSectionProps) {
+  if (activeTab !== 'launch') return null;
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        padding: '10px 16px',
-        borderRadius: '8px 8px 0 0',
-        whiteSpace: 'nowrap',
-        background: active ? 'var(--color-bg-primary)' : 'transparent',
-        color: active ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
-        fontWeight: active ? 600 : 500,
-        fontSize: '0.8rem',
-        border: active ? '1px solid var(--color-border-subtle)' : 'none',
-        borderBottom: active
-          ? '1px solid var(--color-bg-primary)'
-          : '1px solid var(--color-border-subtle)',
-        cursor: 'pointer',
-        marginBottom: active ? '-1px' : 0,
-      }}
-    >
-      {label}
-    </button>
+    <>
+      <div
+        style={{
+          marginTop: 24,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 16,
+          flexWrap: 'wrap',
+        }}
+      >
+        <button
+          type="button"
+          onClick={handleSubmit}
+          disabled={status === 'loading'}
+          className="btn btn-launch"
+          aria-label="Launch Padel Bot"
+          style={{
+            padding: '12px 24px',
+            borderRadius: 10,
+            background:
+              status === 'loading'
+                ? 'var(--color-accent-primary-dark, #4c1d95)'
+                : 'linear-gradient(135deg, var(--color-accent-primary, #7c3aed), var(--color-info, #06b6d4))',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            border: 'none',
+            cursor: status === 'loading' ? 'not-allowed' : 'pointer',
+            opacity: status === 'loading' ? 0.7 : 1,
+            transition: 'opacity 0.2s, transform 0.2s',
+          }}
+        >
+          {status === 'loading' ? 'Launching...' : '🚀 Launch Bot'}
+        </button>
+
+        {status === 'success' && (
+          <span
+            style={{
+              fontSize: '0.875rem',
+              color: 'var(--color-success, #4ade80)',
+              fontWeight: 500,
+            }}
+          >
+            Sent successfully
+          </span>
+        )}
+        {status === 'error' && !response.includes('\n') && (
+          <span
+            style={{ fontSize: '0.875rem', color: 'var(--color-error, #f87171)', fontWeight: 500 }}
+          >
+            {response}
+          </span>
+        )}
+      </div>
+
+      {response?.includes('\n') && (
+        <div
+          style={{
+            marginTop: 16,
+            padding: 16,
+            borderRadius: 12,
+            border: `1px solid ${status === 'success' ? 'var(--color-success-alpha, rgba(74, 222, 128, 0.2))' : 'var(--color-error-alpha, rgba(248, 113, 113, 0.2))'}`,
+            background:
+              status === 'success'
+                ? 'var(--color-success-bg, rgba(74, 222, 128, 0.05))'
+                : 'var(--color-error-bg, rgba(248, 113, 113, 0.05))',
+          }}
+        >
+          <p
+            style={{
+              fontSize: '0.7rem',
+              fontWeight: 600,
+              color: 'var(--color-text-muted)',
+              textTransform: 'uppercase',
+              marginBottom: 8,
+            }}
+          >
+            Response
+          </p>
+          <pre
+            style={{
+              fontSize: '0.8rem',
+              color: 'var(--color-text-secondary)',
+              whiteSpace: 'pre-wrap',
+              fontFamily: 'JetBrains Mono, monospace',
+              margin: 0,
+            }}
+          >
+            {response}
+          </pre>
+        </div>
+      )}
+    </>
   );
+}
+
+async function executeLaunch(
+  url: string,
+  headers: Record<string, string>,
+  body: unknown,
+  setStatus: (status: 'idle' | 'loading' | 'success' | 'error') => void,
+  setResponse: (response: string) => void,
+  addNotification: (type: 'success' | 'error' | 'info' | 'warning', message: string) => void,
+) {
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    const text = await res.text();
+    setStatus(res.ok ? 'success' : 'error');
+    setResponse(`${res.status} ${res.statusText}\n\n${text || '(empty body)'}`);
+
+    if (res.ok) {
+      addNotification('success', 'Bot launched successfully');
+    } else {
+      addNotification('error', 'Failed to launch bot');
+    }
+  } catch (err) {
+    setStatus('error');
+    setResponse(err instanceof Error ? err.message : 'Network error');
+    addNotification('error', 'Network error while launching bot');
+  }
 }

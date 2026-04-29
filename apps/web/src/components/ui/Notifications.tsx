@@ -3,32 +3,32 @@ import { useNotifications } from './NotificationContext';
 const notificationStyles: Record<string, { style: React.CSSProperties; icon: string }> = {
   success: {
     style: {
-      background: 'rgba(74, 222, 128, 0.1)',
-      border: '1px solid rgba(74, 222, 128, 0.2)',
+      background: 'rgba(74, 222, 128, 0.2)',
+      border: '1px solid rgba(74, 222, 128, 0.3)',
       color: '#4ade80',
     },
     icon: '✓',
   },
   error: {
     style: {
-      background: 'rgba(248, 113, 113, 0.1)',
-      border: '1px solid rgba(248, 113, 113, 0.2)',
+      background: 'rgba(248, 113, 113, 0.2)',
+      border: '1px solid rgba(248, 113, 113, 0.3)',
       color: '#f87171',
     },
     icon: '✕',
   },
   info: {
     style: {
-      background: 'rgba(59, 130, 246, 0.1)',
-      border: '1px solid rgba(59, 130, 246, 0.2)',
+      background: 'rgba(59, 130, 246, 0.2)',
+      border: '1px solid rgba(59, 130, 246, 0.3)',
       color: '#3b82f6',
     },
     icon: 'ℹ',
   },
   warning: {
     style: {
-      background: 'rgba(251, 191, 36, 0.1)',
-      border: '1px solid rgba(251, 191, 36, 0.2)',
+      background: 'rgba(251, 191, 36, 0.2)',
+      border: '1px solid rgba(251, 191, 36, 0.3)',
       color: '#fbbf24',
     },
     icon: '⚠',
@@ -96,6 +96,8 @@ export function Notifications() {
             <button
               type="button"
               onClick={() => removeNotification(notification.id)}
+              className="notification-close"
+              aria-label="Close notification"
               style={{
                 background: 'none',
                 border: 'none',
@@ -108,13 +110,6 @@ export function Notifications() {
                 opacity: 0.7,
                 transition: 'opacity 0.2s',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.opacity = '1';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.opacity = '0.7';
-              }}
-              aria-label="Close notification"
             >
               ×
             </button>

@@ -1,0 +1,18 @@
+.card {
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-bg-primary);
+  transition: all 0.2s ease;
+}
+
+.card-hoverable:hover {
+  border-color: var(--color-accent-primary);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
+  transform: translateY(-2px);
+}
+
+.card-hoverable:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}

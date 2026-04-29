@@ -1,5 +1,6 @@
 import { getToken } from '@lib/api-client';
 import { useEffect, useRef, useState } from 'react';
+import { Button } from '../ui/Button';
 
 interface Message {
   id: string;
@@ -203,7 +204,8 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
             </p>
             <a
               href={`/login?redirect=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '')}`}
-              className="inline-block w-full rounded-xl bg-brand-500 py-2.5 font-medium text-sm text-white transition-all hover:scale-[1.02] hover:bg-brand-600 active:scale-95"
+              className="btn btn-primary btn-lg"
+              style={{ width: '100%' }}
             >
               Sign In
             </a>
@@ -222,20 +224,11 @@ export default function ChatWidget({ useLangChain = false }: ChatWidgetProps) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type a message..."
-            className="flex-1 rounded-xl px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
-            style={{
-              border: '1px solid var(--color-border)',
-              backgroundColor: 'var(--color-overlay)',
-              color: 'var(--color-text)',
-            }}
+            className="input-field flex-1 rounded-xl text-sm"
           />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="rounded-xl bg-brand-500 px-4 py-2 font-medium text-sm text-white transition-colors hover:bg-brand-600 disabled:opacity-50"
-          >
+          <Button type="submit" disabled={isLoading || !input.trim()} variant="primary" size="md">
             {isLoading ? '...' : 'Send'}
-          </button>
+          </Button>
         </div>
       </form>
     </div>

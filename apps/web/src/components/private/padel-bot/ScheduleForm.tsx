@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Button } from '../../ui/Button';
 import { useNotifications } from '../../ui/NotificationContext';
 import { type CreateReservationInput, calculateCost, createReservation } from './api';
 
@@ -6,17 +7,6 @@ interface ScheduleFormProps {
   token: string;
   onSuccess?: () => void;
 }
-
-const inputStyle: React.CSSProperties = {
-  padding: '10px 14px',
-  borderRadius: 8,
-  border: '1px solid var(--color-border-subtle)',
-  background: 'var(--color-bg-secondary, #0f0a1a)',
-  color: 'var(--color-text-primary)',
-  fontSize: '0.875rem',
-  outline: 'none',
-  width: '100%',
-};
 
 const labelStyle: React.CSSProperties = {
   fontSize: '0.75rem',
@@ -102,7 +92,8 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             type="datetime-local"
             value={scheduledFor}
             onChange={(e) => setScheduledFor(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
             required
           />
         </div>
@@ -116,7 +107,8 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             type="time"
             value={targetHour}
             onChange={(e) => setTargetHour(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -131,7 +123,8 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             max="14"
             value={daysAhead}
             onChange={(e) => setDaysAhead(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -146,7 +139,8 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             max="60"
             value={maxWait}
             onChange={(e) => setMaxWait(e.target.value)}
-            style={{ ...inputStyle, marginTop: 4 }}
+            className="input-field"
+            style={{ marginTop: 4 }}
           />
         </div>
 
@@ -165,7 +159,13 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
               type="checkbox"
               checked={withLight}
               onChange={(e) => setWithLight(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
+              style={{
+                accentColor: 'var(--color-accent-primary, #7c3aed)',
+                width: 20,
+                height: 20,
+                minWidth: 20,
+                minHeight: 20,
+              }}
             />
             With light
           </label>
@@ -183,7 +183,13 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
               type="checkbox"
               checked={twoHours}
               onChange={(e) => setTwoHours(e.target.checked)}
-              style={{ accentColor: '#7c3aed', width: 16, height: 16 }}
+              style={{
+                accentColor: 'var(--color-accent-primary, #7c3aed)',
+                width: 20,
+                height: 20,
+                minWidth: 20,
+                minHeight: 20,
+              }}
             />
             2 hours
           </label>
@@ -194,8 +200,8 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
           style={{
             padding: 12,
             borderRadius: 8,
-            background: 'rgba(124, 58, 237, 0.05)',
-            border: '1px solid rgba(124, 58, 237, 0.1)',
+            background: 'var(--color-accent-primary-bg, rgba(124, 58, 237, 0.05))',
+            border: '1px solid var(--color-accent-primary-alpha, rgba(124, 58, 237, 0.1))',
           }}
         >
           <p
@@ -213,7 +219,7 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
             style={{
               fontSize: '1.25rem',
               fontWeight: 700,
-              color: '#7c3aed',
+              color: 'var(--color-accent-primary, #7c3aed)',
               margin: 0,
             }}
           >
@@ -221,33 +227,33 @@ export function ScheduleForm({ token, onSuccess }: ScheduleFormProps) {
           </p>
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={status === 'loading'}
-          style={{
-            padding: '12px 32px',
-            borderRadius: 10,
-            background:
-              status === 'loading' ? '#4c1d95' : 'linear-gradient(135deg, #7c3aed, #06b6d4)',
-            color: '#fff',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            border: 'none',
-            cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-            opacity: status === 'loading' ? 0.7 : 1,
-            marginTop: 8,
-          }}
+          variant="primary"
+          size="lg"
+          style={{ marginTop: 8 }}
         >
           {status === 'loading' ? 'Scheduling...' : '📅 Schedule Reservation'}
-        </button>
+        </Button>
 
         {status === 'success' && (
-          <span style={{ fontSize: '0.875rem', color: '#4ade80', fontWeight: 500 }}>
+          <span
+            style={{
+              fontSize: '0.875rem',
+              color: 'var(--color-success, #4ade80)',
+              fontWeight: 500,
+            }}
+          >
             Reservation scheduled successfully!
           </span>
         )}
         {status === 'error' && error && (
-          <span style={{ fontSize: '0.875rem', color: '#f87171', fontWeight: 500 }}>{error}</span>
+          <span
+            style={{ fontSize: '0.875rem', color: 'var(--color-error, #f87171)', fontWeight: 500 }}
+          >
+            {error}
+          </span>
         )}
       </form>
     </div>

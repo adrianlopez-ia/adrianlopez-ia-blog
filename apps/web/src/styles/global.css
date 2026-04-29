@@ -140,4 +140,61 @@
     background-color: var(--color-card-hover);
     border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
+
+  /* Navigation link styles (legacy, kept for backward compatibility) */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    background: transparent;
+    font-weight: 400;
+    transition: all 0.2s ease;
+  }
+
+  .nav-link:hover {
+    background: var(--color-overlay);
+    color: var(--color-text);
+  }
+
+  .nav-link.active {
+    color: #7c3aed;
+    background: rgba(124, 58, 237, 0.1);
+    font-weight: 600;
+  }
+
+  .nav-link.active:hover {
+    background: rgba(124, 58, 237, 0.15);
+  }
+
+  /* Footer social link hover */
+  .footer-social-link {
+    transition: all 0.2s ease;
+  }
+
+  .footer-social-link:hover {
+    background-color: var(--color-accent-primary, rgba(124, 58, 237, 0.1));
+    color: var(--color-accent-primary, #7c3aed);
+    transform: translateY(-2px);
+  }
+
+  .footer-social-link:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
+
+  /* Notification close button hover */
+  .notification-close:hover {
+    opacity: 1;
+  }
+
+  .notification-close:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 }

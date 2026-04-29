@@ -1,0 +1,64 @@
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.icon-button-sm {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+}
+
+.icon-button-md {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+}
+
+.icon-button-lg {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+}
+
+.icon-button-ghost {
+  color: var(--color-text-muted);
+}
+
+.icon-button-ghost:hover {
+  background: var(--color-overlay);
+  color: var(--color-text);
+}
+
+.icon-button-ghost:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.icon-button-secondary {
+  background: var(--color-overlay);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.icon-button-secondary:hover {
+  background: var(--color-overlay-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-text);
+}
+
+.icon-button-secondary:focus-visible {
+  outline: 2px solid var(--color-accent-primary);
+  outline-offset: 2px;
+}
+
+.icon-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

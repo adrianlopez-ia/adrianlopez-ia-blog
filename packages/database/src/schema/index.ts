@@ -8,3 +8,4 @@ export {
   reservationStatus,
   type ReservationStatus,
 } from './reservations';
+export { padelBotConfigs, padelBotConfigsRelations } from './padelBotConfig';

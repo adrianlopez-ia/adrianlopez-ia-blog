@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { Card } from '../../ui/Card';
 import { type ReservationStats, getStatistics } from './api';
 
 interface StatisticsDashboardProps {
@@ -49,34 +50,20 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
   };
 
   if (loading) {
-    return (
-      <div
-        style={{
-          padding: 24,
-          borderRadius: 16,
-          border: '1px solid var(--color-border-subtle)',
-          background: 'var(--color-bg-primary)',
-          textAlign: 'center',
-        }}
-      >
-        Loading statistics...
-      </div>
-    );
+    return <Card style={{ textAlign: 'center' }}>Loading statistics...</Card>;
   }
 
   if (error) {
     return (
-      <div
+      <Card
         style={{
-          padding: 24,
-          borderRadius: 16,
           border: '1px solid rgba(248, 113, 113, 0.2)',
           background: 'rgba(248, 113, 113, 0.05)',
           color: '#f87171',
         }}
       >
         {error}
-      </div>
+      </Card>
     );
   }
 
@@ -127,34 +114,32 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
           marginBottom: 24,
         }}
       >
-        <SummaryCard label="Total Spent" value={formatCurrency(stats.totalSpent)} color="#f87171" />
+        <SummaryCard
+          label="Total Spent"
+          value={formatCurrency(stats.totalSpent)}
+          color="var(--color-error, #f87171)"
+        />
         <SummaryCard
           label="Total Received"
           value={formatCurrency(stats.totalReceived)}
-          color="#4ade80"
+          color="var(--color-success, #4ade80)"
         />
         <SummaryCard
           label="Net Balance"
           value={formatCurrency(stats.netBalance)}
-          color={stats.netBalance >= 0 ? '#4ade80' : '#f87171'}
+          color={
+            stats.netBalance >= 0 ? 'var(--color-success, #4ade80)' : 'var(--color-error, #f87171)'
+          }
         />
         <SummaryCard
           label="Total Reservations"
           value={stats.totalReservations.toString()}
-          color="#7c3aed"
+          color="var(--color-accent-primary, #7c3aed)"
         />
       </div>
 
       {/* Daily Spending Chart */}
-      <div
-        style={{
-          padding: 24,
-          borderRadius: 16,
-          border: '1px solid var(--color-border-subtle)',
-          background: 'var(--color-bg-primary)',
-          marginBottom: 24,
-        }}
-      >
+      <Card style={{ marginBottom: 24 }}>
         <h3
           style={{
             fontSize: '1rem',
@@ -166,7 +151,10 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
         </h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={stats.dailyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--color-border-subtle, rgba(255,255,255,0.1))"
+            />
             <XAxis
               dataKey="date"
               stroke="var(--color-text-muted)"
@@ -198,20 +186,13 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
               }}
               formatter={(value: number) => [`${(value / 100).toFixed(2)}€`, 'Spent']}
             />
-            <Bar dataKey="spent" fill="#f87171" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="spent" fill="var(--color-error, #f87171)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
 
       {/* Money Received vs Spent Chart */}
-      <div
-        style={{
-          padding: 24,
-          borderRadius: 16,
-          border: '1px solid var(--color-border-subtle)',
-          background: 'var(--color-bg-primary)',
-        }}
-      >
+      <Card>
         <h3
           style={{
             fontSize: '1rem',
@@ -223,7 +204,10 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
         </h3>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={stats.dailyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--color-border-subtle, rgba(255,255,255,0.1))"
+            />
             <XAxis
               dataKey="date"
               stroke="var(--color-text-muted)"
@@ -262,22 +246,22 @@ export function StatisticsDashboard({ token }: StatisticsDashboardProps) {
             <Line
               type="monotone"
               dataKey="spent"
-              stroke="#f87171"
+              stroke="var(--color-error, #f87171)"
               strokeWidth={2}
               name="Spent"
-              dot={{ fill: '#f87171' }}
+              dot={{ fill: 'var(--color-error, #f87171)' }}
             />
             <Line
               type="monotone"
               dataKey="received"
-              stroke="#4ade80"
+              stroke="var(--color-success, #4ade80)"
               strokeWidth={2}
               name="Received"
-              dot={{ fill: '#4ade80' }}
+              dot={{ fill: 'var(--color-success, #4ade80)' }}
             />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
     </div>
   );
 }
@@ -290,14 +274,7 @@ interface SummaryCardProps {
 
 function SummaryCard({ label, value, color }: SummaryCardProps) {
   return (
-    <div
-      style={{
-        padding: 20,
-        borderRadius: 12,
-        border: '1px solid var(--color-border-subtle)',
-        background: 'var(--color-bg-primary)',
-      }}
-    >
+    <Card hoverable style={{ padding: 20, borderRadius: 12 }}>
       <p
         style={{
           fontSize: '0.75rem',
@@ -320,6 +297,6 @@ function SummaryCard({ label, value, color }: SummaryCardProps) {
       >
         {value}
       </p>
-    </div>
+    </Card>
   );
 }
