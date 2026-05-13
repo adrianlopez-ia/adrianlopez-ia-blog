@@ -47,6 +47,15 @@ padelBotConfigRoutes.get('/config', authMiddleware, async (c) => {
     });
   }
 
+  // Robust parsing for Drizzle JSON mode in SQLite
+  if (typeof config.headers === 'string') {
+    try {
+      config.headers = JSON.parse(config.headers);
+    } catch {
+      config.headers = [];
+    }
+  }
+
   return c.json({ success: true, data: config });
 });
 
@@ -84,6 +93,14 @@ padelBotConfigRoutes.post(
         .where(eq(padelBotConfigs.userId, sub))
         .returning();
 
+      if (updated && typeof updated.headers === 'string') {
+        try {
+          updated.headers = JSON.parse(updated.headers);
+        } catch {
+          updated.headers = [];
+        }
+      }
+
       return c.json({ success: true, data: updated });
     }
 
@@ -103,6 +120,14 @@ padelBotConfigRoutes.post(
         headers,
       })
       .returning();
+
+    if (created && typeof created.headers === 'string') {
+      try {
+        created.headers = JSON.parse(created.headers);
+      } catch {
+        created.headers = [];
+      }
+    }
 
     return c.json({ success: true, data: created }, 201);
   },

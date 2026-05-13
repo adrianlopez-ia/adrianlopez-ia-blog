@@ -52,13 +52,26 @@ export function PadelBotApp() {
     const loadConfig = async () => {
       try {
         const config = await getPadelBotConfig(token);
-        setTargetHour(config.targetHour);
-        setDaysAhead(String(config.daysAhead));
-        setWithLight(config.withLight);
-        setTwoHours(config.twoHours);
-        setMaxWait(String(config.maxWaitMinutes));
-        setApiUrl(config.apiUrl);
-        setHeaders(config.headers.map((h) => ({ key: h.key, value: h.value })));
+
+        // Ensure robust parsing in case the DB driver returns raw strings/numbers
+        setTargetHour(String(config.targetHour || DEFAULT_PAYLOAD.target_hour));
+        setDaysAhead(String(config.daysAhead ?? DEFAULT_PAYLOAD.days_ahead));
+        setWithLight(Boolean(config.withLight));
+        setTwoHours(Boolean(config.twoHours));
+        setMaxWait(String(config.maxWaitMinutes ?? DEFAULT_PAYLOAD.max_wait_minutes));
+        setApiUrl(String(config.apiUrl || ''));
+
+        const rawHeaders =
+          typeof config.headers === 'string' ? JSON.parse(config.headers) : config.headers || [];
+
+        setHeaders(
+          Array.isArray(rawHeaders) && rawHeaders.length > 0
+            ? rawHeaders.map((h: Record<string, unknown>) => ({
+                key: String(h.key || ''),
+                value: String(h.value || ''),
+              }))
+            : [{ key: '', value: '' }],
+        );
       } catch (err) {
         console.error('Failed to load config:', err);
         // Keep default values on error
