@@ -1,4 +1,5 @@
-const API_BASE = '/api/reservations';
+const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000/api';
+const API_BASE = `${API_URL}/reservations`;
 
 export interface Reservation {
   id: string;
@@ -168,7 +169,7 @@ export interface PadelBotConfig {
 }
 
 export async function getPadelBotConfig(token: string): Promise<PadelBotConfig> {
-  const res = await fetch('/api/padel-bot/config', {
+  const res = await fetch(`${API_URL}/padel-bot/config`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -187,7 +188,7 @@ export async function savePadelBotConfig(
   config: PadelBotConfig,
   token: string,
 ): Promise<PadelBotConfig> {
-  const res = await fetch('/api/padel-bot/config', {
+  const res = await fetch(`${API_URL}/padel-bot/config`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
