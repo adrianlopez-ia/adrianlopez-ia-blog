@@ -4,12 +4,14 @@ import './Button.css';
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost' | 'accent';
   size?: 'sm' | 'md' | 'lg';
+  href?: string;
   children: ReactNode;
 }
 
 export function Button({
   variant = 'primary',
   size = 'md',
+  href,
   children,
   className = '',
   disabled,
@@ -68,13 +70,25 @@ export function Button({
     ...props.style,
   };
 
+  const combinedClassName = ['btn', `btn-${size}`, `btn-${variant}`, className]
+    .filter(Boolean)
+    .join(' ');
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        className={combinedClassName}
+        style={{ ...style, textDecoration: 'none' } as React.CSSProperties}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </a>
+    );
+  }
+
   return (
-    <button
-      className={['btn', `btn-${size}`, `btn-${variant}`, className].filter(Boolean).join(' ')}
-      disabled={disabled}
-      style={style}
-      {...props}
-    >
+    <button className={combinedClassName} disabled={disabled} style={style} {...props}>
       {children}
     </button>
   );
